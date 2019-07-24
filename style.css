@@ -1859,29 +1859,29 @@ a:hover{
 =====================*/
 
 /*===================
-	mxf CSS 麦旋风
+	mdt CSS 麦点通
 =====================*/
-.mxf-title-img{
+.mdt-title-img{
 	text-align: left;
 }
 
-.mxf-title-img img{
+.mdt-title-img img{
 	padding-left: 50px;
 	width: 300px;
 }
 
-.mxf-title-style{
+.mdt-title-style{
 	font-size: 20px;
 	text-align: right;
 	padding-right: 50px;
 }
 
-.mxf-no-section-padding{
+.mdt-no-section-padding{
 	padding: 0 100px 0 0;
 }
 
 /*===================
-	END mxf CSS 麦旋风
+	END mdt CSS 麦点通
 =====================*/
 
 /*===================
@@ -1897,25 +1897,25 @@ a:hover{
 	border-radius: 10px;
 }
 
-.mxf-feature-left img{
+.mdt-feature-left img{
 	width: 100%;
 	height: 100%;
 	margin-top: 30px;
 }
 
-.mxf-p p, h3{
+.mdt-p p, h3{
 	width: 70%;
 	margin: 0 auto;
 	font-size: 18px;
 	line-height: 40px;
 }
 
-.mxf-p h3{
+.mdt-p h3{
 	font-size: 28px;
 	text-align: center;
 	margin-bottom: 50px;
 }
 
 /*===================
-	END mxf CSS 麦旋风
+	END mdt CSS 麦点通
 =====================*/
