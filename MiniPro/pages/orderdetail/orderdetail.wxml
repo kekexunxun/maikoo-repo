@@ -1,0 +1,154 @@
+<!--pages/demo/demo.wxml-->
+<view class='container'>
+  <block wx:if="{{orderInfo.address}}">
+    <view class='buyer'>
+      <view class='buyer-icon'>
+        <image src='../../images/location.png'> </image>
+      </view>
+      <view class='buyer-info'>
+        <view class='buyer-info-up'>
+          <text>收件人： {{orderInfo.user_name}}</text>
+          <text>{{orderInfo.tel_num}}</text>
+        </view>
+        <view class='buyer-info-bottom'>
+          <text>收货地址： {{orderInfo.address}}</text>
+          <!--行高不能设置  -->
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 核销码查看 -->
+  <block wx:if="{{orderInfo.status == 3}}">
+    <block wx:if="{{orderInfo.verify_url}}">
+      <view class='code'>
+        <image src='{{orderInfo.verify_url}}'></image>
+        <button>核销码：{{orderInfo.order_id}}</button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class='gen-code'>
+        <form report-submit='true' bindsubmit='genVerifyCode' data-orderid='{{orderInfo.order_id}}'>
+          <button form-type='submit'>生成核销码</button>
+        </form>
+      </view>
+    </block>
+  </block>
+
+  <!-- order-status -->
+  <view class='order-status'>
+    <text>{{orderInfo.status_conv}}</text>
+  </view>
+  <!-- order-item -->
+  <view class='product-list'>
+    <block wx:for="{{orderInfo.detail}}" wx:key="">
+      <view class='product'>
+        <view class='product-image'>
+          <image src='{{item.pic}}'></image>
+        </view>
+        <view class='product-info'>
+          <view class='product-info-up'>
+            <text>{{item.name}}</text>
+            <text>￥{{item.shop_price}}</text>
+          </view>
+          <view class='product-info-middle'>
+            <block wx:if="{{item.promotion_id != 0}}">
+              <text class='product-info-middle-text2'>{{item.promotion_name}}</text>
+              <text class='product-info-middle-text2'>{{item.promotion_count}}折</text>
+            </block>
+            <block wx:else>
+              <text class='product-info-middle-text1'></text>
+              <text class='product-info-middle-text2'> </text>
+            </block>
+          </view>
+          <view class='product-info-cat'>商品分类：{{item.catagory_name}}</view>
+          <view class='product-info-promotion'>x{{item.quantity}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class='deliver'>
+    <view class='product-info-up'>
+      <text>运费</text>
+      <text>￥{{orderInfo.express_fee}}</text>
+    </view>
+    <!-- <view class='product-info-middle'>
+      <text class='product-info-middle-text1'></text>
+      <text class='product-info-middle-text2'>￥0.00</text>
+    </view> -->
+    <view class='product-info-middle'>
+      <text class='product-info-middle-text1'>实付款(含运费）</text>
+      <text class='totalFee'>￥{{orderInfo.total_fee}}</text>
+    </view>
+  </view>
+
+  <view class='order'>
+    <view class='product-info-middle'>
+      <text class='product-info-middle-text1'>订单编号：{{orderInfo.order_id}}</text>
+      <form report-submit='true' bindsubmit='copyOrderID'>
+        <button class='copybtn' form-type='submit'>复制</button>
+      </form>
+    </view>
+    <text class='product-info-middle-text1'>成交时间：{{orderInfo.create_time}}</text>
+  </view>
+
+  <view class='order' wx:if="{{orderInfo.status == 9}}">
+    <text class='product-info-middle-text1'>退款情况：{{orderInfo.is_refound ? '退款成功' : '退款驳回'}}</text>
+  </view>
+
+</view>
+
+<view class='bottom-btn'>
+  <view class='btns'>
+    <!-- 待支付 -->
+    <block wx:if="{{orderInfo.status == 1}}">
+      <view class='two-btn'>
+        <form report-submit='true' bindsubmit='cancelOrder'>
+          <button form-type='submit' class='cancel-btn'>取消订单</button>
+        </form>
+      </view>
+      <view class='two-btn'>
+        <form report-submit='true' bindsubmit='prePay'>
+          <button form-type='submit' class='prepay-btn'>立即支付</button>
+        </form>
+      </view>
+    </block>
+    <!--  待发货  -->
+    <block wx:if="{{orderInfo.status == 2}}">
+      <view class='one-btn'>
+        <form report-submit='true' bindsubmit='orderRefund'>
+          <button form-type='submit' class='rate-btn'>申请退款</button>
+        </form>
+      </view>
+    </block>
+    <!--  已发货  -->
+    <block wx:if="{{orderInfo.status == 3}}">
+      <view class='one-btn'>
+        <form report-submit='true' bindsubmit='confirmOrder'>
+          <button form-type='submit' class='rate-btn'>确认收货</button>
+        </form>
+      </view>
+    </block>
+    <!--  已完成  -->
+    <block wx:if="{{orderInfo.status == 4}}">
+      <view class='two-btn'>
+        <form report-submit='true' bindsubmit='orderApplyAS'>
+          <button form-type='submit' class='prepay-btn'>申请售后</button>
+        </form>
+      </view>
+      <view class='two-btn'>
+        <form report-submit='true' bindsubmit='deleteOrder'>
+          <button form-type='submit' class='rate-btn'>删除订单</button>
+        </form>
+      </view>
+    </block>
+    <block wx:if="{{orderInfo.status == 5 || orderInfo.status == 7 || orderInfo.status == 9}}">
+      <view class='one-btn'>
+        <form report-submit='true' bindsubmit='deleteOrder'>
+          <button form-type='submit' class='rate-btn'>删除订单</button>
+        </form>
+      </view>
+    </block>
+  </view>
+</view>

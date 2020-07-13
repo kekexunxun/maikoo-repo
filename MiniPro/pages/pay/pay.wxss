@@ -1,0 +1,376 @@
+/* container */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: inherit;
+  font-family: 'Microsoft Yahei', "微软雅黑";
+  border-top: 1rpx solid #eee;
+  margin-bottom: 150rpx;
+}
+
+/* address */
+
+/* 无地址 */
+
+.address-btn {
+  width: 100%;
+  height: 80rpx;
+  color: #333;
+  background: #fff;
+  font-size: 30rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #eee;
+  line-height: 80rpx;
+}
+
+/* 有地址 */
+
+.address {
+  display: flex;
+  flex-direction: column;
+  font-size: 28rpx;
+  background: #fff;
+}
+
+.address-info {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border-bottom: 1rpx solid #eee;
+  position: relative;
+  line-height: 60rpx;
+}
+
+.address-info-left {
+  text-align: left;
+  color: #333;
+  font-weight: 500;
+  padding-left: 5%;
+  width: 20%;
+}
+
+.address-info-right {
+  color: #666;
+}
+
+.address-info-middle {
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.address-info-arrow {
+  position: absolute;
+  right: 10rpx;
+  height: 32rpx;
+  top: 14rpx;
+  width: 32rpx;
+}
+
+.address-info-arrow-logi {
+  position: absolute;
+  right: 10rpx;
+  height: 32rpx;
+  top: 22rpx;
+  width: 32rpx;
+}
+
+/* line */
+
+.line {
+  height: 20rpx;
+  background: #efeff5;
+}
+
+/* info */
+
+.detail-info {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* height: 200px; */
+}
+
+.detail-info-goods {
+  display: flex;
+  flex-direction: row;
+  padding: 1% 2%;
+  margin-top: 10rpx;
+  border-bottom: 1rpx solid #efeff5;
+}
+
+.detail-info-goods-left {
+  width: 23%;
+}
+
+.detail-info-goods-left image {
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.detail-info-goods-right {
+  width: 77%;
+  display: flex;
+  flex-direction: column;
+  line-height: 40rpx;
+  font-size: 26rpx;
+}
+
+.goods-name {
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  height: 25%;
+  width: 100%;
+}
+
+.name-left {
+  width: 80%;
+  height: 80rpx;
+  line-height: 40rpx;
+}
+
+.detail-name {
+  display: flex;
+  flex-direction: row;
+  height: 80rpx;
+}
+
+.name-right {
+  width: 20%;
+  text-align: right;
+  text-decoration: line-through;
+  color: #e35c55;
+  height: 80rpx;
+  line-height: 40rpx;
+}
+
+.detail-info-goods-right-state {
+  color: #e35c55;
+}
+
+.goods-promotion {
+  color: #333;
+  text-align: right;
+  height: 25%;
+}
+
+.goods-num {
+  height: 25%;
+  color: #333;
+  text-align: right;
+}
+
+.item-price {
+  color: #666;
+  text-align: right;
+  height: 25%;
+}
+
+.name-right-line {
+  height: 1rpx;
+  width: 100rpx;
+  border-bottom: 1rpx solid gainsboro;
+  position: absolute;
+  right: -10rpx;
+  top: 10px;
+}
+
+.name-right-content {
+  position: absolute;
+  right: 2%;
+}
+
+/* shop-info */
+
+.detail-shopinfo {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.detail-shopinfo-left {
+  color: #333;
+  font-weight: 500;
+  width: 20%;
+  text-align: center;
+}
+
+.detail-shopinfo-right {
+  color: #666;
+  position: absolute;
+  right: 2%;
+}
+
+.detail-shopinfo-right text {
+  color: #e35c55;
+}
+
+.detail-shopinfo-right-input {
+  color: #666;
+  position: absolute;
+  left: 25%;
+  width: 80%;
+}
+
+.detail-shopinfo-right-input input {
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  width: 87%;
+}
+
+/* bottom */
+
+.detail-bottom {
+  position: fixed;
+  bottom: 0;
+  height: 90rpx;
+  width: 100%;
+  color: #333;
+  background: #c8a063;
+  line-height: 90rpx;
+  font-weight: 500;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.detail-bottom button {
+  background: #c8a063;
+  font-size: 32rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  border-radius: 0;
+}
+
+/* Modal */
+
+.Modal-container {
+  z-index: 10;
+}
+
+.modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+  z-index: 2;
+  color: #fff;
+}
+
+.modal-dialog {
+  width: 540rpx;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 9999;
+  background: #f9f9f9;
+  margin: -180rpx 105rpx;
+  border-radius: 36rpx;
+}
+
+.modal-title {
+  padding-top: 50rpx;
+  font-size: 36rpx;
+  color: #030303;
+  text-align: center;
+}
+
+.modal-content {
+  padding: 40rpx 32rpx;
+}
+
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  height: 86rpx;
+  border-top: 1px solid #dedede;
+  font-size: 34rpx;
+  line-height: 86rpx;
+}
+
+.btn-cancel {
+  width: 50%;
+  color: #666;
+  text-align: center;
+  border-right: 1px solid #dedede;
+}
+
+.btn-confirm {
+  width: 50%;
+  color: #ec5300;
+  text-align: center;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.radio {
+  font-size: 32rpx;
+  height: 48rpx;
+  vertical-align: middle;
+}
+
+.radio radio {
+  transform: scale(0.8);
+  align-items: center;
+}
+
+/* Image-number */
+
+.image-number-right {
+  display: flex;
+  flex-flow: row;
+  position: relative;
+  margin-top: 10rpx;
+  width: 80%;
+}
+
+.image-number-box {
+  margin-right: 20rpx;
+  width: 200rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  background: #f7f7f7;
+  text-align: center;
+  position: absolute;
+  right: 0;
+}
+
+.image-number-right-text {
+  width: 60rpx;
+  font-size: 38rpx;
+  /* line-height: 1.6rem; */
+  color: #999;
+  text-align: center;
+}
+
+.image-number-right-input {
+  width: 80rpx;
+  font-size: 32rpx;
+  color: #999;
+  line-height: 60rpx;
+  height: 60rpx;
+}
+
+.tex-dec {
+  text-decoration: line-through;
+}

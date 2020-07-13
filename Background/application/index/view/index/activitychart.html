@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+
+    <title>活动统计</title>
+</head>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 活动管理 <span
+            class="c-gray en">&gt;</span> 活动统计 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+            href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <div id="container" style="min-width:700px;min-height:500px"></div>
+    </div>
+    <footer class="footer mt-20">
+        <div class="container">
+            <p>Powered By 福建麦口信息科技有限公司</p>
+        </div>
+    </footer>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <!--/_footer 作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+    <script type="text/javascript">
+        var xset = new Array();//X轴数据集
+        var yset = new Array();//Y轴数据集
+        $.ajax({
+            data: {},
+            datatype: "POST",
+            url: "activityData",
+            success: function (data) {
+                var i, len = data[0].length;
+                for (i = 0; i < len; i++) {
+                    xset[i] = data[0][i].name;
+                    yset[i] = data[1][i];
+                }
+                var height = yset.length * 50;
+                $('#container').css('height', height + 'px');
+                showChart(xset, yset);
+            }
+        });
+        // 初始化化图表
+        function showChart(xset, yset) {
+            var chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    type: 'bar',
+                    marginRight: 130,
+                    marginBottom: 85
+                },
+                title: {
+                    text: '活动人数统计条形图',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: xset
+                },
+                yAxis: {
+                    min: 0,
+                    tickInterval: 1,
+                    title: {
+                        text: '参与人数（位）'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    // formatter: function() {
+                    //         return this.x+'<br/><br/>'+
+                    //         '<b>'+this.series.name+ this.y+' 位'+'</b>';
+                    // }
+                    valueSuffix: ' 位'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -10,
+                    y: 100,
+                    borderWidth: 0
+                },
+                series: [{
+                    name: '参与人数',
+                    data: yset
+                }]
+            });
+        }
+        // 设置默认参数
+        Highcharts.setOptions({
+            lang: {
+                printChart: ['打印图表'],
+                downloadJPEG: ['导出JPEG图片'],
+                downloadPDF: ['导出PDF文件'],
+                downloadPNG: ['导出PNG图片'],
+                downloadSVG: ['导出SVG文件'],
+                months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                weekdays: ['第一季度', '第一季度', '第一季度', '第一季度']
+            }
+        });
+    </script>
+</body>
+
+</html>

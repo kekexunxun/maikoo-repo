@@ -1,0 +1,241 @@
+<!--_meta 作为公共模版分离出去-->
+
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<link rel="Bookmark" href="/favicon.ico" >
+
+<link rel="Shortcut Icon" href="/favicon.ico" />
+
+<!--[if lt IE 9]>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+
+<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+
+<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+
+<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+
+<!--[if IE 6]>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
+<script>DD_belatedPNG.fix('*');</script>
+
+<![endif]-->
+
+<!--/meta 作为公共模版分离出去-->
+
+<title>新增分类</title>
+
+</head>
+
+<body>
+
+	<form action="catagoryinset"  onsubmit="catagory_submit()" method="post" enctype="multipart/form-data"  class="form form-horizontal" id="form-catagory-add">
+
+		<div class="row cl">
+
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类名称：</label>
+
+			<div class="formControls col-xs-8 col-sm-9">
+
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+
+			</div>
+
+		</div>
+
+		<div class="row cl">
+
+			<label class="form-label col-xs-4 col-sm-3">父级分类：</label>
+
+			<div class="formControls col-xs-8 col-sm-9">
+
+				<select  name="father_name" id="father_name"style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+
+					<option value="0">无父级</option>
+
+					{volist name="$catagoryadd" id="vol"}
+
+					<option value="{$vol.catagory_id}">{$vol.catagory_name}</option>
+
+					{/volist}
+
+				</select>
+
+			</div>
+
+		</div>
+
+		<div class="row cl">
+
+			<label class="form-label col-xs-4 col-sm-3">显示等级：</label>
+
+			<div class="formControls col-xs-8 col-sm-9">
+
+				<input type="number" maxlength="6" min="0" class="input-text" value="0" placeholder="" id="order" name="order">
+
+			</div>
+
+		</div>
+
+		<div class="row cl">
+
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+
+				<button  onClick="catagory_submit();" class="btn btn-primary radius"  id = "btnsubmit" type="button" ><i class="Hui-iconfont">&#xe632;</i> 提交 </button>
+
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">取消</button>
+
+			</div>
+
+		</div>
+
+	</form>
+
+
+
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script> 
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+
+
+<script type="text/javascript">
+
+$(function(){
+
+	$(".permission-list dt input:checkbox").click(function(){
+
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+
+	});
+
+	$(".permission-list2 dd input:checkbox").click(function(){
+
+		var l =$(this).parent().parent().find("input:checked").length;
+
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+
+		if($(this).prop("checked")){
+
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+
+		}
+
+		else{
+
+			if(l==0){
+
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+
+			}
+
+			if(l2==0){
+
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+
+			}
+
+		}
+
+	});
+
+
+
+});
+
+function catagory_submit() {
+
+    var name = $('#name').val();
+
+    var father_name = $('#father_name').val();
+
+    var order = $('#order').val();
+
+
+
+    if (name == '') {
+
+        layer.msg('商品分类不能为空！');
+
+        return false;
+
+    }
+
+    if(parseInt(order)< 0 || isNaN(order)){
+
+        layer.msg('排序等级请输入大于0的数字！');
+
+        return false;
+
+    }
+
+    $.post("catagoryinsert", $('#form-catagory-add').serialize(), function (res) {
+
+        if (res.code == 200) {
+
+            layer.msg(res.msg);
+
+            index = parent.layer.getFrameIndex(window.name);
+
+            setTimeout('parent.layer.close(index);',1000)
+
+
+
+        }
+
+        if (res.code == 300) {
+
+            layer.msg(res.msg);
+
+            window.history.go(-1);
+
+        }
+
+
+
+    });
+
+
+
+}
+
+</script>
+
+<!--/请在上方写此页面业务相关的脚本-->
+
+</body>
+
+</html>

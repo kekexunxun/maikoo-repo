@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/layer/layer.css" />
+    <title>用户活动</title>
+    <style>
+        table{
+            table-layout: fixed;
+            word-wrap: break-spaces;
+        }
+        .text{
+           text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .Hui-iconfont{
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>用户管理 <span class="c-gray en">&gt;</span>
+        用户活动 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);"
+            title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+                <!-- <a href="javascript:;" onClick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> -->
+                <a class="btn btn-primary radius" onClick="activity_add('添加活动','activityadd.html')" href="javascript:;"><i
+                        class="Hui-iconfont">&#xe600;</i> 添加活动</a> </span> <span class="r" style="margin-top: 3px;">共有：<strong>{:sizeof($activity)}</strong>
+                条数据</span> </div>
+        <div class="mt-20">
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                    <tr class="text-c">
+                        <td width="30">活动ID</td>
+                        <td width="60">活动名称</td>
+                        <!-- <th width="100">活动简介</th> -->
+                        <th width="100">活动图片</th>
+                        <th width="60">已参与人数</th>
+                        <th width="70">开始时间</th>
+                        <th width="70">结束时间</th>
+                        <th width="130">活动奖励</th>
+                        <th width="80">活动物料</th>
+                        <th width="50">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if condition="sizeof($activity) == 0"}
+                    {else /}
+                    {volist name="$activity" id="vol"}
+                    <tr class="text-c">
+                        <td>{$vol.activity_id}</td>
+                        <td>{$vol.name}</td>
+                        <!-- <td class="text">
+                    <p>{:htmlspecialchars_decode($vol.detail)}</p>
+                </td> -->
+                        <td>
+                            {if condition = "$vol.pic eq '' "}
+                            无
+                            {else/}
+                            <img src="{$vol.pic}" width="100px" height="100px">
+                            {/if}
+                        </td>
+                        <td class="td-num">
+                            {if condition = "$vol.num eq 0 "}
+                            0
+                            {else/}
+                            {$vol.num}
+                            {/if}
+                        </td>
+                        <td>{:date('Y-m-d H:i', intval($vol.start_time))} </td>
+                        <td>{:date('Y-m-d H:i', intval($vol.end_time))} </td>
+                        <td>
+                            <p>一等奖人数：{$vol.first_price_num} 人</p>
+                            <p>一等奖奖品：{$vol.first_price}</p>
+                            </br>
+                            <p>二等奖人数：{$vol.second_price_num} 人</p>
+                            <p>二等奖奖品：{$vol.second_price}</p>
+                            </br>
+                            <p>三等奖人数：{$vol.third_price_num} 人</p>
+                            <p>三等奖奖品：{$vol.third_price}</p>
+                        </td>
+                        <td class="td-poster">
+                            {if condition = "$vol.activity_poster == '' "}
+                            <a onClick="create_activity_poster(this,'{$vol.activity_id}');" class="btn btn-primary radius"
+                                href="javascript:;"><i class="Hui-iconfont">&#xe685;</i> 生成</a>
+                            {else/}
+                            <a class="btn btn-secondary radius" href="{$vol.qrcode}" download="qrcode"><i class="Hui-iconfont">&#xe641;</i>
+                                维码下载</a>
+                            <a style="margin-top: 10px;" class="btn btn-success radius" href="../{$vol.activity_poster}"
+                                download="poster"><i class="Hui-iconfont">&#xe641;</i> 海报下载</a>
+                            {/if}
+                        </td>
+                        <td class="td-manage">
+                            {if condition = "$vol.end_time lt time()"}
+                            <!-- <a title="已过期" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6dd;</i> </a> -->
+                            <a style="text-decoration:none" href="javascript:;" onClick="activity_del(this,'{$vol.activity_id}');"
+                                title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            {elseif condition = "$vol.is_active eq 0 "}
+                            <a style="text-decoration:none" onClick="changeActivity(this,'{$vol.activity_id}');" href="javascript:;"
+                                title="等待上线"><i class="Hui-iconfont">&#xe6dc;</i></a>
+                            <a style="text-decoration:none" href="javascript:;" onClick="activity_del(this,'{$vol.activity_id}');"
+                                title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            {elseif condition = "$vol.is_active eq 1" /}
+                            <a onClick="lottery(this,'{$vol.activity_id}');" href="javascript:;" title="活动抽奖"><i class="Hui-iconfont">&#xe6bb;</i></a>
+                            <a style="text-decoration:none" onClick="activityStop(this,'{$vol.activity_id}');" href="javascript:;"
+                                title="停止"><i class="Hui-iconfont">&#xe6e5;</i></a>
+                            <a style="text-decoration:none" href="javascript:;" onClick="activity_del(this,'{$vol.activity_id}');"
+                                title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer class="footer mt-20">
+        <div class="container">
+            <p>Powered By 福建麦口信息科技有限公司</p>
+        </div>
+    </footer>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <!--/_footer 作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+    <script type="text/javascript">
+        $('.table-sort').dataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "从当前数据中检索： ",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            },
+            "aaSorting": [[0, "desc"]],//默认第几个排序
+            "bStateSave": true,//状态保存
+            "aoColumnDefs": [
+                //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+                { "orderable": false, "aTargets": [0, 1] }// 制定列不参与排序
+            ]
+        });
+        // 更改活动展示状态
+        function changeActivity(obj, id) {
+            var showMessage = '确定要上线当前活动吗？';
+            layer.confirm(showMessage, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'changeActivity',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == "200") {
+                            // $(obj).parents("tr").find(".td-manage").html('<a style="text-decoration:none" title="活动已上线" class="ml-5"><i class="Hui-iconfont">&#xe615;</i></a>  <a style="text-decoration:none" onClick="activityStop(this,'+id+');" href="javascript:;" title="停止" class="ml-5"><i class="Hui-iconfont">&#xe6e5;</i></a> ');
+                            setTimeout('window.location.reload(location.href);', 1000);
+                        }
+                        index = parent.layer.getFrameIndex(window.name);
+                        layer.msg(data.msg, { icon: 1, time: 1000 });
+                    },
+                    error: function (data) {
+                        // index.log(data.message);
+                        alert(data);
+                    },
+                });
+            });
+        }
+        // 活动停止
+        function activityStop(obj, id) {
+            var showMessage = '确定要停止当前活动吗？';
+            layer.confirm(showMessage, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'activityStop',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (data) {
+                        if (data.code == "200") {
+                            $(obj).parents("tr").find(".td-manage").html(' <a style="text-decoration:none" onClick="changeActivity(this,' + id + ');" href="javascript:;" title="等待上线"><i class="Hui-iconfont">&#xe6dc;</i></a>');
+                        }
+                        index = parent.layer.getFrameIndex(window.name);
+                        layer.msg(data.msg, { icon: 1, time: 1000 });
+                    },
+                    error: function (data) {
+                        // index.log(data.message);
+                        layer.msg('提交出错！请刷新页面重新提交！', { icon: 2, time: 1000 });
+                    },
+                });
+            });
+        }
+        /*活动-添加*/
+        function activity_add(title, url) {
+            var index = layer.open({
+                type: 2,
+                title: title,
+                content: url,
+                end: function () {
+                    location.replace(location.href);
+                }
+            });
+            layer.full(index);
+        }
+        // 活动删除
+        function activity_del(obj, id) {
+            layer.confirm('确认要删除吗？', function (index) {
+                var str = { id: id };
+                $.post("delActivity", str, function (res) {
+                    if (res.code == 200) {
+                        $(obj).parents("tr").remove();
+                        $(obj).remove();
+                        layer.msg(res.msg, { icon: 6, time: 1000 });
+                        setTimeout('window.location.reload(location.href);', 1000);
+                    }
+                    if (res.code == 300) {
+                        layer.msg(res.msg, { icon: 5, time: 1000 });
+                    }
+                })
+            });
+        }
+        // 点击抽奖
+        function lottery(obj, id) {
+            var num = $(obj).parents("tr").find(".td-num").html();
+            if (num > 0) {
+                // 打开新窗口
+                window.open('https://ft.up.maikoo.cn/index/activitylottery?activity_id=' + id + '');
+            }
+            layer.msg('抽奖人数不足哦！', { icon: 5, time: 1000 });
+        }
+        // 点击生成活动海报
+        function create_activity_poster(obj, id) {
+            var showMessage = '确定要生成活动海报吗？';
+            layer.confirm(showMessage, function (index) {
+                // loading层 0.1透明度
+                var index = layer.load(1, { shade: [0.9, '#fff'] });
+                $.ajax({
+                    type: 'POST',
+                    url: 'createActivityPoster',
+                    dataType: 'json',
+                    data: { activity_id: id },
+                    success: function (res) {
+                        if (res.code == "200") {
+                            layer.close(index);
+                            layer.msg(res.msg, { icon: 1, time: 1000 });
+                            // $(obj).parents("tr").find(".td-poster").html('<a class="btn btn-success radius" href="../'+res.data+'" download="poster"><i class="Hui-iconfont">&#xe641;</i> 下载</a>');
+                            setTimeout('window.location.reload(location.href);', 1300);
+                        }
+                        if (res.code == "300") {
+                            layer.msg(res.msg, { icon: 2, time: 1000 });
+                        }
+                    },
+                    error: function (res) {
+                        // index.log(res.message);
+                        layer.msg('提交出错！请刷新页面重新提交！', { icon: 2, time: 1000 });
+                    },
+                    complete: function (res) {
+                        layer.close(index);
+                    },
+                });
+
+            });
+        }
+    </script>
+</body>
+
+</html>

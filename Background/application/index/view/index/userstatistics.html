@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>用户统计图表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商城统计 <span class="c-gray en">&gt;</span> 用户统计 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2" style="margin-left: 30px;margin-top: 5px;">选择图表：</label>
+            <div class="formControls col-xs-8 col-sm-6">
+                <select  name="time" id="time"style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="day">默认统计</option>
+                    <option value="month">按月份统计</option>
+                    <option value="season">按季度统计</option>
+                    <option value="year">按年度统计</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="container" style="min-width:700px;height:400px"></div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+    <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<!-- <script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> -->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript">
+
+    $.ajax({
+        data:{select:'day'},
+        datatype:"POST",
+        url:"userCount",
+        success:function(data){
+              
+            var xset = new Array();
+            var yset = data;
+
+            for( i=14;i>=0;i--){
+       
+                var date = getNowFormatDate(i);
+
+                // console.log(date);
+
+                xset.push(date);
+            }
+        
+            showChart(xset,yset);  
+        }
+    });
+// 选择框事件
+$("#time").change(function(){
+
+    var select = $(this).val();
+    // console.log(select);
+    // 默认显示图表
+    if(select=="day"){
+        $.ajax({
+            data:{select:'day'},
+            datatype:"POST",
+            url:"userCount",
+            success:function(data){
+                  
+                var xset = new Array();
+                var yset = data;
+
+                for( i=14;i>=0;i--){
+           
+                var date = getNowFormatDate(i);
+
+                    xset.push(date);
+                }
+            
+                showChart(xset,yset);  
+            }
+        });
+    }
+    // 选择日期图表
+    if(select=="month"){
+        $.ajax({
+            data:{select:select},
+            datatype:"POST",
+            url:"userCount",
+            success:function(data){
+                 
+                var xset = new Array();
+                var yset = data;
+
+                var daycount = mGetDate();
+        
+                for( i=1;i<=daycount;i++){
+           
+                var date = getMonthDate(i);
+
+                    xset.push(date);
+                }
+           
+                showChart(xset,yset);  
+            }
+        });
+    }
+    // 选择季度图表
+    if(select=='season'){
+        $.ajax({
+            data:{select:select},
+            datatype:"POST",
+            url:"userCount",
+            success:function(data){
+                var xset = ['第一季度','第二季度','第三季度','第四季度'];
+                var yset = data;//Y轴数据集
+    
+                console.log(xset);
+                showChart(xset,yset);
+            }
+        });
+    }
+    // 选择年份图表
+    if(select=='year'){
+        $.ajax({
+            data:{select:select},
+            datatype:"POST",
+            url:"userCount",
+            success:function(data){
+                var xset = new Array();
+                var yset = data;//Y轴数据集
+                for( i=4;i>=0;i--){
+                    var year = getNowYear(i);
+                    xset.push(year);
+                }
+                // console.log(xset);
+                showChart(xset,yset);
+            }
+        });
+    }
+});
+    // 初始化化图表    
+   function showChart(xset,yset){  
+        var chart = new Highcharts.Chart({  
+            chart: {  
+                renderTo: 'container',  
+                type: 'line',  
+                marginRight: 130,  
+                marginBottom: 85  
+            },  
+            title: {
+                text: '新增用户折线图',
+                x: -20 //center
+            },
+            xAxis: {  
+                categories: xset
+            },  
+            yAxis: {
+                min: 0,
+                tickInterval: 1,  
+                title: {  
+                    text: '新增用户（名）'  
+                },  
+                plotLines: [{  
+                    value: 0,  
+                    width: 1,  
+                    color: '#808080'  
+                }]  
+            },  
+            tooltip: {  
+                formatter: function() {  
+                        return this.x+'<br/><br/>'+  
+                        '<b>'+this.series.name+ this.y+' 名'+'</b>';
+                } 
+                // valueSuffix: '°C' 
+            },  
+            legend: {  
+                layout: 'vertical',
+                align: 'right',  
+                verticalAlign: 'top',  
+                x: -10,  
+                y: 100,  
+                borderWidth: 0  
+            },  
+            series: [{  
+                name: '新增用户：',  
+                data: yset
+            }]  
+        });  
+    } 
+
+    //获取当前时间，格式YYYY-MM-DD
+    function getNowFormatDate(day) {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate()-day;
+        if(strDate<=0){
+            var date2 = new Date(date-(day)*24*3600*1000);
+            month = date2.getMonth()+1;
+            strDate = date2.getDate();
+        }
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+     // 获取当前月份天数
+    function mGetDate(){
+         var date = new Date();
+         var year = date.getFullYear();
+         var month = date.getMonth()+1;
+         var d = new Date(year, month, 0);
+         return d.getDate();
+    }
+    //获取当月时间，格式YYYY-MM-DD
+    function getMonthDate(day) {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = day;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+    //获取当前年份
+    function getNowYear(year) {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear()-year;
+        var currentdate = year + '年';
+        return currentdate;
+    }
+
+  // 设置默认参数
+  Highcharts.setOptions({
+    lang: {
+        printChart:['打印图表'],
+        downloadJPEG:['导出JPEG图片'],
+        downloadPDF:['导出PDF文件'],
+        downloadPNG:['导出PNG图片'],
+        downloadSVG:['导出SVG文件'],
+        months: ['一月', '二月', '三月', '四月', '五月', '六月',  '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        weekdays: ['第一季度', '第一季度', '第一季度', '第一季度']
+    }
+    });
+</script>
+</body>
+
+</html>

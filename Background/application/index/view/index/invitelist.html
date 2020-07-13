@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lt IE 9]>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+
+    <!--[if IE 6]>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
+    <script>DD_belatedPNG.fix('*');</script>
+
+    <![endif]-->
+
+    <title>小程序邀请码</title>
+
+    <link rel="stylesheet" href="__ROOT__/public/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <style>
+    .Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+</head>
+
+<body class="pos-r">
+
+<div class="pos-a" style="left:0;top:0; bottom:0; height:100%; border-right:1px solid #e5e5e5; background-color:#f5f5f5; overflow:auto;">
+
+    <ul id="treeDemo" class="ztree"></ul>
+
+</div>
+
+<div>
+
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 小程序管理 <span class="c-gray en">&gt;</span> 邀请码<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+    <div class="page-container">
+
+
+
+        <div class="cl pd-5 bg-1 bk-gray mt-20">
+
+            <a href="javascript:;" class="btn btn-primary radius" onclick="invite_add('添加邀请码','inviteadd.html','','510')"><i class="Hui-iconfont">&#xe600;</i> 添加邀请码</a></span> <span class="r">共有数据：<strong>{:sizeof($invite)}</strong> 条</span> </div>
+
+        <div class="mt-20">
+
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+
+                <thead>
+
+                <tr class="text-c">
+
+
+
+                    <th width="100">邀请码</th>
+
+                    <th width="60">可邀请总人数</th>
+
+                    <th width="100">已被激活人数</th>
+
+                    <th width="100">创建时间</th>
+
+                    <th width="100">状态</th>
+
+                    <th width="100">操作</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {if condition="sizeof($invite) == 0"}
+
+
+
+                {else /}
+
+                {volist name="$invite" id="vol"}
+
+                <tr class="text-c">
+
+                    <td>{$vol.invite_code}</td>
+
+                    <td>{$vol.code_total_num}</td>
+
+                    <td>{$vol.code_active_num}</td>
+
+                    <td >{$vol.create_time}</td>
+
+                    <td class="td-status">
+
+                        {if condition = "$vol.is_active eq 0 "}
+
+                            {if condition = "$vol.code_total_num eq $vol.code_active_num "}
+
+                             <span class="label label-defaunt radius" style="background-color: red">停用</span>
+
+                            {else}
+
+                             <span class="label label-defaunt radius" >待启用</span>
+
+                             {/if}
+
+                        {elseif condition = "$vol.is_active eq 1" }
+
+                             {if condition = "$vol.code_total_num eq $vol.code_active_num " /}
+
+                             <span class="label label-defaunt radius" style="background-color: red">停用</span>
+
+                             {else}
+
+                             <span class="label label-success radius">已启用</span>
+
+                             {/if}
+
+                        {/if}
+
+                    </td>
+
+                    <td class="td-manage">
+
+                        {if condition = "$vol.code_total_num eq $vol.code_active_num "}
+
+                             <a title="无操作" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6dd;</i> </a>
+
+                        {elseif condition = "$vol.is_active eq 0 "}
+
+                             <a title="启用" href="javascript:;" onclick="code_use(this,'{$vol.code_id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>
+
+                        {elseif condition = "$vol.is_active eq 1" /}
+
+                             <a title="停用" href="javascript:;" onclick="code_stop(this,'{$vol.code_id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>
+
+                    {/if}
+
+                    </td>
+
+                </tr>
+
+                {/volist}
+
+                {/if}
+
+                </tbody>
+
+            </table>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+
+<script type="text/javascript">
+
+   $('.table-sort').dataTable({
+    language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+       "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+
+       "bStateSave": true,//状态保存
+
+       "aoColumnDefs": [
+
+           {"orderable":false,"aTargets":[]}// 制定列不参与排序
+
+       ]
+
+   });
+
+    /*添加邀请码*/
+
+    function invite_add(title,url){
+
+        var index = layer.open({
+
+            type: 2,
+
+            title: title,
+
+            content: url
+
+        });
+
+        layer.full(index);
+
+    }
+
+
+
+    /*邀请码-启用*/
+
+    function code_use(obj,id){
+
+        layer.confirm('确认启用吗？',function(index){
+
+            var str = {id : id};
+
+            $.post("inviteuse", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").find(".td-manage").prepend('<a title="停用" href="javascript:;" onclick="code_stop(this,\'{$vol.code_id}\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已使用</span>');
+
+                    $(obj).remove();
+
+                    layer.msg('已启用!',{icon: 6,time:1000});
+                    window.reload();
+
+                } else {
+
+                    layer.msg('操作失败!',{icon: 6,time:1000});
+
+                }
+
+            })
+
+            return false;
+
+        });
+
+    }
+
+   /*邀请码-停用*/
+
+   function code_stop(obj,id){
+
+       layer.confirm('确认停用吗？',function(index){
+
+           var str = {id : id};
+
+           $.post("invitestop", str, function (res) {
+
+               if (res.code == 200) {
+
+                   $(obj).parents("tr").find(".td-manage").prepend('<a title="使用" href="javascript:;" onclick="code_use(this,\'{$vol.code_id}\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+
+                   $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">待使用</span>');
+
+                   $(obj).remove();
+
+                   layer.msg('已停用!',{icon: 6,time:1000});
+
+               } else {
+
+                   layer.msg('操作失败!',{icon: 6,time:1000});
+
+               }
+
+           })
+
+           return false;
+
+       });
+
+   }
+
+</script>
+
+</body>
+
+</html>

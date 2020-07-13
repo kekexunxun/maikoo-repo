@@ -1,0 +1,236 @@
+/* 无订单 */
+
+.no-order {
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  color: #999;
+  text-align: center;
+  margin-top: 70px;
+}
+
+/* TAB BAR */
+
+page {
+  background-color: #f8f8f8;
+  font-size: 16px;
+  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+  font-family: '微软雅黑', Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', Arial, sans-serif;
+}
+
+.page__bd {
+  padding-bottom: 15px;
+}
+
+.weui-tab {
+  position: relative;
+  height: 100%;
+}
+
+.weui-tab__panel {
+  box-sizing: border-box;
+  height: 100%;
+  padding-top: 80rpx;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.weui-navbar__item {
+  position: relative;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 0;
+  color: #666;
+}
+
+.weui-navbar__item.weui-bar__item_on {
+  color: #ffb600;
+}
+
+.weui-navbar__slider {
+  position: absolute;
+  content: " ";
+  left: 0;
+  bottom: 0;
+  width: 80px;
+  height: 6rpx;
+  background-color: #ffb600;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
+}
+
+.weui-navbar__title {
+  display: inline-block;
+  font-size: 30rpx;
+  max-width: 8em;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+.weui-navbar {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  position: absolute;
+  z-index: 500;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+/* container */
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* order-list */
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 5px;
+  margin: 15rpx 2% 0 2%;
+}
+
+.list-title {
+  display: flex;
+  flex-direction: row;
+  line-height:70rpx;
+  font-size: 26rpx;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+.list-title-left {
+  color: #333;
+  text-align: left;
+  width: 70%;
+  padding-left: 2%;
+}
+
+.list-title-right {
+  text-align: right;
+  width: 30%;
+  padding-right: 2%;
+}
+
+/*  订单多种状态颜色显示  */
+
+.list-item {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2%;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: row;
+  line-height: 60rpx;
+  font-size: 26rpx;
+  padding: 10rpx 10rpx 10rpx 0;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+.content-left {
+  width: 18%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.content-left image {
+  height: 110rpx;
+  width: 110rpx;
+}
+
+.content-middle {
+  width: 62%;
+  display: flex;
+  flex-direction: column;
+  line-height: 60rpx;
+}
+
+.content-right {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.list-bottom {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 10rpx 0;
+}
+
+/*  用户操作的几个Button  */
+
+/*  待付款  */
+
+.list-bottom button {
+  font-size: 22rpx;
+  border-radius: 15px;
+  line-height: 40rpx;
+  padding: 0 16rpx;
+  margin: 0 10rpx;
+  background-color: white;
+}
+
+.prepay {
+  color: #e04e5b;
+  border: 1rpx solid #e04e5b;
+}
+
+.common {
+  color: #333;
+  border: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+.onemore {
+  color: #e3ac04;
+  border: 1rpx solid #e3ac04;
+}
+
+.confirm{
+  border: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+/*  去掉button的border  */
+
+button::after {
+  border: none;
+}
+
+.order-count {
+  line-height: 60rpx;
+  color: #666;
+  text-align: right;
+  padding-right: 2%;
+  padding-bottom: 4rpx;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.5);
+  font-size: 26rpx;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.text-dec {
+  text-decoration: line-through;
+}
+.promo-count{
+  color: #e3ac04;
+  font-size: 28rpx;
+}

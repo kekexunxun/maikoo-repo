@@ -1,0 +1,44 @@
+<!--pages/demo/demo.wxml-->
+<view class='container'>
+  <!-- order-item -->
+  <view class='product-list'>
+    <block wx:for="{{orderDetail}}" wx:key="">
+      <view class='product'>
+        <view class='product-image'>
+          <image src='{{item.pic}}'></image>
+        </view>
+        <view class='product-info'>
+          <view class='product-info-up'>
+            <text class='textOverFlow'>{{item.name}}</text>
+            <text>￥{{item.shop_price}}</text>
+          </view>
+          <view class='product-info-middle'>
+            <block wx:if="{{item.is_on_promotion}}">
+              <text class='product-info-middle-text1 textOverFlow'>{{item.promotion_name}}</text>
+              <text class='product-info-middle-text2'>{{item.promotion_count}}折</text>
+            </block>
+            <block wx:else>
+              <text class='product-info-middle-text1'></text>
+              <text class='product-info-middle-text2'> </text>
+            </block>
+          </view>
+          <view class='product-info-promotion'>x{{item.quantity}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- 核销按钮 -->
+<view class='bottom-btn'>
+  <block wx:if="{{notVerify}}">
+    <form report-submit='true' bindsubmit='confirmVerify'>
+      <button form-type='submit' type='primary'>核销订单</button>
+    </form>
+  </block>
+  <block wx:else>
+    <form report-submit='true'>
+      <button type='primary' class="already-verify">订单已核销</button>
+    </form>
+  </block>
+</view>

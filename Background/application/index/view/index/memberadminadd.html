@@ -1,0 +1,257 @@
+
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="__ROOT__/public/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <!--[if IE 6]>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+</head>
+<body>
+<div class="page-container">
+    <form action="" method="post" class="form form-horizontal" id="form-addadmin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">管理员：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+            <select name="adminname" id="adminname" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                {volist name="$userinfo" id="vol"}
+                <option name="{$vol.user_id}">{$vol.nickName} - {$vol.name} - {$vol.tel_num}</option>
+                {/volist}
+            </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">管理员角色：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input name="staff" checked="checked" value="1" type="radio">票券核销员
+                <input name="staff" value="2" type="radio" style="margin-left: 20px;">系统管理员
+            </div>
+        </div>
+        <div class="row cl active" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+            </div>
+        </div>
+        <div class="row cl active" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" placeholder="确认新密码" id="password2" name="password2">
+            </div>
+        </div>
+        <div class="row cl active" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择权限：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" value="点击选择" type="button" class="input-text valid" id="selectPower">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">是否立即启用：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select name="adminactive" id="adminactive" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <a onClick="addadmin_save_submit();" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 提交</a>
+               <!--  <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button> -->
+            </div>
+        </div>
+    </form>
+</div>
+    <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">权限选择</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <!-- <p>对话框内容…</p> -->
+                <div class="zTreeDemoBackground left">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm" class="btn btn-primary">确定</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+// zTree插件
+var setting = {
+    check: {
+        enable: true
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+        }
+    },
+    callback:{
+        beforeCheck:true,
+        onCheck:onCheck
+    }
+};
+var code;
+function setCheck() {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+    py = $("#py").attr("checked")? "p":"p",
+    sy = $("#sy").attr("checked")? "s":"s",
+    pn = $("#pn").attr("checked")? "p":"p",
+    sn = $("#sn").attr("checked")? "s":"s",
+    type = { "Y":py + sy, "N":pn + sn};
+    zTree.setting.check.chkboxType = type;
+    showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+}
+function showCode(str) {
+    if (!code) code = $("#code");
+    code.empty();
+    code.append("<li>"+str+"</li>");
+}
+var aa='';
+function onCheck(e,treeId,treeNode){
+    var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+    nodes=treeObj.getCheckedNodes(true),
+    v="";
+    for(var i=0;i<nodes.length;i++){
+        v+=nodes[i].id + ",";
+        // console.log("节点id:"+nodes[i].id+"节点名称"+v); //获取选中节点的值
+    }
+    aa=v
+}
+// 权限分配
+$('#selectPower').click(function(){
+    var userid = $('#adminname option:selected').attr('name');
+    // console.log(userid);
+    // 显示模态框
+    $("#modal-demo").modal("show");
+    $.ajax({
+        async:false,
+        cache:false,
+        type: 'POST',
+        data:{id:userid},
+        dataType : "json",
+        url: 'power',//请求的action路径
+        success:function(data){ //请求成功后处理函数
+            // console.log(data);
+            treeNodes = data; //把后台封装好的简单Json格式赋给treeNodes
+            $.fn.zTree.init($("#treeDemo"), setting, treeNodes);
+            setCheck();
+            $("#py").bind("change", setCheck);
+            $("#sy").bind("change", setCheck);
+            $("#pn").bind("change", setCheck);
+            $("#sn").bind("change", setCheck);
+        },
+        error: function(){
+        },
+    });
+})
+    $('input[type=radio][name=staff]').change(function() {
+        var type = this.value;
+        if(type == 1){
+            $('.active').hide();
+        }else{
+            $('.active').show();
+        }
+    });
+    // 提交表单
+    function addadmin_save_submit() {
+        var userid = $('#adminname option:selected').attr('name');
+        // var adminname = $('#adminname option:selected').val();
+        var admintype = $("input[type=radio][name=staff]:checked").val();
+        var adminactive = $('#adminactive option:selected').val();
+        if(admintype == 2){
+            var password = $('#password').val();
+            var password2 = $('#password2').val();
+            if(password == '' || password2 == ''){
+                layer.msg('密码不能为空！',{icon:2,time:1000});
+                return false;
+            }else if(password != password2 ){
+                layer.msg('两次输入的密码不一致！',{icon:2,time:1000});
+                return false;
+            }
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'addAdmin',
+            dataType: 'json',
+            data: {userid: userid, password: password, admintype: admintype,adminactive: adminactive},
+            success: function(data){
+                if(data.code == '200'){
+                    index = parent.layer.getFrameIndex(window.name);
+                    layer.msg(data.msg,{icon:1,time:1000});
+                    setTimeout('parent.layer.close(index);',1000);
+                }
+                if(data.code == '300'){
+                    layer.msg(data.msg,{icon:2,time:1000});
+                }
+            },
+            error:function(data) {
+                layer.msg('网络错误，请稍后重试!',{icon:2,time:1000});
+            },
+        });
+        return false;
+}
+// 点击确定保存权限
+$("#confirm").click(function(){
+    var userid = $('#adminname option:selected').attr('name');
+    if(aa){
+        $.ajax({
+            type: 'POST',
+            data:{menuid:aa,id:userid},
+            dataType : "json",
+            url: 'selectPower',
+            success:function(data){ //请求成功后处理函数。
+                $("#modal-demo").modal("hide");
+                layer.msg(data.msg, {icon: 1,time:1300});
+
+            },
+            // error:function(){//请求失败处理函数
+            //     layer.msg('请求失败',{
+            //       icon: 2,
+            //       shade: 2
+            //     })
+            // },
+        });
+    }else{
+        layer.msg('您尚未选择任何权限！',{icon:2,time:1000});
+        return false;
+    }
+})
+</script>
+</body>
+</html>

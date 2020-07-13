@@ -1,0 +1,263 @@
+/* pages/demo/demo.wxss */
+
+page {
+  background-color: #f4f4f4;
+}
+
+.buyer {
+  background-color: #fff;
+  margin-top: 2rpx;
+  display: flex;
+}
+
+.order-status {
+  line-height: 60rpx;
+  font-size: 28rpx;
+  background: white;
+  padding: 0 10rpx;
+  margin-top: 15rpx;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+.buyer-icon {
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buyer-icon image {
+  height: 40rpx;
+  width: 40rpx;
+}
+
+.buyer-info {
+  padding: 10rpx 20rpx;
+  width: 85%;
+  line-height: 50rpx;
+}
+
+.buyer-info-up {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.buyer-info-up text {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.buyer-info-bottom text {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.product {
+  background-color: #fff;
+  display: flex;
+  border-top: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+.product:first-child {
+  border-top: none;
+}
+
+.product-image {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.product-image image {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 5px;
+}
+
+.product-info {
+  width: 75%;
+  padding: 20rpx;
+  color: #333;
+  line-height: 60rpx;
+  font-size: 28rpx;
+}
+
+.product-info-up {
+  width: 100%;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.product-info-up text {
+  font-size: 26rpx;
+}
+
+.product-info-middle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+.product-info-middle-text1 {
+  color: #666;
+}
+
+.product-info-middle-text2 {
+  color: #e3ac04;
+}
+
+.totalFee {
+  color: #666;
+}
+
+.product-info-promotion {
+  text-align: right;
+}
+
+.product-info-cat {
+  text-align: left;
+}
+
+.product-info-bottom {
+  text-align: right;
+}
+
+.code {
+  background-color: #fff;
+  margin-top: 15rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 450rpx;
+  justify-content: space-around;
+}
+
+.code image {
+  height: 300rpx;
+  width: 300rpx;
+  margin-top: 10rpx;
+}
+
+/* 生成二维码 */
+
+.gen-code {
+  margin-top: 15rpx;
+  width: 100%;
+  background: #fff;
+}
+
+.gen-code button {
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  color: #333;
+  background: #fff;
+}
+
+.code button {
+  background-color: #fff;
+  color: #737373;
+  font-size: 28rpx;
+}
+
+.deliver {
+  background-color: #fff;
+  margin-top: 15rpx;
+  padding: 0 10rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+}
+
+.order {
+  background-color: #fff;
+  margin-top: 15rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  padding: 0 10rpx;
+}
+
+.copybtn {
+  border-radius: 3px;
+  line-height: 20px;
+  font-size: 24rpx;
+  padding: 0 6px;
+  background: #ededed;
+  color: #999;
+}
+
+button::after {
+  border: none;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/*  底部按钮  */
+
+.bottom-btn {
+  height: 40px;
+  line-height: 40px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/*  btn  */
+
+.btns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background: rgba(220, 220, 220, 0.1);
+}
+
+.btns button {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: white;
+  border-radius: 0;
+}
+
+.prepay-btn {
+  background-color: #f00 !important;
+  border: #f00;
+}
+
+.cancel-btn {
+  background: #333;
+  border: #333;
+}
+
+.rate-btn {
+  background: #333;
+  border: #333;
+}
+
+.onemore-btn {
+  background: #ff8a00;
+  border: #ff8a00;
+}
+
+.one-btn {
+  width: 100%;
+}
+
+.two-btn {
+  width: 50%;
+}
+
+.three-btn {
+  width: 33.3%;
+}

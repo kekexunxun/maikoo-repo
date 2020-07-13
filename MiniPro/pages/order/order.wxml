@@ -1,0 +1,35 @@
+<import src="../../template/orderTemplate.wxml" />
+<block wx:if="{{isHaveOrder}}">
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-tab">
+        <view class="weui-navbar">
+          <block wx:for-items="{{tabs}}" wx:key="{{index}}">
+            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+              <view class="weui-navbar__title">{{item}}</view>
+            </view>
+          </block>
+          <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+        </view>
+        <view class="weui-tab__panel">
+          <block wx:for="{{tabIndex}}" wx:key="">
+            <view class="weui-tab__content" hidden="{{activeIndex != index}}">
+              <!--  使用template  -->
+              <view class='container'>
+                <!--  全部订单列表  -->
+                <view class='order-list' wx:for="{{item.list}}" wx:key="">
+                  <template is="order" data="{{...item}}" />
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+</block>
+<block wx:else>
+  <view class='no-order'>
+    <text>暂无任何订单信息，快去下单吧</text>
+  </view>
+</block>

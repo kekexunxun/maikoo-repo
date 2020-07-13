@@ -1,0 +1,39 @@
+<view class="container {{showBottomLoading ? 'bottom-show' : ''}}" wx:if="{{isHavePromotion}}">
+  <block wx:for="{{promotionList}}" wx:key="">
+    <view class='promote-item'>
+      <!--  左侧 购买人详情  -->
+      <view class='item-top'>
+        <view class='item-left'>
+          <image src='{{item.buyer_pic}}'></image>
+          <view class='nickname text-flow'>{{item.buyer_name}}</view>
+          <view class='goodname text-flow'>{{item.goods_name}}</view>
+        </view>
+        <view class='item-middle'>
+          <view class='upper-image'>
+            <image src='{{item.upper_pic}}'></image>
+          </view>
+          <view class='upper-nickname text-flow'>{{item.upper_name}}</view>
+        </view>
+        <view class='item-right'>
+          <view class='right-text'>返佣</view>
+          <view>
+            <text>+{{item.upper_dis_fee}}</text>
+          </view>
+        </view>
+      </view>
+      <view class='item-bottom'>{{item.create_time}}</view>
+    </view>
+  </block>
+  <view class='bottom-msg' wx:if="{{showBottomLoading}}">
+    <view class="weui-loadmore weui-loadmore_line" wx:if="{{showBottomLoading && !isHaveMore}}">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">没有更多了</view>
+    </view>
+  </view>
+</view>
+
+<!--  没有promotion数据时  -->
+<view wx:else>
+  <view class='nothing-container'>
+    <view class='nothing'>当前无数据</view>
+  </view>
+</view>

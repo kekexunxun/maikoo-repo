@@ -1,0 +1,23 @@
+<view class="container" wx:if="{{isHaveActivity}}">
+  <view class='activity-list'>
+    <block wx:for="{{activityList}}" wx:key="">
+      <navigator url='../activitydetail/activitydetail?activityid={{item.activity_id}}' hover-class="none">
+        <view class='activity-item'>
+          <view class='item-title textOverFlow'>{{item.name}}</view>
+          <block wx:if="{{countDown[index].isActive}}">
+            <view class='item-brief'>距离活动结束还有：{{countDown[index].time}}</view>
+          </block>
+          <block wx:else>
+            <view class='item-brief'>活动已结束</view>
+          </block>
+          <view class='item-pic'><image src="{{item.pic || 'https://ft.up.maikoo.cn/public/banner/defaultbanner.png'}}"></image></view>
+          <!-- <view class='item-pic'><image src=></image></view>  -->
+        </view>
+      </navigator>
+    </block>
+  </view>
+</view>
+
+<view class='nothing' wx:else>
+  <view class='wait'><image src='../../images/waitmore.png' mode='widthFix'></image></view>
+</view>

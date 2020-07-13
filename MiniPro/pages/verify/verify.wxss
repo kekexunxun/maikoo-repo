@@ -1,0 +1,119 @@
+/* pages/demo/demo.wxss */
+
+.container{
+  margin-bottom: 150rpx;
+}
+
+.product {
+  background-color: #fff;
+  display: flex;
+  border-top: 1rpx solid rgba(220, 220, 220, 0.5);
+}
+
+.product-image {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.product-image image {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 5px;
+}
+
+.product-info {
+  width: 75%;
+  padding: 20rpx;
+  color: #333;
+  line-height: 60rpx;
+  font-size: 28rpx;
+}
+
+.product-info-up {
+  width: 100%;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.product-info-up text {
+  font-size: 26rpx;
+}
+
+.product-info-middle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+.product-info-middle-text1 {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.product-info-middle-text2 {
+  color: #666;
+  text-decoration: line-through;
+}
+
+.totalFee {
+  color: #666;
+}
+
+.product-info-promotion {
+  text-align: right;
+}
+
+.product-info-bottom {
+  text-align: right;
+}
+
+.order {
+  background-color: #fff;
+  margin-top: 15rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  padding: 0 10rpx;
+}
+
+.copybtn {
+  border-radius: 3px;
+  line-height: 20px;
+  font-size: 24rpx;
+  padding: 0 6px;
+  background: #ededed;
+  color: #999;
+}
+
+button::after {
+  border: none;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/*  底部按钮  */
+
+.bottom-btn {
+  line-height: 80rpx;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.bottom-btn button{
+  border-radius: 0;
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.already-verify{
+  background: #c8a063!important;
+}

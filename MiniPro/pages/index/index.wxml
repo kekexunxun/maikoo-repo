@@ -1,0 +1,80 @@
+<view class="container">
+  <!--  Banner  -->
+   <swiper indicator-dots="false" autoplay="true" interval="5000" duration="1000" class='swiper' indicator-color="white">
+    <block wx:for="{{banner}}" wx:key="">
+      <swiper-item>
+      <image src="{{item.banner_src}}" class='banner-img' mode='scaleToFill' bindtap='navToGood' data-goodsid='{{item.goods_id}}'/>
+      </swiper-item>
+    </block>
+  </swiper> 
+  <!--  Banner END  -->
+  <!--  搜索框  -->
+  <view class="weui-search-bar">
+    <view class="weui-search-bar__form">
+        <view class="weui-search-bar__box">
+          <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" bindinput='inputValue' />
+          <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+              <icon type="clear" size="14"></icon>
+          </view>
+        </view>
+        <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+          <icon class="weui-icon-search" type="search" size="14"></icon>
+          <view class="weui-search-bar__text">搜索</view>
+        </label>
+    </view>
+    <view class="weui-search-bar__cancel-btn" wx:if="{{inputVal.length > 0}}" bindtap="searchResult">搜索</view>
+    <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" wx:else bindtap="hideInput">取消</view>
+  </view>
+  <!--  搜索详情页  -->
+  <view class="weui-cells searchbar-result" wx:if="{{isHaveSearchValue}}">
+    <block wx:for="{{searchResult}}" wx:key="">
+      <navigator url="../goodsdetail/goodsdetail?goodsid={{item.goods_id}}" class="weui-cell" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">
+          <view>{{item.name}}</view>
+        </view>
+      </navigator>
+    </block>
+  </view>
+  <!--  搜索框 END  -->
+  <!--  票券分类展示  -->
+  <view class='ticket'>
+    <view class='ticket-title'>
+      <view class='ticket-title-left'>票券<text>Ticket</text></view>
+      <view class='ticket-title-right' bindtap='navToCat' data-catid='0'>
+        <text>全部</text>
+        <image src='../../images/icon-arrowright.png'></image>
+      </view>
+    </view>
+    <view class='ticket-list'>
+      <block wx:for="{{ticketList}}" wx:key="">
+        <view class='ticket-item' bindtap='{{item.tap}}' data-catid='{{item.catId}}'>
+          <image src='{{item.icon}}'></image>
+          <text>{{item.text}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+  <!--  票券分类展示 END  -->
+  <!--  生活用品展示  -->
+  <view class='daily'>
+    <view class='ticket-title'>
+      <view class='ticket-title-left'>生活用品<text>Daily</text></view>
+      <view class='ticket-title-right' bindtap='navToCat' data-catId='5'>
+        <text>全部</text>
+        <image src='../../images/icon-arrowright.png'></image>
+      </view>
+    </view>
+    <!--  生活用品横向滚动栏  -->
+    <scroll-view class="recommend_scroll_x_box" scroll-x="true">
+      <view class="recommend_hot_box" wx:for="{{dailyList}}" wx:key="">
+        <navigator url='../goodsdetail/goodsdetail?goodsid={{item.goods_id}}'>
+          <image src="{{item.pic}}" class="recommend_hot_image"></image>
+          <view class="title text_center textOverFlow">{{item.name}}</view>
+          <!-- <view class="desc text_center"><text>￥ {{item.shop_price}}</text><text class='text-dec'>￥{{item.market_price}}</text></view> -->
+        </navigator>
+      </view>
+    </scroll-view>
+  </view>
+  <!--  生活用品展示 END  -->
+</view>

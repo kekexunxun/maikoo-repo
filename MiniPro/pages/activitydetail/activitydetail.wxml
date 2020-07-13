@@ -1,0 +1,78 @@
+<import src="../../utils/wxParse/wxParse.wxml" />
+<view class="container">
+  <view class='title'>{{activityInfo.name}}</view>
+  <view class='brief'>活动简介：{{activityInfo.brief}}</view>
+  <view class='countDown' wx:if="{{countDown.isActive}}">距离活动结束还有：<text>{{countDown.time}}</text></view>
+  <view class='price'>
+    <view class='price-title'>奖项设置</view>
+    <view class='price-content' wx:if="{{activityInfo.first_price_num > 0}}">
+      <view class='price-content-left'>奖项</view>
+      <view class='price-content-middle'>获奖人数</view>
+      <view class='price-content-right'>奖品</view>
+    </view>
+    <view class='price-content' wx:if="{{activityInfo.first_price_num > 0}}">
+      <view class='price-content-left'>一等奖</view>
+      <view class='price-content-middle'>{{activityInfo.first_price_num}}人</view>
+      <view class='price-content-right'>{{activityInfo.first_price}}</view>
+    </view>
+    <view class='price-content' wx:if="{{activityInfo.second_price_num > 0}}">
+      <view class='price-content-left'>二等奖</view>
+      <view class='price-content-middle'>{{activityInfo.second_price_num}}人</view>
+      <view class='price-content-right'>{{activityInfo.second_price}}</view>
+    </view>
+    <view class='price-content' wx:if="{{activityInfo.second_price_num > 0}}">
+      <view class='price-content-left'>三等奖</view>
+      <view class='price-content-middle'>{{activityInfo.third_price_num}}人</view>
+      <view class='price-content-right'>{{activityInfo.third_price}}</view>
+    </view>
+  </view>
+  <view class='win-content' wx:if="{{activityInfo.isWin}}">
+    <view class='win-title'>中奖啦！！！</view>
+    <view class='win-price'>
+      <view class='win-price-left'>所中奖项</view>
+      <view class='win-price-right'>{{activityInfo.level}}等奖</view>
+    </view>
+    <view class='win-price'>
+      <view class='win-price-left'>所获奖品</view>
+      <view class='win-price-right'>{{activityInfo.level_price}}</view>
+    </view>
+    <view class='win-price'>
+      <view class='win-price-left'>中奖时间</view>
+      <view class='win-price-right'>{{activityInfo.win_time}}</view>
+    </view>
+  </view>
+
+  <view class='line'></view>
+
+  <view class='content'>
+    <template is="wxParse" data="{{wxParseData:content.nodes}}" />
+  </view>
+</view>
+
+<!-- poster -->
+<view class='poster' bindtap='showPosterModal'>
+  <image src='/images/qr.png'></image>
+</view>
+
+<!--  用户报名参与按钮  -->
+<view class='signup' wx:if="{{countDown.isActive && !isJoin}}">
+  <form report-submit='true' bindsubmit='signUp'>
+    <button form-type='submit'>我要参加</button>
+  </form>
+</view>
+<view class='signup expired' wx:if="{{!countDown.isActive || !activityInfo.is_active}}">
+  活动已过期
+</view>
+<view class='signup success' wx:if="{{activityInfo.isJoin && !activityInfo.isWin}}">
+  活动已参与
+</view>
+<view class='signup winback' wx:if="{{activityInfo.isWin}}">
+  中奖啦
+</view>
+
+<!-- 自定义遮罩层 -->
+<view class='modal' bindtouchmove='preventTouchMove' wx:if="{{posterModalShow}}"></view>
+<view class='modal-container' wx:if="{{posterModalShow}}">
+  <image class='modal-img' src="{{activityInfo.activity_poster}}"></image>
+  <image class='modal-close' src='/images/icon-save.png' bindtap='savePoster'></image>
+</view>

@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datapond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="__ROOT__/public/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <link href="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <link href="__ROOT__/public/static/lib/jqueryColorPicker/css/colorpicker.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+        .colorSpan{
+            display:inline-block;
+            width:25px;
+            height:25px;
+            background-color:#{$data.mini_color | default = "FFFFFF"};
+            border:1px solid gray;
+        }
+        .fileupload .thumbnail {
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 5px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .thumbnail {
+            display: block;
+            padding: 4px;
+            margin-bottom: 20px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            -webkit-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+        .fileupload-preview {
+            width: 200px;
+            height: 150px;
+            display: block;
+            color: #666;
+        }
+        .fileupload-preview img{
+            width:100%;
+            height:100%;
+            margin-bottom: 12px;
+        }
+        .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
+            display: none;
+        }
+        .fileupload .btn {
+            vertical-align: middle;
+            line-height: 18px;
+            margin-left: 0px;
+        }
+        .btn-file {
+            overflow: hidden;
+            position: relative;
+            vertical-align: middle;
+        }
+        .fa {
+            display: inline-block;
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .btn-file>input{
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            transform: translate(-300px, 0) scale(4);
+            font-size: 23px;
+            direction: ltr;
+            cursor: pointer;
+        }
+        .btn {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+    <title>小程序设置</title>
+</head>
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 小程序管理 <span class="c-gray en">&gt;</span> 小程序设置 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <form action="" method="post" class="form form-horizontal" enctype="multipart/form-data">
+            {notempty name="$data.idx"}
+                <input type="hidden" id="idx" value="{$data.idx}" name="idx" />
+            {/notempty}
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">小程序名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.mini_name | default = ''}" style="width:200px;" type="text" class="input-text" id="mini_name" name="mini_name" maxlength="10"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">客服电话：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.service_phone | default = ''}" style="width:200px;" type="text" class="input-text" id="service_phone" name="service_phone" maxlength="14"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">系统配送费设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.logi_fee | default = ''}" style="width:200px;" type="text" class="input-text" id="logi_fee" name="logi_fee" maxlength="11"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">满金额包邮费用：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.logi_free_fee | default = ''}" style="width:200px;" type="text" class="input-text" id="logi_free_fee" name="logi_free_fee" maxlength="13"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">满金额提现：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.user_rebate_min | default = ''}" style="width:200px;" type="text" class="input-text" id="user_rebate_min" name="user_rebate_min" maxlength="10"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">小程序分享的文字：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea style="width:350px;" id="share_text" name="share_text" cols="" rows="" class="textarea"  placeholder="30个字符以内" dragonfly="true" maxlength="30" onkeyup="textarealength(this,30)">{$data.share_text | default = ''}</textarea>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">顶部导航颜色设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="colorSpan" id="choiceColor"></span>
+                    <input type="text" style="width:80px;" maxlength="6" class="input-text" value="{$data.mini_color | default = ''}" placeholder="" id="mini_color" name="mini_color" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-xs-offset-4 col-sm-9 col-sm-offset-3">
+                  <a  onClick="save_submit();" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer class="footer mt-20">   
+        <div class="container">
+          <p>Powered By 福建麦口信息科技有限公司</p>
+        </div>
+    </footer>
+</body>
+</html>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> 
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jqueryColorPicker/js/colorpicker.js"></script>
+<script type="text/javascript">
+/**
+ * 字数限制
+ */
+function textarealength(obj,number){
+    var value = $(obj).val();
+    if( value.length > number ){
+        value = value.substring(0,number);
+        $(obj).val(value);
+    }
+    $(obj).next().find('em').html(value.length);
+}
+
+//颜色选择
+$('#mini_color').on('change',function(){
+    var value = $(this).val();
+    var reg = /^[0-9A-Fa-f]{6}$/;
+    if( !reg.test(value) ){
+        $('#mini_color').val('');
+    }
+});
+$('#mini_color').ColorPicker({
+    onSubmit: function(hsb, hex, rgb, el) {
+        $(el).val(hex);
+        $('#choiceColor').css({'background':'#'+hex});
+        $(el).ColorPickerHide();
+    },
+    onBeforeShow: function () {
+        $(this).ColorPickerSetColor(this.value);
+    },
+}).bind('keyup', function(){
+    $(this).ColorPickerSetColor(this.value);
+});
+// 表单提交
+function save_submit(){
+var idx = $("#idx").val();
+var mini_name = $("#mini_name").val();
+var service_phone = $("#service_phone").val();
+var logi_fee = $("#logi_fee").val();
+var logi_free_fee = $("#logi_free_fee").val();
+var share_text = $("#share_text").val();
+var mini_color = $("#mini_color").val();  
+var user_rebate_min = $("#user_rebate_min").val();  
+    if(mini_name==''){
+        layer.msg('小程序名称不能为空！',{icon:2,time:1000});
+        return false;
+    }
+    if(service_phone==''){
+        layer.msg('客服电话不能为空！',{icon:2,time:1000});
+        return false;
+    }
+    if(logi_fee=='' || isNaN(logi_fee)){
+        layer.msg('费用不能为空或除数字外的其他字符！',{icon:2,time:1000});
+        return false;
+    }
+    if(logi_free_fee=='' || isNaN(logi_free_fee)){
+        layer.msg('费用不能为空或除数字外的其他字符！',{icon:2,time:1000});
+        return false;
+    }
+    if(user_rebate_min=='' || isNaN(user_rebate_min)){
+        layer.msg('金额不能为空或除数字外的其他字符！',{icon:2,time:1000});
+        return false;
+    }
+    if(share_text==''){
+        layer.msg('分享的文字不能为空！',{icon:2,time:1000});
+        return false;
+    }
+    if(mini_color==''){
+        layer.msg('顶部导航颜色不能为空！',{icon:2,time:1000});
+        return false;
+    }
+    layer.confirm('确定保存吗?',function(){
+        $.ajax({
+            type : 'POST',
+            url  : 'editProgram',
+            typeData : 'JSON',
+            data:{idx:idx,mini_name:mini_name,service_phone:service_phone,logi_fee:logi_fee,logi_free_fee:logi_free_fee,share_text:share_text,mini_color:mini_color,user_rebate_min:user_rebate_min},
+            success : function (result){
+                if( result.code == 200 ){
+                    layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+                        window.location.href = window.location.href;
+                    });
+                }
+                if(result.code == 300){
+                    layer.alert(result.msg);
+                }
+            },
+            error : function(){
+                layer.alert('请求失败!');
+            }
+        });
+    });    
+}
+</script>

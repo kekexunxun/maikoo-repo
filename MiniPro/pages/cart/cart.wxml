@@ -1,0 +1,65 @@
+<view class='container'>
+  <block wx:for="{{cartList}}" wx:key="">
+    <view class='order-list'>
+      <!--  多选框  -->
+      <view class='mulit-select' data-index='{{index}}' bindtap='changeSelectState'>
+        <image src="{{item.select ? '../../images/icon-selected.png' : '../../images/icon.png'}}"></image>
+      </view>
+      <view class='order-list-left'>
+        <image src='{{item.pic}}'></image>
+      </view>
+      <view class='order-list-right'>
+        <view class='delete-icon' catchtap='deleteCartItem' data-idx='{{index}}'>
+          <image src='../../images/delete.png'></image>
+        </view>
+        <block wx:if="{{item.is_on_promotion}}">
+          <view class="order-list-right-price-now tex-dec">￥{{item.shop_price}}</view>
+          <view class='order-list-right-title textOverFlow'>{{item.goods_name}}</view>
+          <view class='order-list-right-state'>￥{{item.pro_price}}</view>
+        </block>
+        <block wx:else>
+        <view class='order-list-right-title textOverFlow'>{{item.goods_name}}</view>
+        <view class="order-list-right-price-now tex-dec">￥{{item.market_price}}</view>
+          <view class='order-list-right-state'>￥{{item.shop_price}}</view>
+        </block>
+        <view class='order-promotion' wx:if="{{item.is_on_promotion}}">
+          <view class='promotion-name'>{{item.promotion_name}}</view>
+          <view class='promotion-name'>优惠折扣{{item.promotion_count}}折</view>
+        </view>
+        <view class='order-list-right-num'>
+          <view class='image-number-right'>
+            <view class='image-number-box'>
+              <text class='image-number-right-text' data-index='{{index}}' bindtap='numberMinus'>-</text>
+              <input class='image-number-right-input' data-index='{{index}}' type='number' bindinput='changeNum' value='{{item.quantity}}'></input>
+              <text class='image-number-right-text' data-index='{{index}}' bindtap='numberPlus'>+</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+
+<!--  底部BUTTON  -->
+<view class='bottom-btn' wx:if="{{isHaveCart}}">
+  <!--  联系客服  -->
+  <view class='btn-service' bindtap='selectAll'>
+    <image src="{{isAllSelect ? '../../images/icon-selected.png' : '../../images/icon.png'}}"></image>
+    <text>全选</text>
+  </view>
+  <view class='btn-addcart' bindtap='addToCart'>
+    总价：<text>￥{{totalFee}}</text>
+  </view>
+  <view class='btn-buy'>
+    <form bindsubmit='navToPay' report-submit='true'>
+      <button form-type='submit'>立即结算</button>
+    </form>
+  </view>
+</view>
+
+
+<view class='no-cart' wx:if="{{!isHaveCart}}">
+  <image src='../../images/cart-null.png'></image>
+  <text>当前购物车中没有商品</text>
+  <text>快去选购吧~</text>
+</view>

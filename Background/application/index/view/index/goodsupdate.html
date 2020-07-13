@@ -1,0 +1,488 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <script type="text/javascript" src="__ROOT__/public/static/lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+    <link href="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <style>
+      .top{
+        margin-top: 5px;
+      }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <form action="" method="post" class="form form-horizontal" id="form-goodsadd-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">商品名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="text" maxlength="13" class="input-text" value="{$goodsInfo.name}" placeholder="" id="goodsname" name="goodsname">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">商品分类：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="catagoryid" id="catagoryid" style="font-size: 14px;width:200px;height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">请选择</option>
+                    {volist name="$catagory" id="vol"}
+                    {if condition="$vol.catagory_id == $goodsInfo.catagory_id"}
+                        <option value="{$vol.catagory_id}" selected="selected">{$vol.catagory_name}</option>
+                    {else /}
+                        <option value="{$vol.catagory_id}">{$vol.catagory_name}</option>
+                    {/if}
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="row cl detail2">
+            <label class="form-label col-xs-4 col-sm-2">商品详情：</label>
+            <div class="formControls col-xs-8 col-sm-10 input_box">
+                {volist name="$goodsInfo.detail" id="vol"}
+                <div class="box" style="margin-top: 5px;">
+                    <input style="width: 150px" type="text" class="input-text goods_name" maxlength="20" value="{$vol.detailname}" placeholder="名称" name="goods_name">
+                    <input style="width: 200px" type="text" class="input-text goods_keyword" maxlength="30" value="{$vol.keywords}" placeholder="关键词" name="goods_keyword">
+                    <input style="width: 150px" type="text" class="input-text market_price" maxlength="10" value="{$vol.marketprice}" placeholder="原价" name="market_price" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+                    <input style="width: 150px" type="text" class="input-text shop_price" maxlength="10" value="{$vol.shopprice}" placeholder="售价" name="shop_price" onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+                    <input style="width: 150px" type="text" class="input-text stock" maxlength="10" value="{$vol.stock}" placeholder="库存" name="stock" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">                     
+                    <input style="width: 250px" type="text" class="input-text goods_intro top" maxlength="20" value="{$vol.detail_intro}" placeholder="简介（不超过20个字)" name="goods_intro">
+<!--                     <select  name="is_distri" class="is_distri top" style="font-size: 14px;height: 31px;line-height: 1.42857;padding: 4px;vertical-align:middle;">
+      
+                    </select> -->
+                    <img class="add_input top" onclick="add_input(this)" src="/public/details_open.png" alt="添加" style="cursor: pointer;">
+                    <img class="del_input top" onclick="del_input(this)" src="/public/details_close.png" alt="删除" style="cursor: pointer;">
+                </div>
+                {/volist}
+            </div>
+        </div>
+        <input id="goods_id" name="goods_id" style="display: none;" value="{$goodsInfo.goods_id}">
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否参加分销：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="is_distri" id="is_distri" style="font-size: 14px;height: 31px;line-height: 1.42857;padding: 4px;vertical-align:middle;">
+                    {if condition="$goodsInfo.is_distri == 0"}
+                    <option value="1">参加分销</option>
+                    <option value="0" selected="selected">不参加分销</option>
+                    {else /}
+                    <option value="1" selected="selected">参加分销</option>
+                    <option value="0">不参加分销</option>
+                    {/if}
+                </select>
+            </div>
+        </div>    
+        <div class="row cl scale">
+            <label class="form-label col-xs-4 col-sm-2">初始分销比例：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="text" min="0" max="100" maxlength="3" class="input-text" value="{$goodsInfo.dis_percent}" placeholder="" id="dis_percent" name="dis_percent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+               % 填入1-100的数值（不支持小数点）
+            </div>
+        </div>
+        <div class="row cl scale">
+            <label class="form-label col-xs-4 col-sm-2">上一级的分销比例：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="text" min="0" max="100" maxlength="3" class="input-text" value="{$goodsInfo.parent_dis_percent}" placeholder="" id="parent_dis_percent" name="parent_dis_percent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+               % 填入1-100的数值（不支持小数点）
+            </div>
+        </div>
+        <div class="row cl scale">
+            <label class="form-label col-xs-4 col-sm-2">上上级的分销比例：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input style="width: 200px;" type="text" min="0" max="100" maxlength="3" class="input-text" value="{$goodsInfo.grand_dis_percent}" placeholder="" id="grand_dis_percent" name="grand_dis_percent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+               % 填入1-100的数值（不支持小数点）
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">参加促销活动：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="promotion" id="promotion" style="font-size: 14px;width:200px;height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">无活动</option>
+                    {volist name="$promotion" id="vol"}
+                    {if condition="$vol.promotion_id == $goodsInfo.promotion_id"}
+                        <option value="{$vol.promotion_id}" selected="selected">{$vol.name}</option>
+                    {else /}
+                        <option value="{$vol.promotion_id}">{$vol.name}</option>
+                    {/if}
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">立即上架：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="updown" id="updown" style="font-size: 14px;width:200px;height: 31px;line-height: 1.42857;padding: 4px;">
+                    {if condition="$goodsInfo.is_active == 0"}
+                        <option value="1">是</option>
+                        <option value="0" selected="selected">否</option>
+                    {else /}
+                        <option value="1" selected="selected">是</option>
+                        <option value="0">否</option>
+                    {/if}
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">原商品图片：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                {if condition="$goodsInfo.pic == null"}
+                    无
+                {else /}
+                    <img src="{$goodsInfo.pic}" alt="图片" style="width: 200px;height: 100px;">
+                {/if}
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">上传商品图片：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <div class="uploader-thum-container">
+                    <div id="fileList" class="uploader-list"></div>
+                    <div id="filePicker">选择图片</div>
+                    <label id="btn-star" style="height: 30px;" class="btn btn-default btn-uploadstar radius ml-10">开始上传</label>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">购买须知：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <script id="container1" name="content1" type="text/plain" style="height: 300px;">
+                    {:htmlspecialchars_decode($goodsInfo.intro)}
+                </script>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">商品描述：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <script id="container" name="content" type="text/plain" style="height: 300px;">
+                    {:htmlspecialchars_decode($goodsInfo.spec)}
+                </script>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <a onClick="goodsadd_save_submit();" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存</a>
+                <button style="margin-left: 20px;" onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+// 点击克隆input框
+function add_input(){
+    for (var i = 0; i < $('.box').length; i++) {
+        if($('.box').length>4){
+            return false;
+        }
+    }
+    var gname = $(".goods_name").eq(0).val();
+    var gkeyword = $(".goods_keyword").eq(0).val();
+    var gprice = $(".market_price").eq(0).val();
+    var gprice2 = $(".shop_price").eq(0).val();
+    var gintro = $(".goods_intro").eq(0).val();
+    var gstock = $(".stock").eq(0).val();
+    $(".goods_name").eq(0).val('');
+    $(".goods_keyword").eq(0).val('');
+    $(".market_price").eq(0).val('');
+    $(".shop_price").eq(0).val('');
+    $(".goods_intro").eq(0).val('');
+    $(".stock").eq(0).val('');
+    // 克隆
+    $(".input_box").append($(".box").eq(0).clone());
+    $(".goods_name").eq(0).val(gname);
+    $(".goods_keyword").eq(0).val(gkeyword);
+    $(".market_price").eq(0).val(gprice);
+    $(".shop_price").eq(0).val(gprice2);
+    $(".goods_intro").eq(0).val(gintro);
+    $(".stock").eq(0).val(gstock);
+}
+// 点击删除input框
+function del_input(obj){
+    for (var i = 0; i < $('.box').length; i++) {
+        if($('.box').length<2){
+            return false;
+        }
+    }
+    $(obj).parent('.box').remove();
+}
+// 表单提交
+function goodsadd_save_submit() {
+    var goods_id = $("#goods_id").val();
+    var goodsname = $("#goodsname").val();
+    var updown = $("#updown option:selected").val();
+    var dis_percent = $("#dis_percent").val();
+    var parent_dis_percent = $("#parent_dis_percent").val();
+    var grand_dis_percent = $("#grand_dis_percent").val();
+    var catagoryid = $('#catagoryid option:selected').val();
+    var distri = $('#is_distri option:selected').val();
+    var promotion = $('#promotion option:selected').val();
+    // ueditor的值
+    var content1 = UE.getEditor('container1').getContent();
+    var content = UE.getEditor('container').getContent();
+    // 商品详情
+    var goods_name ='';
+    for (var i = 0; i < $('.goods_name').length; i++) {
+        goods_name += $('.goods_name').eq(i).val()+',';
+    }
+    var goods_keyword ='';
+    for (var i = 0; i < $('.goods_keyword').length; i++) {
+        goods_keyword += $('.goods_keyword').eq(i).val()+',';
+    }
+    var market_price ='';
+    for (var i = 0; i < $('.market_price').length; i++) {
+        market_price += $('.market_price').eq(i).val()+',';
+    }
+    var shop_price ='';
+    for (var i = 0; i < $('.shop_price').length; i++) {
+        shop_price += $('.shop_price').eq(i).val()+',';
+    }
+    var goods_intro ='';
+    for (var i = 0; i < $('.goods_intro').length; i++) {
+        goods_intro += $('.goods_intro').eq(i).val()+',';
+    }
+    var stock ='';
+    for (var i = 0; i < $('.stock').length; i++) {
+        stock += $('.stock').eq(i).val()+',';
+    }
+    // var distri ='';
+    // $(".is_distri option:selected").each(function(){
+    //     distri += $(this).val()+',';
+    // })
+    // 非空判断
+    if(goodsname==''){
+        layer.msg('商品名称不能为空！',{icon:2,time:1000});
+        return false;
+    }
+    // 商品详情
+    for (var i = 0; i < $('.goods_name').length; i++) {
+        if($('.goods_name').eq(i).val()==''){
+            layer.msg('名称不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    for (var i = 0; i < $('.goods_keyword').length; i++) {
+        if($('.goods_keyword').eq(i).val()==''){
+            layer.msg('关键词不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    for (var i = 0; i < $('.market_price').length; i++) {
+        if($('.market_price').eq(i).val()==''){
+            layer.msg('原价不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    for (var i = 0; i < $('.shop_price').length; i++) {
+        if($('.shop_price').eq(i).val()==''){
+            layer.msg('售价不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    for (var i = 0; i < $('.goods_intro').length; i++) {
+        if($('.goods_intro').eq(i).val()==''){
+            layer.msg('简介不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    for (var i = 0; i < $('.stock').length; i++) {
+        if($('.stock').eq(i).val()==''){
+            layer.msg('库存不能为空！',{icon:2,time:1000});
+            return false;
+        }
+    }
+    // 分销比例判断
+    if(distri == 1){
+        if(parseInt(dis_percent) < 0){
+            layer.msg('初始分销比例不能为0！',{icon:2,time:1000});
+            return false;
+        }
+        if(parseInt(parent_dis_percent)< 0){
+            layer.msg('上一级的分销比例不能为0！',{icon:2,time:1000});
+            return false;
+        }
+        if(parseInt(grand_dis_percent)< 0){
+            layer.msg('上上级的分销比例不能为0！',{icon:2,time:1000});
+            return false;
+        }        
+    }
+    if(parseInt(dis_percent)>100){
+        layer.msg('初始分销比例不能超过100%！',{icon:2,time:1000});
+        return false;
+    }
+    if(parseInt(parent_dis_percent)>100){
+        layer.msg('上一级的分销比例不能超过100%！',{icon:2,time:1000});
+        return false;
+    }
+    if(parseInt(grand_dis_percent)>100){
+        layer.msg('上上级的分销比例不能超过100%！',{icon:2,time:1000});
+        return false;
+    }
+    if((parseInt(parent_dis_percent)+parseInt(grand_dis_percent))>100){
+        layer.msg('上一级的分销比例与上上级的分销比例之和不能超过100%！',{icon:2,time:2000});
+        return false;
+    }
+    $.ajax({
+        type: 'POST',
+        url: '../../updateGoods',
+        dataType: 'json',
+        data:{goods_id:goods_id,goodsname:goodsname,updown:updown,dis_percent:dis_percent,parent_dis_percent:parent_dis_percent,grand_dis_percent:grand_dis_percent,goods_name:goods_name,goods_keyword:goods_keyword,market_price:market_price,shop_price:shop_price,goods_intro:goods_intro,distri:distri,catagoryid:catagoryid,content1:content1,content:content,promotion:promotion,stock:stock},
+        success: function(data){
+            if(data.code=='200'){
+                index = parent.layer.getFrameIndex(window.name);
+                layer.msg(data.msg,{icon:1,time:1000});
+                setTimeout('parent.layer.close(index);',1000);
+            }
+            if(data.code=='300'){
+                layer.msg(data.msg,{icon:2,time:1000});
+            }
+        },
+        error:function(data) {
+            layer.msg(data.message,{icon:2,time:1000});
+        },
+    })
+    return false;
+}
+// // 选择是否参与分销活动
+$("#is_distri").change(function(){
+    if($(this).val() == 0){
+        $(".scale").hide();
+        $("#dis_percent").val(0);
+        $("#parent_dis_percent").val(0);
+        $("#grand_dis_percent").val(0);
+    }else{
+        $(".scale").show();
+    }
+})
+// 上传商品图片
+$(function(){
+    $('.skin-minimal input').iCheck({
+        checkboxClass: 'icheckbox-blue',
+        radioClass: 'iradio-blue',
+        increaseArea: '20%'
+    });
+    UE.getEditor('container1');
+    UE.getEditor('container');
+    // 上传商品图片
+    $list = $("#fileList"),
+    $btn = $("#btn-star"),
+    state = "pending",
+    uploader;
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: '__ROOT__/public/static/lib/webuploader/0.1.5/Uploader.swf',
+        // 文件接收服务端。
+        server: '../../addPic',
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        pick: '#filePicker',
+        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+        resize: false,
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    uploader.on( 'fileQueued', function( file ) {
+        var $li = $(
+            '<div id="' + file.id + '" class="item">' +
+                '<div class="pic-box"><img></div>'+
+                '<div class="info">' + file.name + '</div>' +
+                '<p class="state">等待上传...</p>'+
+            '</div>'
+        ),
+        $img = $li.find('img');
+        $list.append( $li );
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+            $img.attr( 'src', src );
+        }, thumbnailWidth, thumbnailHeight);
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress-box .sr-only');
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<div class="progress-box"><span class="progress-bar radius"><span class="sr-only" style="width:0%"></span></span></div>').appendTo( $li ).find('.sr-only');
+        }
+        $li.find(".state").text("上传中");
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file ) {
+        $( '#'+file.id ).addClass('upload-state-success').find(".state").text("已上传");
+    });
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        $( '#'+file.id ).addClass('upload-state-error').find(".state").text("上传出错");
+    });
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress-box').fadeOut();
+    });
+    uploader.on('all', function (type) {
+        if (type === 'startUpload') {
+            state = 'uploading';
+        } else if (type === 'stopUpload') {
+            state = 'paused';
+        } else if (type === 'uploadFinished') {
+            state = 'done';
+        }
+        if (state === 'uploading') {
+            $btn.text('暂停上传');
+        } else {
+            $btn.text('开始上传');
+        }
+    });
+    $btn.on('click', function () {
+        if (state === 'uploading') {
+            uploader.stop();
+        } else {
+            uploader.upload();
+        }
+    });
+});
+</script>
+</body>
+</html>

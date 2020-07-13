@@ -1,0 +1,46 @@
+<view class="container" style="background-image: url('https://ft.up.maikoo.cn/public/my-bg.png')">
+  <view class="userinfo">
+    <block wx:if="{{isLogin}}">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <text class="userinfo-nickname" bindtap='getRebate'>当前返佣：{{rebate}} 元</text>
+    </block>
+    <block wx:else>
+      <button class='not-login-button' open-type="getUserInfo" bindgetuserinfo="getUserInfo">微信授权登录</button>
+    </block>
+  </view>
+  <view class="menu-list">
+    <block wx:for="{{menuList}}" wx:key="">
+      <view class="menu-item" hidden="{{item.isadmin ? !isAdmin : item.isadmin}}" bindtap='{{item.tap}}'>
+        <image src='{{item.icon}}'></image>
+        <text>{{item.text}}</text>
+        <view class='menu-itm-bottom-line'></view>
+        <view class='border-left' hidden="{{index % 2 == 1 ? false : true}}"></view>
+        <view class='border-bottom' hidden="{{index == 0 || index == 1 || index == 2 || index == 3 ? false : true}}"></view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- 自定义modal用于让用户输入测试ID进行测试 -->
+<view class='modal' bindtouchmove='preventTouchMove' wx:if="{{testInputShow}}"></view>
+<view class='modal-container' wx:if="{{testInputShow}}">
+ <view class='modal-item'>
+   <view class='modal-title'>订单核销</view>
+  <view class='input-container'>
+    <input class='modal-input' bindblur='inputTestID' placeholder='请输入核销码' value='{{verifyCode}}' maxlength='20'></input>
+  </view>
+  <view class='modal-btn'>
+    <view class='modal-btn-cancel'>
+      <form report-submit='true' bindsubmit='modalCancel'>
+        <button form-type='submit'>取消</button>
+      </form>
+    </view>
+    <view class='modal-btn-confirm'>
+      <form report-submit='true' bindsubmit='modalConfirm'>
+        <button form-type='submit'>确认</button>
+      </form>
+    </view>
+  </view>
+ </view>
+</view>

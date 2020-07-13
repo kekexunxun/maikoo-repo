@@ -1,0 +1,7 @@
+runtime/cache/*
+runtime/log/*
+runtime/temp/*
+.idea
+vendor
+.DS_Store
+sftp-config.json

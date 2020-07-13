@@ -1,0 +1,7 @@
+{
+    "php.suggest.basic": false,
+    "emmet.showAbbreviationSuggestions": false,
+    "emmet.excludeLanguages": [
+        "markdown","php"
+      ],
+}

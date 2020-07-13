@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/layer/layer.css" />
+    <style>
+    .Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+    <title>分销详情</title>
+</head>
+<body>
+<!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span> 用户分销 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">购买者昵称：{$rebateData[0]['buyer_nickName']}</span>
+        <span class="r">共有：<strong>{:sizeof($rebateData)}</strong> 条数据</span> 
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-c">
+                <!-- <th width="100">用户信息</th> -->
+                <th width="50">商品名称</th>
+                <th width="100">购买者信息</th>
+                <th width="100">上级信息</th>
+                <th width="100">上上级信息</th>
+                <th width="50">返佣金额</th>        
+                <th width="80">时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if condition="sizeof($rebateData) == 0"}
+            {else /}
+            {volist name="$rebateData" id="vol"}
+            <tr class="text-c">
+
+                <td>
+                {if condition = "$vol.goods_name eq '' "}
+                    无
+                {else/}
+                    {$vol.goods_name}
+                {/if}
+                </td>
+                <td>
+                    {if condition = "$vol.buyer_avatarUrl eq '' "}
+                    无
+                    {else/}
+                    <img src="{$vol.buyer_avatarUrl}" width="50px" height="50px" style="border-radius: 50%;margin-bottom: 10px;">
+                    {/if}
+                    <p>{$vol.buyer_nickName}</p>
+                </td>    
+                <td>
+                    {if condition = "$vol.parent_avatarUrl eq '' "}
+                    无
+                    {else/}
+                    <img src="{$vol.parent_avatarUrl}" width="50px" height="50px" style="border-radius: 50%;margin-bottom: 10px;">
+                    {/if}
+                    <p>{$vol.buyer_nickName}</p>
+                </td>
+                <td>
+                    {if condition = "$vol.grand_id == 0"}
+                    <p>无</p>
+                    {else/}
+                        {if condition = "$vol.grand_avatarUrl eq '' "}
+                        无
+                        {else/}
+                        <img src="{$vol.grand_avatarUrl}" width="50px" height="50px" style="border-radius: 50%;margin-bottom: 10px;">
+                        <p>{$vol.grand_nickName}</p>
+                        {/if}
+                    {/if}
+                </td>
+                <td>￥{$vol.dis_fee}</td>
+                <td>{$vol.create_time_conv}</td>
+            </tr>
+            {/volist}
+            {/if}
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+        <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript"  src="__ROOT__/public/static/lib/layer/layer.js"></script>
+<script type="text/javascript">
+    $('.table-sort').dataTable({
+        language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+        "aaSorting": [[ 5, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,1]}// 制定列不参与排序
+        ]
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+	<!--[if lt IE 9]>
+
+	<script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+
+	<script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+	<![endif]-->
+
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+
+	<script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
+	<script>DD_belatedPNG.fix('*');</script>
+
+	<![endif]-->
+
+	<title>分类管理</title>
+    <style>
+    .Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+</head>
+
+<body>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商城管理<span class="c-gray en">&gt;</span> 商品分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+
+		<a href="javascript:;" onclick="catagor_add('添加分类','catagoryadd.html','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r">共有数据：<strong>{:sizeof($catagory)}</strong> 条</span> </div>
+
+	<div class="mt-20">
+
+		<table id="catagorylist" class="table table-border table-bordered table-hover table-bg table-sort">
+
+			<thead>
+
+			<tr class="text-c">
+
+				<th width="40">ID</th>
+
+				<th width="200">商品分类名称</th>
+
+				<th>父级分类</th>
+
+				<th>排序等级</th>
+
+				<th>创建时间</th>
+
+				<th>状态</th>
+
+				<th width="100">操作</th>
+
+			</tr>
+
+			</thead>
+
+			<tbody>
+
+			{if condition="sizeof($catagory) == 0"}
+
+
+
+			{else /}
+
+			{volist name="$catagory" id="vol"}
+
+			<tr class="text-c">
+
+				<td>{$vol.catagory_id}</td>
+
+				<td>{$vol.catagory_name}</td>
+
+				<td>
+
+					{if condition = "$vol.father_catagory_id eq 0 "}
+
+					 无父级
+
+					{elseif condition = "$vol.father_catagory_id neq 0" /}
+
+					   {volist name="$catagory" id="v"}
+
+					       {if condition = "$vol.father_catagory_id eq $v.catagory_id "/}
+
+					         {$v.catagory_name}
+
+					        {/if}
+
+					    {/volist}
+
+					{/if}
+
+				</td>
+
+				<td>{$vol.orderby}</td>
+
+				<td>{$vol.create_time}</td>
+
+				<td class="td-status">
+
+					{if condition = "$vol.is_delete eq 0 "}
+
+					<span class="label label-defaunt radius">停用</span>
+
+					{elseif condition = "$vol.is_delete eq 1" /}
+
+					<span class="label label-success radius">已展示</span>
+
+					{/if}
+
+				</td>
+
+				<td class="td-manage">
+
+					{if condition = "$vol.is_delete eq 0 "}
+
+					<a style="text-decoration:none" onClick="catagory_start(this,'{$vol.catagory_id}');" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>
+
+					{elseif condition = "$vol.is_delete eq 1" /}
+
+					<a style="text-decoration:none"  href="javascript:;"onClick="catagory_stop(this,'{$vol.catagory_id}');" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>
+
+					{/if}
+
+
+
+					<a style="text-decoration:none"  href="javascript:;"onClick="catagory_del(this,'{$vol.catagory_id}');" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+
+				</td>
+
+				{/volist}
+
+			{/if}
+
+			</tbody>
+
+				<tfoot>
+		            <tr>
+						<th>ID</th>
+
+						<th>商品分类名称</th>
+
+						<th>父级分类</th>
+
+						<th>排序等级</th>
+
+						<th>创建时间</th>
+
+						<th>状态</th>
+
+						<th>操作</th>
+		            </tr>
+	        	</tfoot>
+
+		</table>
+
+	</div>
+
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        // $('.table-sort').dataTable({
+
+        //     "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+
+        //     "bStateSave": true,//状态保存
+
+        //     "aoColumnDefs": [
+
+        //         {"orderable":false,"aTargets":[]}// 制定列不参与排序
+
+        //     ]
+
+        // });
+
+	// $('#catagorylist').DataTable().fnDestroy();
+	
+ // 配置语言项
+$('#catagorylist').DataTable({
+    language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+    // 下拉框搜索
+	initComplete: function () {
+		this.api().columns().every( function () {
+		    var column = this;
+		    var select = $('<select class="choose" style="width:100%;"><option value=""></option></select>')
+		        .appendTo( $(column.footer()).empty() )
+		        .on( 'change', function () {
+		            var val = $.fn.dataTable.util.escapeRegex(
+		                $(this).val()
+		            );
+
+		            column
+		                .search( val ? '^'+val+'$' : '', true, false )
+		                .draw();
+		        } );
+
+		    column.data().unique().sort().each( function ( d, j ) {
+		        select.append( '<option value="'+d+'">'+d+'</option>' )
+		    } );
+		} );
+        $(".choose").eq(5).css("display","none");
+        $(".choose").eq(6).css("display","none");
+	}
+});
+
+});
+
+    /*分类-添加*/
+
+    function catagor_add(title,url){
+
+        var index = layer.open({
+
+            type: 2,
+
+            title: title,
+
+            content: url
+
+        });
+
+        layer.full(index);
+
+    }
+
+    /*分类-启用*/
+
+    function catagory_start(obj,id){
+
+        layer.confirm('确认展示吗？',function(index){
+
+            var str = {id : id};
+
+            $.post("catagorystart", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="catagory_stop(this,\'{$vol.catagory_id}\')" href="javascript:;" title="停用" class="ml-5"><i class="Hui-iconfont">&#xe631;</i></a>');
+
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已展示</span>');
+
+                    $(obj).remove();
+
+                    layer.msg('已展示!',{icon: 6,time:1000});
+
+                } else {
+
+                    layer.msg('操作失败!',{icon: 6,time:1000});
+
+                }
+
+            })
+
+        });
+
+    }
+
+    /*分类-停用*/
+
+    function catagory_stop(obj,id){
+
+        layer.confirm('确认停用吗？',function(index){
+
+            var str = {id : id};
+
+            $.post("catagorystop", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="catagory_start(this,\'{$vol.catagory_id}\')" href="javascript:;" title="展示" class="ml-5"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+
+                    $(obj).remove();
+
+                    layer.msg('已停用!',{icon: 5,time:1000});
+
+                } else {
+
+                    layer.msg('操作失败!',{icon: 6,time:1000});
+
+                }
+
+            })
+
+        });
+
+    }
+
+    /*分类-删除*/
+
+    function catagory_del(obj,id) {
+
+        layer.confirm('确认要删除吗？', function (index) {
+
+            var str = {id: id};
+
+            $.post("catagorydel", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").remove();
+
+                    layer.msg('删除成功!', {icon: 5, time: 1000});
+
+                } else {
+
+                    layer.msg('操作失败!', {icon: 6, time: 1000});
+
+                }
+
+            })
+
+        });
+
+    }
+
+
+
+</script>
+
+</body>
+
+</html>

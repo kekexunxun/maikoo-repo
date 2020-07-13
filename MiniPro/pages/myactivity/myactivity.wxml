@@ -1,0 +1,24 @@
+<view class="container" wx:if="{{isHaveActivity}}">
+  <view class='activity-list'>
+    <block wx:for="{{activityList}}" wx:key="">
+      <navigator url='../activitydetail/activitydetail?activityid={{item.activity_id}}' hover-class="none">
+        <view class='activity-item'>
+          <view class='item-title'>活动名称：{{item.name}}</view>
+          <view class='item-time'>参加时间：{{item.join_time}}</view>
+          <view class='item-state'>中奖情况：
+            <block wx:if="{{item.isWin}}">
+              {{item.win_level}}等奖 {{item.win_price}}
+            </block>
+            <block wx:else>未中奖</block>
+          </view>
+        </view>
+      </navigator>
+    </block>
+  </view>
+</view>
+
+<view class='nothing' wx:else>
+  <view class='wait'>
+    <image src='../../images/waitmore.png' mode='widthFix'></image>
+  </view>
+</view>

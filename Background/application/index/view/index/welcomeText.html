@@ -1,0 +1,742 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title></title>
+	<script type="text/javascript" src="https://www.maikoo.cn//web/resource/js/lib/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="https://www.maikoo.cn//web/resource/js/app/util.js?v=20161011"></script>
+	<script type="text/javascript" src="https://www.maikoo.cn//web/resource/js/app/common.min.js?v=20161011"></script>
+	<script type="text/javascript" src="https://www.maikoo.cn//web/resource/js/require.js?v=20161011"></script>
+	<script type="text/javascript" src="https://www.maikoo.cn//web/resource/js/app/config.js?v=20161011"></script>
+</head>
+<body>
+<!-- 餐饮 -->
+<style>
+	body{background-color: white #F5F7F9;}
+	.nav.nav-tabs{border-color: white#20a0ff;}
+	.nav-tabs>li>a:hover{border-color: white#eee #eee #20a0ff #eee;}
+	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{background-color: white#20a0ff; border-color: white#20a0ff;}
+	.nav-tabs>li>a {border-radius: 0 0 0 0;}
+	.nav{background-color: white white;}
+	.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+		color: white #FFF;
+		background-color: white #20a0ff;
+		border-color: white #20a0ff;
+	}
+	.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{
+		color: white #24303C;
+	}
+	.list-group-item.active{
+		background-color: white #edf6ff;
+		border:none;
+		color: white #00aeff;
+	}
+	.navbar-inverse {
+		background-color: white #fff;
+		border-color: white #20a0ff
+	}
+	.block {
+		display: block;
+	}
+	.clear {
+		display: block;
+		overflow: hidden;
+	}
+	.navbar-nav > li > a {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		line-height: 40px
+	}
+	.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus{
+		color: white #777;
+		background-color: white #eee;
+	}
+	.big-menu{
+		background-color: white #24303C;
+		padding-right: 0px;
+		padding-left: 0px;
+		padding-top: 10px;
+		height: 95%;
+		width: 150px;
+		position: fixed;
+		left: 0px;
+		top: 50px;
+		z-index: 88;
+		overflow-y: scroll;
+	}
+	.navback{
+		background-color: white white;
+		width: 110px;
+		height: 100%;
+		position: fixed;
+		left: 150px;
+		top: 50px;
+		z-index: 80;
+		color: white #666;
+		line-height: 50px;
+		border-right: 1px solid #eee;
+	}
+	.therji{
+		background-color: white white;
+		width: 109px;
+		position: fixed;
+		left: 150px;
+		top: 50px;
+		z-index: 89;
+		color: white #666;
+		line-height: 50px;
+		display: none;
+	}
+	.therji:nth-child(1){display: block;}
+	.therji>li:nth-child(1){
+		margin-top: 20px;
+	}
+	.big-menu .panel .list-group-item{
+		border:none;overflow:hidden; white-space:normal; text-overflow:clip;
+		font-size: 13px;		
+		height: 50px;		
+		padding: 0px 15px;
+	}
+	.panel>.list-group .list-group-item{padding-left: 34px;}
+	.big-menu .panel .list-group-item:hover{
+		background-color: white #edf6ff;
+		color: white#00aeff;
+	}
+	.btn-primary {
+		color: white #fff;
+		background-color: white #0066cd;
+		border-color: white #0066cd;
+	}
+	.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
+	.open > .dropdown-toggle.btn-primary {
+		color: white #fff;
+		background-color: white #0066cd;
+		border-color: white #0066cd;
+	}
+	.open{position: relative;}
+	.big-menu .panel .panel-heading .panel-title{
+		width: 100px;
+		float: left;
+		font-size: 14px;
+	}
+	.dropdown-menu{left:32px;}
+	.big-menu .panel .panel-heading .panel-title .fa{font-size: 16px;}
+	.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse
+	.navbar-nav>.active>a:focus{
+		color: white #f60;
+		background-color: white #e7e7e7;
+		border-bottom: 2px solid transparent;
+		border-color: white #f60;
+	}
+	button{outline: none;}
+	.left{float: left;}
+	.right{float: right;}
+	a{text-decoration: none;}
+	a:hover{text-decoration: none;}
+	ul,li{list-style: none;}
+	ul{margin-bottom: 0px;}
+	body{font-size: 14px;font-family: "微软雅黑";}
+	.clearfix{clear:both;}
+	.header{
+	    background-color: white #fff;
+	    color: white #666;
+	    height: 50px;
+	    position: fixed;
+	    top: 0px;
+	    left: 0px;
+	    z-index: 90;
+	    width: 100%;
+	    border-bottom:1px solid #eee;
+	}
+	.header_left{
+	    height: 50px;
+	    padding-top: 10px;
+	    float: left;
+	}
+	.wheaderbox{
+		color: white #666;
+		padding: 10px 5px 0px 20px;
+		float: left;
+	}
+	.header_logo{
+	    width: 34px;
+	    height: 34px;
+	    border-radius: 50%;
+	    background-color: white #009B4D;
+	    margin-right: 10px;
+	}
+	.header_title{
+	    font-size: 14px;
+	    text-align: center;
+	    margin-top: 15px;
+	}
+	.header_right{
+	    height: 50px;
+	    padding: 8px 0px;
+	    float: right;
+	    margin-right: 54px;
+	    width: 400px;
+	}
+	.header_right>li>a:hover{color: white #666;}
+	.header_right>li{
+	    float: left;
+	    padding: 0px 20px;
+	    border-right: 1px solid #eee;
+	    line-height: 33px;
+	}
+	.ymargin{
+		float: right;
+		width: 30px;
+		height: 30px;
+		margin-top: 5px;
+	}
+	.yg_back{
+		background-color: white #F5F7F9;
+		margin-left: 260px;
+		margin-top: 50px;
+	}
+	.yyhome{font-size: 26px;position: relative;}
+	.yyhome:hover .fanhuihome{display: block;}
+	.fanhuihome{position: absolute;top: 40px;left: 0px;font-size: 14px;width: 100px;display: none;}
+	.wyactive{background-color: white #39485D;border-left: 3px solid #44ABF7;}
+	.panel-default>.navtitle{background-color: white #24303C;color: white white;border:none;}
+	.big-menu .panel .panel-heading .wytitle{height: 50px;padding: 15px 15px;width: 130px;}
+	.navtitle{padding: 0px;}
+	.panel,.panel-heading{border-radius: 0px;}
+	.list-group-item:last-child,.list-group-item:first-child{border-radius: 0px;}
+	.yg_login{height: auto;background-color: white #24303C;padding: 10px 10px 15px;text-align: center;color: white white;font-size: 14px;}
+	.yg_login>img{margin: 0px auto;width: 60px;height: 60px;background-color: white #5CB85C;border-radius: 50%;border: none;margin-bottom: 10px;}
+	.header_btn{text-align: center;float: left;margin-left: 10px;width: 100px;border-right: 1px solid #fff;border-right: 1px solid #eee;height: 30px;line-height: 30px;}
+	.wytitle:hover{color: white white;}
+
+	.fa-pencil-square-o,.fa-comments,.fa-star-half-o,.fa-users,.fa-user,.fa-clipboard,.fa-money,.fa-life-ring,.fa-bars,.fa-recycle,.fa-cog,.fa-book,.fa-database,.fa-gift,.fa-user,.fa-binoculars,.fa-trophy,.fa-key{margin-right: 15px;}
+	.fa-cubes{margin-right: 8px;}
+	.fa-university{margin-right: 10px;}
+	.fa-map-marker{margin-right: 18px;}
+	.fa-jpy{margin-right: 20px;}
+</style>
+
+
+<div class="container-fluid col-md-12 col-xs-12 col-sm-12">
+			
+
+				<div class="col-lg-10 col-md-10 col-xs-10 col-sm-10 yg_back">
+					
+
+															
+<style>
+
+.panel-slide{position: relative;}
+.panel-slide .btnClose{position: absolute; top:-10px; right:-10px; width:30px; height: 30px; border-radius: 30px;background: #eee; font-size: 16px; cursor: pointer; color: white#FFF; text-align: center; line-height: 30px}
+.panel-slide .btnClose:hover{background: red}
+.panel-slide .panel-body div{margin-top: 10px}
+</style>
+<style type="text/css">
+    .yg9_content{padding:0px;font-size: 14px;}
+    .yg9_content>li{padding-left: 0px;}
+    .yg9_content>li:nth-child(2)>.col-md-12{
+        border:1px solid #eee;
+    }
+    .gkfour,.gkthree{
+        padding: 8px 0px;
+        border:1px solid #eee;
+    }
+    .gkfour{margin-top: 10px;}
+    
+    .vipbanner{padding:0px;}
+    .vipbox{
+        background-color: white white;
+        box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .vipbig1{padding-left: 0px;} 
+    .vipbig2{padding-right: 0px;}
+    .vipcontent{
+        border-bottom: 1px solid #E4EAEC;
+        height: 60px;
+        line-height: 60px;
+        padding:0px;
+    }  
+    .vipright{float: right;}
+    .vipleft{float: left;}
+    .vipleft>img{
+        width: 20px;
+        height: 20px;
+    }
+    .vipadd{
+        height: 210px;
+        text-align: center;
+    }
+    .vipadd>li{
+        padding-top: 50px;
+    }
+    .font1{font-size: 30px;color: white #333;}
+    .font2{font-size: 15px;color: white #666;margin-top: 15px;}
+    .vipsell{padding:0px;}
+    .vipsell>li:nth-child(1){padding-left: 0px;}
+    .vipsell>li:nth-child(2){padding-right: 0px;}
+    .vipsell{
+        height: 210px;
+        padding: 25px 0px;
+    }
+    .vipsell>li{height: 100%;}
+    .vipsell>li>div{
+        background-color: white #F7F7F7;
+        height: 100%;
+        border-radius: 6px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .xuni{color: white #666;text-align: center;}
+    .xuni>span{color: white #ff6363;}
+    .viptitle{
+        color: white #333;
+        border-bottom:1px solid #DEDEDE;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+        width: 50%;
+        font-size: 16px;
+    }
+    .botul{
+        display: flex;
+    }
+    .botul>li{
+        width: 13%;
+        margin-right: 1.5%;
+        height: 190px;
+        background-color: white white;
+        padding: 50px 0px;
+    }
+    .botul>li:last-child{
+        margin-right:0px;
+        box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+    }
+    .boxcon{
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
+    .boxcon>img{
+        margin-bottom: 10px;
+        width: 55px;
+        height: 55px;
+    }
+    .bfont1{
+        color: white #666;
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+    .bfont2{
+        color: white #ED5D5D;
+        font-size: 20px;
+    }
+    .gkbackimg,.backimg{text-align: center;}
+    .backimg>img{
+        width: 31px;
+        height: 35px;
+        margin-top: 17px;
+    }
+    .gkbackimg>img{
+        width: 31px;
+        height: 35px;
+        margin-top: 20px;
+    }
+    .datanum{line-height: 23px;}
+    .datanum2{line-height: 35px;font-size: 15px;text-align: center;}
+    .datanum3{padding: 15px 15px 0px;border:1px solid #eee;}
+    .tmoney{font-size: 26px;text-align: center;}
+    .today{font-size: 14px;text-align: center;cursor: pointer;}    
+    .todaybox2,.todaybox3,.todaybox4,.todaybox1{position: absolute;left: -10%;top: -22px;z-index: 10;width: 200px;height: 65px;padding: 10px;
+        background-color: white rgba(0,0,0,0.7);border-radius: 6px;color: white white;font-size: 12px;text-indent: 1em;display: none;}
+    .arrow-down{width: 0;height: 0;border-bottom: 10px solid rgba(0,0,0,0.7);  border-left: 10px solid transparent;transform: rotate(45deg);
+        position: absolute;left: 50%;top: 60px;
+    }
+    .gkborder{margin-top: 15px;}
+    .gkborder2{margin-top: 16px;}
+    .gkborder2,.gkborder{border-top: 1px solid #eee;padding: 20px 0px;border-bottom-right-radius: 6px;border-bottom-left-radius: 6px;}
+    .gkborder>li{padding: 10px 5px 10px 5px;text-align: center;}
+    .gkborder2>li{padding: 9px 5px;text-align: center;}
+    .gkborder2>li:nth-child(3),.gkborder>li:nth-child(1){border-right: 1px solid #eee;}
+    .gkborder2>li:nth-child(1),.gkborder2>li:nth-child(2),.gkborder>li:nth-child(2){border-right: 1px solid #eee;}
+    .gkfont1{line-height: 30px;font-weight: bold;}
+    .gkfont2{line-height: 30px;font-size: 12px;}
+    .gktitle{padding-left: 30px;font-size: 12px;}
+    .ygxian{width: 3px;height: 17px;float:left;background-color: white #44ABF7;margin-top: 6px;border:none;}
+</style>
+<div class="main">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="ygxian"></span>
+                    <div class="col-md-1 gkfont2">今日收益</div>
+                          <form action="" method="post" class="col-md-4">
+                    <div class="col-md-4">
+              
+                        <div class="input-group" style="width: 100px">
+                            
+	<button class="btn btn-default daterange daterange-time" type="button"> <i class="fa fa-calendar"></i></button>
+	                            <span class="input-group-btn">
+                                <input type="submit" class="btn btn-default" name="submit" value="查找"/>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="hidden" name="token" value="500313b5"/>
+                    </form>
+                    <div class="col-md-2 gkfont1">总平台统计报表</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">        
+            <ul class="col-md-12 yg9_content" style="margin-bottom: 10px;">
+                <li class="col-md-4">
+                    <div class="col-md-12 datanum3">
+                        <!-- <div class="col"></div> -->
+                        <div class="col-md-6 backimg">
+                            <img src="../addons/zh_dianc/template/images/xinxi1.png">
+                        </div>
+                        <div class="col-md-6 datanum2" style="padding: 0px;">
+                            <div>今日平台总收入</div>
+                            <div>¥&nbsp;0.00</div>
+                        </div>
+                    
+                        <ul class="col-md-12 gkborder">
+                            <li class="col-md-4">
+                                <div>微信支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                            <li class="col-md-4">
+                                <div>余额支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                            <li class="col-md-4">
+                                <div>积分支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="col-md-4">
+                    <div class="col-md-12 datanum3">
+                        <div class="col-md-6 backimg">
+                            <img src="../addons/zh_dianc/template/images/xinxi2.png">
+                        </div>
+                        <div class="col-md-6 datanum2" style="padding: 0px;">
+                            <div>今日已完成订单</div>
+                            <div>0</div>
+                        </div>
+                    
+                        <ul class="col-md-12 gkborder2">
+                            <li class="col-md-3">
+                                <div>外卖订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>店内订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>预定订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>当面订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="col-md-4">
+                    <div class="col-md-12 gkthree">
+                        <div class="col-md-4 col-xs-3 gkbackimg">
+                            <img src="../addons/zh_dianc/template/images/cz.png">
+                        </div>
+                        <div class="col-xs-8">
+                            <p class="tmoney">¥&nbsp;0.00</p>
+                            <p class="today jinri1">今日新增储值
+                                <!-- <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                <div class="todaybox1">指来自外卖、店内、预约、优惠买单等业务中，状态为已完成的微信支付订单总金额
+                                    <div class="arrow-down"></div>
+                                </div>  -->                               
+                            </p>                            
+                        </div>
+                    </div>
+                    <div class="col-md-12 gkfour">
+                        <div class="col-md-4 col-xs-3 gkbackimg">
+                            <img src="../addons/zh_dianc/template/images/tk.png">
+                        </div>
+                        <div class="col-xs-8">
+                            <p class="tmoney">¥&nbsp;0.00</p>
+                            <p class="today jinri1">今日新增退款
+                                <!-- <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                <div class="todaybox1">指来自外卖、店内、预约、优惠买单等业务中，状态为已完成的微信支付订单总金额
+                                    <div class="arrow-down"></div>
+                                </div>  -->                               
+                            </p>                            
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>        
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading gktitle">
+            昨日收益
+        </div>
+        <div class="panel-body">        
+            <ul class="col-md-12 yg9_content" style="margin-bottom: 10px;">
+                <li class="col-md-4">
+                    <div class="col-md-12 datanum3">
+                        <div class="col-md-6 backimg">
+                            <img src="../addons/zh_dianc/template/images/xinxi1.png">
+                        </div>
+                        <div class="col-md-6 datanum2" style="padding: 0px;">
+                            <div>昨日平台总收入</div>
+                            <div>¥&nbsp;0.00</div>
+                        </div>
+                    
+                        <ul class="col-md-12 gkborder">
+                            <li class="col-md-4">
+                                <div>微信支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                            <li class="col-md-4">
+                                <div>余额支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                            <li class="col-md-4">
+                                <div>积分支付收入</div>
+                                <div class="gkbold">¥&nbsp;0.00</div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </li>
+                <li class="col-md-4">
+                    <div class="col-md-12 datanum3">
+                        <div class="col-md-6 backimg">
+                            <img src="../addons/zh_dianc/template/images/xinxi2.png">
+                        </div>
+                        <div class="col-md-6 datanum2" style="padding: 0px;">
+                            <div>昨日已完成订单</div>
+                            <div>0</div>
+                        </div>
+                    
+                        <ul class="col-md-12 gkborder2">
+                            <li class="col-md-3">
+                                <div>外卖订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>店内订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>预定订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                            <li class="col-md-3">
+                                <div>当面订单数</div>
+                                <div class="gkbold">0</div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="col-md-4">
+                    <div class="col-md-12 gkthree">
+                        <div class="col-md-4 col-xs-3 gkbackimg">
+                            <img src="../addons/zh_dianc/template/images/cz.png">
+                        </div>
+                        <div class="col-xs-8">
+                            <p class="tmoney">¥&nbsp;0.00</p>
+                            <p class="today jinri1">昨日新增储值
+                                <!-- <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                <div class="todaybox1">指来自外卖、店内、预约、优惠买单等业务中，状态为已完成的微信支付订单总金额
+                                    <div class="arrow-down"></div>
+                                </div>  -->                               
+                            </p>                            
+                        </div>
+                    </div>
+                    <div class="col-md-12 gkfour">
+                        <div class="col-md-4 col-xs-3 gkbackimg">
+                            <img src="../addons/zh_dianc/template/images/tk.png">
+                        </div>
+                        <div class="col-xs-8">
+                            <p class="tmoney">¥&nbsp;0.00</p>
+                            <p class="today jinri1">昨日新增退款
+                                <!-- <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                <div class="todaybox1">指来自外卖、店内、预约、优惠买单等业务中，状态为已完成的微信支付订单总金额
+                                    <div class="arrow-down"></div>
+                                </div>  -->                               
+                            </p>                            
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>        
+    </div>
+ </div>
+ <div class="main" style="height: 270px;">
+    <div class="col-md-12 vipbanner">
+        <div class="col-md-6 vipbig1">
+            <div class="col-md-12 vipbox">
+                <div class="col-md-12 vipcontent">
+                    <div class="vipleft">
+                        <img src="../addons/zh_dianc/template/images/ygrz.png">
+                        <span>会员信息</span>
+                    </div>
+                    <div class="vipright">(单位：  人)</div>
+                </div>
+                <ul class="col-md-12 vipadd">
+                    <li class="col-md-3">
+                        <p class="font1">2</p>
+                        <p class="font2">今日新增</p>
+                    </li>
+                    <li class="col-md-3">
+                        <p class="font1">1</p>
+                        <p class="font2">昨日新增</p>
+                    </li>
+                    <li class="col-md-3">
+                        <p class="font1">41</p>
+                        <p class="font2">本月新增</p>
+                    </li>
+                    <li class="col-md-3">
+                        <p class="font1">41</p>
+                        <p class="font2">会员总数</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6 vipbig2">
+            <div class="col-md-12 vipbox">
+                <div class="col-md-12 vipcontent">
+                    <div class="vipleft">
+                        <img src="../addons/zh_dianc/template/images/6.png">
+                        <span>提现申请</span>
+                    </div>
+                    <div class="vipright">(单位：件)</div>
+                </div>
+                <ul class="col-md-12 vipsell">
+                    <li class="col-md-6">
+                        <div>
+                            <div class="viptitle">提现</div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 xuni">待提现：<span>0</span></div>
+                                <div class="col-md-6 xuni">已通过：<span>0</span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="col-md-6">
+                        <div>
+                            <div class="viptitle">订单</div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 xuni">有效订单：<span>1</span></div>
+                                <div class="col-md-6 xuni">无效订单：<span>0</span></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <ul class="botul">
+   
+        <li>
+         <a href="./index.php?c=site&a=entry&do=store&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata2.png">
+                <p class="bfont1">门店管理</p>
+            </div>
+            </a>
+        </li>
+        
+        <li>
+        <a href="./index.php?c=site&a=entry&do=user&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata1.png">
+                <p class="bfont1">会员管理</p>
+            </div>
+            </a>
+        </li>
+        <li>
+        <a href="./index.php?c=site&a=entry&do=ad&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata3.png">
+                <p class="bfont1">广告管理</p>
+            </div>
+            </a>
+        </li>
+        <li>
+         <a href="./index.php?c=site&a=entry&do=jfgoods&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata4.png">
+                <p class="bfont1">积分商城</p>
+            </div>
+            </a>
+        </li>
+        <li>
+        <a href="./index.php?c=site&a=entry&do=ruzhu&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata5.png">
+                <p class="bfont1">入驻管理</p>
+            </div>
+            </a>
+        </li>
+        <li>
+        <a href="./index.php?c=site&a=entry&do=txlist&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata6.png">
+                <p class="bfont1">提现管理</p>
+            </div>
+            </a>
+        </li>
+        <li>
+         <a href="./index.php?c=site&a=entry&do=settings&m=zh_dianc">
+            <div class="boxcon">
+                <img src="../addons/zh_dianc/template/images/gkdata7.png">
+                <p class="bfont1">系统设置</p>
+            </div>
+            </a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#frame-0").show();
+        $("#yframe-0").addClass("wyactive");
+        // $(".jinri1").mouseover(function(){
+        //     $(".todaybox1").show();
+        // })
+        // $(".jinri1").mouseout(function(){
+        //     $(".todaybox1").hide();
+        // })
+        // $(".jinri2").mouseover(function(){
+        //     $(".todaybox2").show();
+        // })
+        // $(".jinri2").mouseout(function(){
+        //     $(".todaybox2").hide();
+        // })
+        // $(".jinri3").mouseover(function(){
+        //     $(".todaybox3").show();
+        // })
+        // $(".jinri3").mouseout(function(){
+        //     $(".todaybox3").hide();
+        // })
+        // $(".jinri4").mouseover(function(){
+        //     $(".todaybox4").show();
+        // })
+        // $(".jinri4").mouseout(function(){
+        //     $(".todaybox4").hide();
+        // })
+    })
+</script>

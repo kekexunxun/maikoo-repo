@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/my",
+    "pages/promote/promote",
+    "pages/activity/activity",
+    "pages/order/order",
+    "pages/userinfo/userinfo",
+    "pages/goods/goods",
+    "pages/goodsdetail/goodsdetail",
+    "pages/invitecode/invitecode",
+    "pages/clause/clause",
+    "pages/activitydetail/activitydetail",
+    "pages/myactivity/myactivity",
+    "pages/pay/pay",
+    "pages/orderdetail/orderdetail",
+    "pages/cart/cart",
+    "pages/goodsdetailinfo/goodsdetailinfo",
+    "pages/verify/verify"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "A·Q大玩家",
+    "navigationBarTextStyle": "black",
+    "onReachBottomDistance": "-30"
+  },
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#333",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/index.png",
+        "selectedIconPath": "images/index-select.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/activity/activity",
+        "iconPath": "images/activity.png",
+        "selectedIconPath": "images/activity-select.png",
+        "text": "活动"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "images/my.png",
+        "selectedIconPath": "images/my-select.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "debug": true
+}

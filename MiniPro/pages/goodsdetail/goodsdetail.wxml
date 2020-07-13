@@ -1,0 +1,102 @@
+<import src="../../utils/wxParse/wxParse.wxml" />
+<view class="container">
+  <!--  商品Banner  先不使用swiper  -->
+  <view class='goods-banner'>
+    <image src='{{goodsInfo.pic}}'></image>
+  </view>
+  <!--  商品Banner END  -->
+  <!--  商品名和价格  -->
+  <view class='goods-brief'>
+    <view class='goods-name'>{{goodsInfo.name}}</view>
+    <view class='goods-detail-type-one'>
+      <view class="type-one-promiton">{{goodsInfo.is_on_promotion ? '促销活动：' + goodsInfo.promotion_name + ' ' + goodsInfo.promotion_count + '折' : ''}}</view>
+    </view>
+    <view class='goods-info'>
+      <view class='logi' wx:if="{{expressFee != 0}}">运费：￥{{expressFee}} 满￥{{expressFreeFee}}包邮</view>
+      <view class='logi' wx:else>免运费</view>
+      <view class='sellnum'>销量：{{goodsInfo.sellnum}}</view>
+    </view>
+  </view>
+  <!--  产品分类  -->
+  <view class='good-type'>
+    <view class='type-title'>产品分类</view>
+    <block wx:for="{{goodsInfo.detail}}" wx:key="">
+      <view class='type-list'>
+        <view class='type-item'>
+          <view class='item-left'>
+            <view class='item-name'>{{item.detail_name}}</view>
+            <view class='item-intro'>{{item.detail_intro}}</view>
+            <view class='item-keywords'>
+              <block wx:for="{{item.keywords}}" wx:for-item="it" wx:key="">
+                <button>{{it}}</button>
+              </block>
+            </view>
+          </view>
+          <view class='item-right'>
+            <!-- 有商品折扣时 -->
+            <block wx:if="{{goodsInfo.is_on_promotion}}">
+              <view class='item-price'>￥{{item.pro_price}}
+                <text class='item-market-price'>￥{{item.shop_price}}</text>
+              </view>
+            </block>
+            <block wx:else>
+              <view class='item-price'>￥{{item.shop_price}}
+                <text class='item-market-price'>￥{{item.market_price}}</text>
+              </view>
+            </block>
+            <view class='item-stock'>剩余：{{item.stock}}</view>
+            <view class='item-pay'>
+              <form report-submit='true' bindsubmit='directBuy' data-idx="{{index}}" wx:if="{{item.stock > 0}}">
+                <button class="buy-btn" form-type='submit'>立即购买</button>
+              </form>
+              <form wx:else>
+                <button class="buy-btn">暂无存货</button>
+              </form>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!--  预定须知  -->
+  <view class='goods-detail'>
+    <view class='type-title'>预定须知</view>
+    <view class='goods-detail-text'>
+      <template is="wxParse" data="{{wxParseData:article.nodes}}" />
+    </view>
+  </view>
+
+  <!--  产品详情  -->
+  <view class='goods-detail'>
+    <view class='type-title'>产品详情</view>
+    <view class='goods-detail-text'>继续上拉查看商品详情</view>
+  </view>
+
+  <view class='bottom-btn'>
+    <!--  联系客服  -->
+    <view class='btn-service' style='border-right: 1rpx solid gainsboro'>
+      <button open-type='contact'>
+        <image src='../../images/service.png'></image>
+        <text>客服</text>
+      </button>
+    </view>
+    <!--  购物车  -->
+    <view class='btn-service'>
+      <button bindtap='addToCart'>
+        <image src='../../images/cart.png'></image>
+        <text>购物车</text>
+      </button>
+    </view>
+    <view class='btn-addcart'>
+      <button class='btn-share' open-type='share'>分享并获利</button>
+    </view>
+    <view class='btn-buy' bindtap='directBuy' wx:if="{{!isAllNoStock}}">
+      <text>立即购买</text>
+    </view>
+    <view class='btn-buy' wx:else>
+      <text>暂无存货</text>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,101 @@
+{
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.2.5",
+	"appid": "wx57beee95d7c48bbe",
+	"projectname": "ftxcx",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 9,
+			"list": [
+				{
+					"id": 0,
+					"name": "orderdetail",
+					"pathName": "pages/orderdetail/orderdetail",
+					"query": "orderid=090493235"
+				},
+				{
+					"id": -1,
+					"name": "order",
+					"pathName": "pages/order/order",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "userinfo",
+					"pathName": "pages/userinfo/userinfo",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "cart",
+					"pathName": "pages/cart/cart",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "promotion",
+					"pathName": "pages/promote/promote",
+					"query": ""
+				},
+				{
+					"id": 5,
+					"name": "商品详情",
+					"pathName": "pages/goodsdetail/goodsdetail",
+					"query": "goodsid=58"
+				},
+				{
+					"id": 6,
+					"name": "商品列表",
+					"pathName": "pages/goods/goods",
+					"query": "catId=1"
+				},
+				{
+					"id": 7,
+					"name": "商品支付",
+					"pathName": "pages/pay/pay",
+					"query": "isCart=0&totalFee=123.00"
+				},
+				{
+					"id": 8,
+					"name": "verify",
+					"pathName": "pages/verify/verify",
+					"query": "orderid=083198519"
+				},
+				{
+					"id": 9,
+					"name": "活动详情",
+					"pathName": "pages/activitydetail/activitydetail",
+					"query": "activityid=60"
+				}
+			]
+		}
+	}
+}

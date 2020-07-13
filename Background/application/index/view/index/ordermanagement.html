@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <style>
+        td.details-control {
+        background: url('__ROOT__/public/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('__ROOT__/public/details_close.png') no-repeat center center;
+    }
+    #orderlist td{
+        text-align: center;
+    }
+    </style>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>用户管理</title>
+</head>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商城管理 <span
+            class="c-gray en">&gt;</span> 订单管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+            href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <div class="cl pd-5 bg-1 bk-gray mt-20">
+            <span class="l">
+                <a href="javascript:;" class="btn btn-warning radius" onClick="order_unpay()"><i class="Hui-iconfont">&#xe606;</i>
+                    待付款</a>
+                <a href="javascript:;" onClick="order_undeliver()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe608;</i>
+                    待发货</a>
+                <a href="javascript:;" onClick="order_deliver()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe669;</i>
+                    已发货</a>
+                <a href="javascript:;" onClick="order_success()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe6a7;</i>
+                    已完成</a>
+                <a href="javascript:;" onClick="order_cancel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6a6;</i>
+                    已取消</a>
+                <a href="javascript:;" onClick="after_sale()" class="btn btn-warning radius"><i class="Hui-iconfont">&#xe653;</i>
+                    售后中</a>
+                <a href="javascript:;" onClick="after_saledone()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe637;</i>
+                    售后完成</a>
+                <a href="javascript:;" onClick="on_refound()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe637;</i>
+                    退款申请</a>
+                <a href="javascript:;" onClick="on_refound_done()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe637;</i>
+                    退款处理完成</a>
+            </span>
+            <span class="r datalength">共有数据：<strong></strong> 条</span> </div>
+        <div class="mt-20">
+            <table id="orderlist" class="table table-border table-bordered table-hover table-bg table-sort">
+                <thead>
+                    <tr class="text-c">
+                        <th width="20">详情</th>
+                        <th width="50">订单号</th>
+                        <th width="50">订单金额</th>
+                        <th width="120">快递信息</th>
+                        <th width="50">用户姓名</th>
+                        <th width="50">电话</th>
+                        <th width="100">地址</th>
+                        <th width="50">用户留言</th>
+                        <th width="100">创建时间</th>
+                        <th width="150">其它时间</th>
+                        <th width="50">订单状态</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="modal-demo-refound" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">处理退款</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" class="form form-horizontal" id="form-addadmin-add">
+                        <span id="order_idx" style="display: none;"></span>
+                        <div class="row cl" style="margin-left: 60px;">
+                            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>退款处理：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <select name="father_name" id="refound-select" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px; width: 200px;">
+                                    <option value="0">取消</option>
+                                    <option value="1">同意</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="refound-confirm" class="btn btn-primary">确定</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">填写快递信息</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <!-- <p>对话框内容…</p> -->
+                    <form action="" method="post" class="form form-horizontal" id="form-addadmin-add">
+                        <span id="order_idx" style="display: none;"></span>
+                        <div class="row cl" style="margin-left: 60px;">
+                            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>快递公司：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input style="width: 200px;" type="text" class="input-text valid" autocomplete="off"
+                                    value="" maxlength="18" id="express_co" name="express_co">
+                            </div>
+                        </div>
+                        <div class="row cl" style="margin-left: 60px;">
+                            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>快递单号：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input style="width: 200px;" type="text" class="input-text valid" autocomplete="off"
+                                    maxlength="24" id="express_num" name="express_num">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm" class="btn btn-primary">确定</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-20">
+        <div class="container">
+            <p>Powered By 福建麦口信息科技有限公司</p>
+        </div>
+    </footer>
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <!--/_footer 作为公共模版分离出去-->
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+    <script type="text/javascript">
+        // 显示行的附加信息
+        function format(data) {
+            var p = '';
+            for (var i = 0; i < data.detail.length; i++) {
+                p += '<p>商品名称：' + data.detail[i].name + '&nbsp;&nbsp' + '商品原价：￥' + data.detail[i].market_price + '&nbsp;&nbsp' + '商品售价：￥' + data.detail[i].shop_price + '&nbsp;&nbsp' + '参与的促销活动：' + data.detail[i].promotion_name + '&nbsp;&nbsp' + '对应折扣：' + data.detail[i].promotion_count + '</p>';
+            }
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                "<tr style='width:50%'>" +
+                '<td style="font-weight: bold;width: 21%;">订单详情：</td>' +
+                '<td>' + '' + p + '' + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+        // 订单时间
+        function ordertime(row) {
+            let pay = row.pay_time && row.pay_time != 0 ? '<p>支付时间：' + '' + row.pay_time + '' + '</p>' : '';
+            let cancel = row.cancel_time && row.cancel_time != 0 ? '<p>取消时间：' + '' + row.cancel_time + '' + '</p>' : '';
+            let verify = row.verify_time && row.verify_time != 0 ? '<p>核销时间：' + '' + row.verify_time + '' + '</p>' : '';
+            let apply_re = row.apply_refound_time && row.apply_refound_time != 0 ? '<p>申请退款时间：' + '' + row.apply_refound_time + '' + '</p>' : '';
+            let acc_re = row.accept_refound_time && row.accept_refound_time != 0 ? '<p>退款处理时间：' + '' + row.accept_refound_time + '' + '</p>' : '';
+            let onas = row.onas_time && row.onas_time != 0 ? '<p>申请售后时间：' + '' + row.onas_time + '' + '</p>' : '';
+            let finish_as = row.finish_as_time && row.finish_as_time != 0 ? '<p>售后处理时间：' + '' + row.finish_as_time + '' + '</p>' : '';
+
+            return pay + cancel + verify + onas + finish_as + apply_re + acc_re;
+        }
+        // 快递信息
+        function expressinfo(row) {
+            return '<p>快递公司：' + '' + row.express_co + '' + '</p>' + '<p>快递单号：' + '' + row.express_num + '' + '</p>' + '<p>快递费用：' + '' + row.express_fee + '' + '</p>';
+        }
+        $(document).ready(function () {
+            var table = $('#orderlist').DataTable({
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "从当前数据中检索： ",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "ajax": {
+                    "url": "orderDetail",
+                    //默认为data,这里定义为空，则只需要传不带属性的数据
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    { "data": "order_id" },
+                    {
+                        "data": "total_fee",
+                        "render": function (data, type, row, meta) {
+                            //类型："" 暂无
+                            switch (data) {
+                                default:
+                                    return '￥' + data + '';
+                            }
+                        }
+                    },
+                    {
+                        "data": "express_fee",
+                        "render": function (data, type, row, meta) {
+                            //类型："" 暂无
+                            switch (data) {
+                                default:
+                                    return expressinfo(row);
+                            }
+                        }
+                    },
+                    { "data": "user_name" },
+                    { "data": "tel_num" },
+                    { "data": "address" },
+                    { "data": "message" },
+                    { "data": "create_time" },
+                    {
+                        "data": "pay_time",
+                        "render": function (data, type, row, meta) {
+                            //类型："" 暂无
+                            switch (row) {
+                                default:
+                                    return ordertime(row);
+                            }
+                        }
+                    },
+                    {
+                        "className": 'td-manage',
+                        "data": "status",
+                        "render": function (data, type, row, meta) {
+                            //类型："" 暂无
+                            switch (data) {
+                                case 0: return '';
+                                    break;
+                                case 1: return '<span class="label label-defaunt radius" style="background-color: #f37b1d;padding:5px;">待付款</span>';
+                                    break;
+                                case 2: return '<span class="label label-defaunt radius" style="background-color: #5a98de;padding:5px;cursor:pointer" onClick="express_to(\'' + row.order_id + '\')">立即发货</span>';
+                                    break;
+                                case 3: return '<span class="label label-defaunt radius" style="background-color: #5eb95e;padding:5px;">已发货</span>';
+                                    break;
+                                case 4: return '<span class="label label-defaunt radius" style="background-color: #3bb4f2;padding:5px;">已完成</span>';
+                                    break;
+                                case 5: return '<span class="label label-defaunt radius" style="background-color: #dd514c;padding:5px;">已取消</span>';
+                                    break;
+                                case 6: return '<span class="label label-defaunt radius" style="background-color: #f37b1d;padding:5px;cursor:pointer" onClick="cancel_after_sale(this,\'' + row.order_id + '\')">售后中</span>';
+                                    break;
+                                case 7: return '<span class="label label-defaunt radius" style="background-color: #5eb95e;padding:5px;">售后完成</span>';
+                                    break;
+                                case 8: return '<span class="label label-defaunt radius" style="background-color: #5a98de;padding:5px;cursor:pointer" onClick="do_refound(\'' + row.order_id + '\')">退款处理</span>';
+                                    break;
+                                case 9: return '<span class="label label-defaunt radius" style="background-color: #5eb95e;padding:5px;">' + (row.is_refound ? '退款成功' : '退款失败') + '</span>';
+                                    break;
+                            }
+                        }
+                    },
+                ],
+                "order": [[8, 'desc']]
+            });
+            // Add event listener for opening and closing details
+            $('#orderlist tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.addClass('shown');
+                }
+            });
+            // 转UnixTime时间到当前时间
+            function FormatDateTime(UnixTime) {
+                var a = UnixTime;
+                var date = new Date(parseInt(a * 1000));
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            };
+        });
+        // 待付款
+        function order_unpay() {
+            ajaxData(1);
+        }
+        // 待发货
+        function order_undeliver() {
+            ajaxData(2);
+        }
+        // 已发货
+        function order_deliver() {
+            ajaxData(3);
+        }
+        // 已完成
+        function order_success() {
+            ajaxData(4);
+        }
+        // 已取消
+        function order_cancel() {
+            ajaxData(5);
+        }
+        // 售后中
+        function after_sale() {
+            ajaxData(6);
+        }
+        // 售后完成
+        function after_saledone() {
+            ajaxData(7);
+        }
+
+        function on_refound() {
+            ajaxData(8);
+        }
+
+        function on_refound_done() {
+            ajaxData(9);
+        }
+        // 请求数据
+        function ajaxData(data) {
+            $.ajax({
+                data: { state: data },
+                datatype: "POST",
+                url: "selectState",
+                success: function (data) {
+                    $(".datalength").html('共有：' + '<strong>' + data.length + '</strong>' + ' 条数据');
+                    $('#orderlist').dataTable().fnClearTable();   //将数据清除
+                    if (data.length != 0) {
+                        $('#orderlist').dataTable().fnAddData(data);  //重新绑定table数据
+                    }
+                }
+            });
+        }
+        // 点击发货
+        function express_to(id) {
+            $("#modal-demo").modal("show");
+            $("#order_idx").html(id);
+        }
+
+        // 点击处理退款
+        function do_refound(id) {
+            $("#modal-demo-refound").modal("show");
+            $("#order_idx").html(id);
+        }
+
+        $('#refound-confirm').click(function () {
+            var id = $("#order_idx").html();
+            var refoundSelect = $("#refound-select").val();
+            var showMessage = refoundSelect == 0 ? '确定要取消退款申请吗？' : '确定要同意退款申请吗？';
+            layer.confirm(showMessage, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'refound',
+                    dataType: 'json',
+                    data: { order_id: id, isRefound: refoundSelect },
+                    success: function (data) {
+                        if (data.code == "200") {
+                            index = parent.layer.getFrameIndex(window.name);
+                            layer.msg(data.msg, { icon: 1, time: 1300 });
+                            setTimeout('window.location.reload(location.href);', 1300);
+                        }
+                        if (data.code == "300") {
+                            layer.msg(data.msg, { icon: 2, time: 1300 });
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg('请刷新页面重新提交！', { icon: 2, time: 1300 });
+                    },
+                });
+            });
+        })
+
+        // 点击确定
+        $("#confirm").click(function () {
+            var id = $("#order_idx").html();
+            var express_co = $("#express_co").val();
+            // var express_fee = $("#express_fee").val();
+            var express_num = $("#express_num").val();
+            var showMessage = '确定要发货吗？';
+            layer.confirm(showMessage, function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'expressTo',
+                    dataType: 'json',
+                    data: { order_id: id, express_co: express_co, express_num: express_num },
+                    success: function (data) {
+                        if (data.code == "200") {
+                            index = parent.layer.getFrameIndex(window.name);
+                            layer.msg(data.msg, { icon: 1, time: 1300 });
+                            setTimeout('window.location.reload(location.href);', 1300);
+                        }
+                        if (data.code == "300") {
+                            layer.msg(data.msg, { icon: 2, time: 1300 });
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg('请刷新页面重新提交！', { icon: 2, time: 1300 });
+                    },
+                });
+            });
+        })
+        // 点击售后完成
+        function cancel_after_sale(obj, id) {
+            layer.confirm('确定完成售后吗？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'cancelAfterSale',
+                    dataType: 'json',
+                    data: { order_id: id },
+                    success: function (data) {
+                        if (data.code == "200") {
+                            layer.msg(data.msg, { icon: 1, time: 1300 });
+                            $(obj).parents("tr").find(".td-manage").html('<span class="label label-defaunt radius" style="background-color: #5eb95e;padding:5px;">售后完成</span>');
+                        }
+                        if (data.code == "300") {
+                            layer.msg(data.msg, { icon: 2, time: 1300 });
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg('请刷新页面重新提交！', { icon: 2, time: 1300 });
+                    },
+                });
+            });
+        }
+
+// 点击取消分销
+// function cancel_distri(id){
+//     layer.confirm('确定取消分销吗？',function(index){
+//         $.ajax({
+//             type: 'POST',
+//             url: 'cancelDistribution',
+//             dataType: 'json',
+//             data: {order_id: id},
+//             success: function(data){
+//                 if (data.code == "200") {
+//                     index = parent.layer.getFrameIndex(window.name);
+//                     layer.msg(data.msg,{icon:1,time:1300});
+//                     setTimeout('window.location.reload(location.href);',1300);
+//                 }
+//                 if(data.code == "300"){
+//                     layer.msg(data.msg,{icon:2,time:1300});
+//                 }
+//             },
+//             error:function(data) {
+//                 layer.msg('请刷新页面重新提交！',{icon:2,time:1300});
+//             },
+//         });
+//     });
+// }
+    </script>
+</body>
+
+</html>

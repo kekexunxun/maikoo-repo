@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+	<title>分类管理</title>
+	<style>
+		.Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+</head>
+
+<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商城管理<span class="c-gray en">&gt;</span>
+		商品统计 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);"
+		 title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="page-container">
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			<span class="r">共有数据：<strong>{:sizeof($goodslist)}</strong> 条</span> </div>
+		<div class="mt-20">
+			<table id="goodssaleslist" class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="40">商品ID</th>
+						<th width="80">商品名称</th>
+						<th width="80">分类名称</th>
+						<th width="80">商品图片</th>
+						<th width="80">商品总销量</th>
+						<th width="80">商品当前状态</th>
+						<th width="80">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{if condition = "count($goodslist) == 0"}
+					<tr class="text-c">暂无数据</tr>
+					{else}
+					{volist name="$goodslist" id="vol"}
+					<tr class="text-c">
+						<td>{$vol.goods_id}</td>
+						<td>{$vol.name}</td>
+						<td>{$vol.catagory_name}</td>
+						<td>
+							{if condition = "$vol.pic == null "}
+							无
+							{else}
+							<img style="width: 180px;height: 100px;" src="{$vol.pic}">
+							{/if}
+						</td>
+						<td>{$vol.salesnum}</td>
+						<td class="td-status">
+							{if condition = "$vol.is_active eq 0 "}
+							<span class="label label-defaunt radius">未上架</span>
+							{elseif condition = "$vol.is_active eq 1" /}
+							<span class="label label-success radius">已上架</span>
+							{/if}
+						</td>
+						<td class="td-manage">
+							<a style="text-decoration:none" href="javascript:;" onClick="goodssales_chart('{$vol.goods_id}');" title="销量图表"><i
+								 class="Hui-iconfont">&#xe621;</i></a>
+						</td>
+					</tr>
+					{/volist}
+					{/if}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer class="footer mt-20">
+		<div class="container">
+			<p>Powered By 福建麦口信息科技有限公司</p>
+		</div>
+	</footer>
+	<!--_footer 作为公共模版分离出去-->
+	<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+	<!--/_footer 作为公共模版分离出去-->
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="__ROOT__/public/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			// 配置语言项
+			$('#goodssaleslist').DataTable({
+				language: {
+					"sProcessing": "处理中...",
+					"sLengthMenu": "显示 _MENU_ 项结果",
+					"sZeroRecords": "没有匹配结果",
+					"sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+					"sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+					"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+					"sInfoPostFix": "",
+					"sSearch": "从当前数据中检索： ",
+					"sUrl": "",
+					"sEmptyTable": "表中数据为空",
+					"sLoadingRecords": "载入中...",
+					"sInfoThousands": ",",
+					"oPaginate": {
+						"sFirst": "首页",
+						"sPrevious": "上页",
+						"sNext": "下页",
+						"sLast": "末页"
+					},
+					"oAria": {
+						"sSortAscending": ": 以升序排列此列",
+						"sSortDescending": ": 以降序排列此列"
+					}
+				}
+			});
+		});
+		// 点击查看图表
+		function goodssales_chart(id) {
+			var goods_id = id;
+			var index = layer.open({
+				type: 2,
+				title: '统计图表',
+				content: 'goodssaleschart.html?goods_id =' + goods_id
+			});
+			layer.full(index);
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+<view class="container">
+  <view class='invite-code'>
+    <text>请填写邀请码</text>
+    <input maxlength='20' type='text' focus="true" bindinput="inputCode"></input>
+    
+  </view>
+  <view class='confirm-button'>
+    <form bindsubmit='confirm' report-submit="true">
+      <button type="primary" form-type='submit' disabled='{{disable}}'>确认</button>
+    </form>
+  </view>
+</view>

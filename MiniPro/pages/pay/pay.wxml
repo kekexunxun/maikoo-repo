@@ -1,0 +1,108 @@
+<view class='container'>
+
+  <!-- 地址选择 -->
+  <block wx:if="{{!address}}">
+    <button class='address-btn' open-type="openSetting" bindopensetting="checkUserAuthSetting" wx:if="{{!addressAuth}}">选择地址</button>
+    <view class='address-btn' bindtap='chooseAddress' wx:if="{{addressAuth}}">选择地址</view>
+  </block>
+  <block wx:else>
+    <view class='address' bindtap='chooseAddress'>
+      <view class='address-info'>
+        <view class='address-info-left'>收货人</view>
+        <view class='address-info-right'>{{userName}}</view>
+      </view>
+      <view class='address-info'>
+        <view class='address-info-left'>联系电话</view>
+        <view class='address-info-right'>{{telNumber}}</view>
+      </view>
+      <view class='address-info' bindtap='chooseAddress'>
+        <view class='address-info-left'>所在地区</view>
+        <view class='address-info-right'>{{address}}</view>
+        <image class='address-info-arrow' src='../../images/icon-arrowright.png'></image>
+      </view>
+      <view class='address-info'>
+        <view class='address-info-left'>详细地址</view>
+        <view class='address-info-right'>{{addressDetail}}</view>
+      </view>
+    </view>
+  </block>
+  <view class='line'></view>
+
+  <!-- 商品 -->
+  <block wx:for="{{goodsList}}" wx:key="">
+    <view class='detail-info'>
+      <view class='detail-info-goods'>
+        <view class='detail-info-goods-left'>
+          <image src='{{item.pic}}'></image>
+        </view>
+        <view class='detail-info-goods-right'>
+          <view class='detail-name'>
+            <view class='name-left textOverFlow'>{{item.goods_name}}</view>
+            <view class='name-right'>￥{{item.market_price}}</view>
+          </view>
+          <view class='goods-promotion'>
+            <view class='textOverFlow'>{{item.is_on_promotion ? item.promotion_name : ' '}}
+              <text>{{item.is_on_promotion ? item.promotion_count + ' 折' : ' '}}</text>
+            </view>
+          </view>
+          <!--  只要当从购物车进入时才会在这里显示数量  -->
+          <view class='goods-num'>{{isCart ? '× ' + item.quantity : ' '}}</view>
+          <view class='item-price'>￥{{item.shop_price}}
+            <text></text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <!-- shop-detail -->
+  <block>
+    <view class='detail-shopinfo' bindtap='chooseLogi'>
+      <view class='detail-shopinfo-left'>当前运费</view>
+      <view class='detail-shopinfo-right'>{{expressFee}}</view>
+      <!-- <image class='address-info-arrow-logi' src='../../images/icon-arrowright.png'></image> -->
+    </view>
+  </block>
+  <!--  当用户不是从购物车进入时，可在此进行商品数量的变更  -->
+  <block wx:if="{{isCart == '0'}}">
+    <view class='detail-shopinfo'>
+      <view class='detail-shopinfo-left'>商品数量</view>
+      <view class='image-number-right'>
+        <view class='image-number-box'>
+          <text class='image-number-right-text' bindtap='numberMinus'>-</text>
+          <input class='image-number-right-input' type='number' bindinput='changeNum' value='{{itemCount}}'></input>
+          <text class='image-number-right-text' bindtap='numberPlus'>+</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class='detail-shopinfo'>
+    <view class='detail-shopinfo-left'>买家留言</view>
+    <view class='detail-shopinfo-right-input'>
+      <input bindinput='inputMessage' maxlength='140' placeholder='选填：填写内容已和卖家协商确认'></input>
+    </view>
+  </view>
+  <!-- 打印规格 -->
+  <!-- <view class='detail-shopinfo'>
+    <view class='detail-shopinfo-left'></view>
+    <view class='detail-shopinfo-right'><text style='color: #333333'>打印规格：{{format}}</text></view>
+  </view> -->
+  <!-- total -->
+  <view class='detail-shopinfo'>
+    <view class='detail-shopinfo-left'></view>
+    <view class='detail-shopinfo-right'>
+      <text style='color: #333333'>共{{itemCount}}件商品 合计</text>
+      <text>￥{{totalFee}}</text>
+    </view>
+  </view>
+  <!-- 备注 -->
+  <!-- <view class='detail-shopinfo'>
+    <view class='detail-shopinfo-left'></view>
+    <view class='detail-shopinfo-right'><text style='color: red; font-weight: 500'>不选择地址默认为自取</text></view>
+  </view> -->
+  <!-- 底部BAR -->
+  <view class='detail-bottom'>
+    <form report-submit="true" bindsubmit='makeOrder'>
+      <button form-type="submit" disabled='{{!isCanSubmitOrder}}'>提交订单</button>
+    </form>
+  </view>
+</view>

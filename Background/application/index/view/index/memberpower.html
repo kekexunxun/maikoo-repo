@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/layer/layer.css" />
+    <link rel="stylesheet" href="__ROOT__/public/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <title>管理员管理</title>
+    <style>
+        table{
+            table-layout: fixed;
+            word-wrap: break-spaces;
+        }
+        .text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        td img{
+            max-height: 0px;
+            max-width: 0px;
+        }
+        #admintable td{
+            text-align: center;
+        }
+        .Hui-iconfont{
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>用户管理 <span class="c-gray en">&gt;</span> 权限管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+    </span> <span class="r datalength">共有：<strong>{$num}</strong> 条数据</span> </div>
+    <div class="mt-20">
+        <table id="admintable" class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="40">ID</th>
+                <th width="60">用戶名</th>
+                <th width="60">登录名</th>
+                <th width="60">角色名</th>
+                <th width="70">创建时间</th>
+                <th width="50">是否已启用</th>
+                <th width="50">操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content radius">
+            <div class="modal-header">
+                <h3 class="modal-title">权限选择</h3>
+                <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+            </div>
+            <div class="modal-body">
+                <!-- <p>对话框内容…</p> -->
+            <div class="zTreeDemoBackground left">
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm" class="btn btn-primary">确定</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-demotwo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content radius">
+            <div class="modal-header">
+                <h3 class="modal-title">修改管理员密码</h3>
+                <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+            </div>
+            <div class="modal-body">
+                <!-- <p>对话框内容…</p> -->
+            <form action="" method="post" class="form form-horizontal" id="form-addadmin-add">
+                <div class="row cl active">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+                    </div>
+                </div>
+                <div class="row cl active">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>新密码：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" placeholder="新密码" id="password1" name="password1">
+                    </div>
+                </div>
+                <div class="row cl active">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" placeholder="确认新密码" id="password2" name="password2">
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+                <button id="change" class="btn btn-primary">确定</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+        <!-- <p>云打印</p> -->
+        <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript">
+// zTree插件
+var setting = {
+    check: {
+        enable: true
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: 0
+        }
+    },
+    callback:{
+        beforeCheck:true,
+        onCheck:onCheck
+    }
+};
+var code;
+function setCheck() {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+    py = $("#py").attr("checked")? "p":"p",
+    sy = $("#sy").attr("checked")? "s":"s",
+    pn = $("#pn").attr("checked")? "p":"p",
+    sn = $("#sn").attr("checked")? "s":"s",
+    type = { "Y":py + sy, "N":pn + sn};
+    zTree.setting.check.chkboxType = type;
+    showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+}
+function showCode(str) {
+    if (!code) code = $("#code");
+    code.empty();
+    code.append("<li>"+str+"</li>");
+}
+var aa='';
+function onCheck(e,treeId,treeNode){
+    var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+    nodes=treeObj.getCheckedNodes(true),
+    v="";
+    for(var i=0;i<nodes.length;i++){
+        v+=nodes[i].id + ",";
+        // console.log("节点id:"+nodes[i].id+"节点名称"+v); //获取选中节点的值
+    }
+    aa=v;
+}
+// 权限分配
+function selectPower(id){
+    // console.log(id);
+    rid = id;
+    // 显示模态框
+    $("#modal-demo").modal("show");
+    $.ajax({
+        async:false,
+        cache:false,
+        type: 'POST',
+        data:{id:rid},
+        dataType : "json",
+        url: 'prePower',//请求的action路径
+        success:function(data){ //请求成功后处理函数
+            // console.log(data);
+            treeNodes = data; //把后台封装好的简单Json格式赋给treeNodes
+            $.fn.zTree.init($("#treeDemo"), setting, treeNodes);
+            setCheck();
+            $("#py").bind("change", setCheck);
+            $("#sy").bind("change", setCheck);
+            $("#pn").bind("change", setCheck);
+            $("#sn").bind("change", setCheck);
+        },
+        error: function(){
+        },
+    });
+}
+// 点击确定保存权限
+$("#confirm").click(function(){
+    if(aa){
+    layer.confirm('确定修改权限吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            data:{menuid:aa,id:rid},
+            dataType : "json",
+            url: 'selectPower',
+            success:function(data){ //请求成功后处理函数。
+                $("#modal-demo").modal("hide");
+                layer.msg(data.msg, {icon: 1,time:1300});
+            },
+            // error:function(){//请求失败处理函数
+            //     layer.msg('请求失败',{
+            //       icon: 2,
+            //       shade: 2
+            //     })
+            // },
+        });
+    });
+    }else{
+        alert('您尚未修改任何权限！');
+    }
+})
+// 修改管理员密码
+function password_edit(id){
+    var user_id = id;
+    $("#modal-demotwo").modal("show");
+    // 点击确定
+    $("#change").click(function(){
+        var password = $('#password').val();
+        var password1 = $('#password1').val();
+        var password2 = $('#password2').val();
+    if(password == '' || password1 == '' || password2 == ''){
+        layer.msg('密码不能为空！',{icon:2,time:1000});
+        return false;
+    }else if(password1 != password2 ){
+        layer.msg('两次输入的密码不一致！',{icon:2,time:1000});
+        return false;
+    }
+        $.ajax({
+            type: 'POST',
+            url: 'passwordUpdate',
+            dataType: 'json',
+            data:{user_id:user_id,password:password,password1:password1,password2:password2},
+            success: function(data){
+                if(data.code=="200"){
+                    layer.msg(data.msg,{icon:1,time:1000});
+                    setTimeout("location.replace(location.href);",1000)
+                }
+                if(data.code=='300'){
+                    layer.msg(data.msg,{icon:2,time:1000});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });
+    })
+        return false;
+}
+// 初始化表格
+$(document).ready(function() {
+    $('#admintable').DataTable( {
+        language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+        "ajax": {
+              "url": "powerList",
+              //默认为data,这里定义为空，则只需要传不带属性的数据
+              "dataSrc": ""
+          },
+        "columns": [
+            { "data": "user_id" },
+            { "data": "username" },
+            { "data": "tel_num" },
+            { "data": "account_type" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (data) {
+                        // case 0:
+                        // return '用户';
+                        // break;
+                        // case 1:
+                        // return '票券核销员';
+                        // break;
+                        case 2:
+                        return '系统管理员';
+                        break;
+                        // case 3:
+                        // return '最高管理员';
+                        // break;
+                    }
+                }
+            },
+            { "data": "create_time" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (data) {
+                        default:
+                        return  ''+data+'';
+                    }
+                }
+            },
+            { "className": "td-active",
+            "data": "is_active" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (data) {
+                        case 0:
+                        return '<span class="label label-defaunt radius">已停用</span>';
+                        break;
+                        case 1:
+                        return '<span class="label label-success radius">已启用</span>';
+                        break;
+                    }
+                }
+            },
+            {  "className": "td-manage",
+             "data": "user_id" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (data) {
+                        default:
+                        return '<a style="text-decoration:none" onClick="selectPower('+data+');" href="javascript:;" title="权限管理" class="ml-5"><i class="Hui-iconfont">&#xe60c;</i></a> <a style="text-decoration:none" onClick="password_edit('+data+');" href="javascript:;" title="修改密码" class="ml-5"><i class="Hui-iconfont">&#xe63f;</i></a>';
+                        break;
+                    }
+                }
+            }
+        ]
+    } );
+    // 转UnixTime时间到当前时间
+    function FormatDateTime(UnixTime) {
+        var a = UnixTime.replace("/Date(", "").replace(")/", "");
+        var date = new Date(parseInt(a*1000));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    };
+} )
+</script>
+</body>
+</html>

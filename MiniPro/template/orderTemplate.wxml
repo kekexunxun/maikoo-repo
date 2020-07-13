@@ -1,0 +1,131 @@
+<template name="goodsDetail">
+  <view class='list-item'>
+    <view class='item-content'>
+      <view class='content-left'>
+        <image src='{{pic}}'></image>
+      </view>
+      <view class='content-middle'>
+        <view class='goodsname textOverFlow'>{{name}}</view>
+        <view class='promo-count textOverFlow' wx:if="{{promotion_id}}">促销活动：{{promotion_name}} {{promotion_count}}折</view>
+      </view>
+      <view class='content-right'>
+        <view class="goodsfee">￥ {{shop_price}}</view>
+        <view class='goodsnum'>× {{quantity}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<!--  Button的模板  -->
+<template name="pay">
+  <form bindsubmit='prePay' report-submit='true'>
+    <button form-type='submit' class='prepay' data-orderid='{{order_id}}'>立即付款</button>
+  </form>
+</template>
+<template name="cancel">
+  <form bindsubmit='cancelOrder' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>取消订单</button>
+  </form>
+</template>
+<template name="onemore">
+  <form bindsubmit='oneMoreOrder' report-submit='true'>
+    <button form-type='submit' class='onemore' data-orderid='{{order_id}}'>再来一单</button>
+  </form>
+</template>
+<template name="detail">
+  <form bindsubmit='orderDetail' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>订单详情</button>
+  </form>
+</template>
+<!-- <template name="express">
+  <form bindsubmit='orderDetail' report-submit='true'>
+    <button form-type='submit' class='common'>查看物流</button>
+  </form>   
+</template> -->
+<template name="confirm">
+  <form bindsubmit='orderConfirm' report-submit='true'>
+    <button form-type='submit' class='confirm' data-orderid='{{order_id}}'>确认收货</button>
+  </form>
+</template>
+<template name="rate">
+  <form bindsubmit='orderRate' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>立即评价</button>
+  </form>
+</template>
+<template name="delete">
+  <form bindsubmit='orderDelete' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>删除订单</button>
+  </form>
+</template>
+<template name="remind">
+  <form bindsubmit='orderRemind' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>提醒发货</button>
+  </form>
+</template>
+<template name="applyAS">
+  <form bindsubmit='orderApplyAS' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>申请售后</button>
+  </form>
+</template>
+<template name="refund">
+  <form bindsubmit='orderRefund' report-submit='true'>
+    <button form-type='submit' class='common' data-orderid='{{order_id}}'>申请退款</button>
+  </form>
+</template>
+
+<!--  订单列表的模板  -->
+<template name="order">
+  <!--  列表顶部  -->
+  <view class='list-title'>
+    <view class='list-title-left'>下单时间：{{create_time}}</view>
+    <view class='list-title-right'>{{status_conv}}</view>
+  </view>
+  <!--  列表中部商品详情  -->
+  <block wx:for="{{detail}}" wx:key="">
+    <navigator url='../goodsdetail/goodsdetail?goodsid={{item.goods_id}}'>
+      <!--  引入template  -->
+      <template is="goodsDetail" data="{{...item}}" />
+    </navigator>
+  </block>
+
+  <!--  列表统计  -->
+  <view class='order-count'>
+    共{{goodsTotalNum}}件商品 合计:￥{{total_fee}}（含运费 ￥{{express_fee}}）
+  </view>
+  <!--  列表底部Button  -->
+  <view class='list-bottom'>
+    <!--  几乎所有订单都有订单详情  -->
+    <template is="detail" data="{{order_id: order_id}}" />
+    <!--  待付款  -->
+    <block wx:if="{{status == 1}}">
+      <template is="pay" data="{{order_id: order_id}}" />
+      <template is="cancel" data="{{order_id: order_id}}" />
+    </block>
+    <!--  待发货  -->
+    <block wx:if="{{status == 2}}">
+      <!-- <template is="remind" data="{{order_id: order_id}}" /> -->
+      <!-- <template is="cancel" data="{{order_id: order_id}}" /> -->
+      <template is="refund" data="{{order_id: order_id}}" />
+    </block>
+    <!--  待收货  -->
+    <block wx:if="{{status == 3}}">
+      <template is="confirm" data="{{order_id: order_id}}" />
+    </block>
+    <!--  已完成  -->
+    <block wx:if="{{status == 4}}">
+      <template is="applyAS" data="{{order_id: order_id}}" />
+      <!-- <template is="onemore" data="{{order_id: order_id}}"/> -->
+      <template is="delete" data="{{order_id: order_id}}" />
+    </block>
+    <!--  售后中  -->
+    <block wx:if="{{status == 6}}">
+    </block>
+    <!--  售后完成  -->
+    <block wx:if="{{status == 5 || status == 7 || status == 9}}">
+      <template is="delete" data="{{order_id: order_id}}" />
+    </block>
+    <!--  退款中  -->
+    <block wx:if="{{status == 8}}">
+    </block>
+  </view>
+</template>
