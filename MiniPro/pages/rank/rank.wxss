@@ -1,0 +1,99 @@
+
+.mini-name {
+  color: #09bb07;
+  font-size: 28rpx;
+  margin: 20rpx;
+}
+
+.searchList {
+  text-align: center;
+  margin: 160rpx 0;
+}
+
+/*  搜索结果的minilist  */
+
+/*  小程序信息  */
+
+.mini-info {
+  display: flex;
+  border: 1rpx solid rgba(220, 220, 220, 0.8);
+  flex-direction: row;
+  margin-bottom: 15rpx;
+  padding: 10rpx 0;
+  border-radius: 10px;
+}
+
+.mini-image {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.mini-pic {
+  height: 120rpx;
+  width: 120rpx;
+  border-radius: 50%;
+}
+
+.info-right {
+  width: 75%;
+  display: flex;
+  flex-direction: row;
+}
+
+.info-data {
+  display: flex;
+  flex-direction: column;
+  line-height: 50rpx;
+  font-size: 26rpx;
+  color: #333;
+  width: 80%;
+  align-items: left;
+}
+
+.data-detail {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.data-detail-left {
+  width: 40%;
+  text-align: left;
+}
+
+.action {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.action image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.action navigator {
+  display: flex;
+}
+
+.mini-list {
+  display: flex;
+  padding: 0 2%;
+  flex-direction: column;
+  margin-top: 30rpx;
+}
+
+/*  未搜索到结果时信息展示  */
+
+.nothing-info {
+  font-size: 36rpx;
+  color: #999;
+  display: flex;
+  align-items: centerl;
+  justify-content: space-around;
+  margin: 180rpx 0;
+}

@@ -1,0 +1,60 @@
+/*  引入weui  */
+@import '../../style/weui.wxss';
+
+.container{
+  font-size: 16px;
+  align-items: center;
+}
+
+.pro-name{
+  display: flex;
+  flex-direction: row;
+  height: 150rpx;
+  justify-content: space-around;
+  align-items: center;
+  width: 50%;
+  margin-top: 130rpx;
+}
+
+.pro-img image{
+  width: 100rpx;
+  height: 100rpx;
+  padding: 25rpx;
+  border-radius: 50%;
+}
+.title{
+  line-height: 150rpx;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.code-text{
+  font-size: 30rpx;
+  color: #999;
+}
+
+.explain{
+  font-size: 28rpx;
+  color: #333;
+  width: 80%;
+  line-height: 50rpx;
+}
+
+.weui-btn-area{
+  margin: 0;
+  width: 60%;
+  margin-top: 80rpx;
+}
+.weui-btn{
+  font-size: 28rpx;
+}
+
+.clause{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 55%;
+}
+.weui-agree__link,.weui-agree{
+  font-size: 26rpx;
+}

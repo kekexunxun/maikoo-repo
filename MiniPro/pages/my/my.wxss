@@ -1,0 +1,114 @@
+page{
+  background: #f2f2f2;
+}
+.container{
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.userinfo {
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  padding: 50rpx 0;
+  align-items: center;
+  justify-content: center;
+}
+.userinfo-avatar {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+}
+.userinfo-nickname {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #c8a063;
+}
+.userinfo-lev{
+  height: 24px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 24px;
+  color: #fff799;
+  padding: 2px 5px;
+  border: 1px solid #fff799;
+}
+.userinfo-admin-log{
+  background-color: #ebafb1;
+  text-align: center;
+  line-height: 24px;
+  border: 1px;
+  border-radius: 5px;
+}
+.userinfo-admin-log text{
+  font-size: 12px;
+  text-align: center;
+  padding: 2px 5px;
+}
+.not-login-button{
+  font-size: 14px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1rpx solid #999;
+}
+
+
+/*  用户操作列表  */
+.menu-list{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background: white;
+}
+.menu-item{
+  width: 49%;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #666666;
+  position: relative;
+}
+.menu-item image{
+  width: 20px;
+  height: 20px;
+}
+.menu-item text{
+  margin-top: 10px;
+}
+.menu-item-bottom-line{
+  width: 100%;
+  height: 1rpx;
+}
+.border-left{
+  height: 60%;
+  display: flex;
+  position: absolute;
+  left: 0;
+  width: 1rpx;
+  border-left: 1rpx solid gainsboro;
+}
+.border-bottom{
+  width: 80%;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  height: 1rpx;
+  border-bottom: 1rpx solid gainsboro;
+}
+
+/*  遮罩层  */
+/* .modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+  z-index: 2;
+  color: #fff;
+} */

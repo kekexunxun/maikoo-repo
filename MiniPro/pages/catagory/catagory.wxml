@@ -1,0 +1,60 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+       <scroll-view class='scroll-view' scroll-x="true"> 
+        <view class="weui-navbar">
+          <block wx:for="{{tabs}}" wx:key="*this">
+            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+              <view class="weui-navbar__title {{tabs.length > 5 ? 'justify-style' : ''}}">{{item}}</view>
+            </view>
+          </block>
+          <view class="weui-navbar__slider" style="left: {{sliderLeft}}rpx; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);width:{{itemWidth}}"></view>
+        </view>
+       </scroll-view> 
+      <view class="weui-tab__panel">
+        <!--  循环构造tabPanel  -->
+        <block wx:for="{{tabInfo}}" wx:key="">
+          <view class="weui-tab__content" hidden="{{activeIndex != index}}">
+            <!--  收藏的小程序列表  -->
+            <view class='container' wx:if="{{item.minis}}">
+              <!--  小程序信息  -->
+              <block wx:for="{{item.minis}}" wx:key="" wx:for-index="idx">
+                <view class='mini-info' bindtap='navToMiniDetail' data-idx='{{idx}}'>
+                  <view class='mini-image'>
+                    <image class='mini-pic' src="{{item.avatarUrl}}"> </image>
+                  </view>
+                  <view class='info-right'>
+                    <view class='info-data'>
+                      <view class='data-detail'>
+                        <view class='data-detail-left'>应用名称：</view>
+                        <view class='data-detail-right'>{{item.name}}</view>
+                      </view>
+                      <view class='data-detail'>
+                        <view class='data-detail-left'>关键词：</view>
+                        <view class='data-detail-right'>{{item.keywords}}</view>
+                      </view>
+                      <view class='data-detail'>
+                        <view class='data-detail-left'>当前热度：</view>
+                        <view class='data-detail-right'>{{item.views}}</view>
+                      </view>
+                    </view>
+                    <view class='action'>
+                      <image src="{{item.isFav ? '../../images/fav-true.png' : '../../images/fav-false.png'}}" catchtap='updateUserFav' data-appid='{{item.appid}}' data-favid="{{item.mini_id}}" data-favidx='{{item.favIdx}}' data-index="{{idx}}" data-isfav="{{item.isFav}}"></image>
+                      <!-- <navigator target="miniProgram" open-type="navigate" app-id="{{item.appid}}" path="" version="release" catchtap="miniClick" hover-class="none" data-idx="{{idx}}">
+                        <image src='../../images/enter.png'></image>
+                      </navigator> -->
+                    </view>
+                  </view>
+                </view>
+              </block>
+            </view>
+            <view class='container' wx:else>
+              <text class='no-info'>当前分类无数据</text>
+            </view>
+          </view>
+          <!--  循环构造tabPanel END  -->
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

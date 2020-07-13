@@ -1,0 +1,56 @@
+<!--pages/themedetail/themedetail.wxml-->
+<view class='container'>
+  <view class='theme-item'>
+    <image src='{{columnInfo.pic}}' mode='widthFix'></image>
+  </view>
+
+  <!--  当前专题的一些信息展示  -->
+  <view class='time'>
+    <image class='icon-time' src='../../images/time.png'></image>
+    <text>{{columnInfo.create_time}}</text>
+    <image class='icon icon-eye' src='../../images/eye.png'></image>
+    <text>{{columnInfo.views}}</text>
+  </view>
+
+  <!--  专题简介  -->
+  <view class='brief'>
+    <text>{{columnInfo.brief}}</text>
+  </view>
+
+  <view class='minis'>
+    <block wx:for="{{columnInfo.minis}}" wx:key="">
+      <view class='minis-item'>
+        <view class='minis-item-left' bindtap='miniDetail' data-mini="{{item.mini_id}}" data-appid="{{item.appid}}">
+          <image class='logo' src='{{item.avatarUrl}}'></image>
+        </view>
+        <view class='minis-item-right'>
+          <view class='mini-detail' bindtap='miniDetail' data-mini="{{item.mini_id}}" data-appid="{{item.appid}}">
+            <text class='name'>{{item.name}}</text>
+            <view>
+              <text class='description heat'>热度：{{item.views}}</text>
+            </view>
+            <view class='star-view'>
+              <text class='heat'>评分：</text>
+              <block wx:for="{{rateStar}}" wx:key="" wx:for-item="iem">
+                <image class='star' src='../../images/no-star.png' wx:if="{{index >= item.rate}}"></image>
+                <image class='star' src='../../images/star.png' wx:if="{{index < item.rate && index + 1 <= item.rate}}"></image>
+                <image class='star' src='../../images/half-star.png' wx:if="{{index < item.rate && index + 1 > item.rate}}"></image>
+              </block>
+            </view>
+          </view>
+          <view class='action'>
+            <view class='fav' bindtap='userFavChange' data-index="{{index}}">
+              <image src="{{item.isFav ? '../../images/fav-true.png' : '../../images/fav-false.png'}}"></image>
+            </view>
+            <!-- <view class='enter' bindtap='miniClick' data-index="{{index}}">
+              <navigator target="miniProgram" open-type="navigate" app-id="{{item.appid}}" path="" version="release">
+                <image src="../../images/enter.png"></image>
+              </navigator>
+            </view> -->
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+</view>

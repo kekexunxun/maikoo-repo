@@ -1,0 +1,154 @@
+.mini-info {
+  display: flex;
+  border-bottom: 1rpx solid #efefef;
+  flex-direction: row;
+  padding: 10rpx 2%;
+  width: 96%;
+}
+
+.mini-image {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.mini-pic {
+  height: 130rpx;
+  width: 130rpx;
+  border-radius: 50%;
+}
+
+.info-right {
+  width: 75%;
+  display: flex;
+  flex-direction: row;
+}
+
+.info-data {
+  display: flex;
+  flex-direction: column;
+  line-height: 50rpx;
+  font-size: 26rpx;
+  color: #333;
+  width: 70%;
+}
+
+.mini-brief {
+  padding: 0 2%;
+  width: 96%;
+  line-height: 50rpx;
+  font-size: 30rpx;
+  color: #999;
+}
+
+.line{
+  width: 100%;
+  height: 1rpx;
+  border-bottom: 1rpx solid #efefef;
+}
+
+.introduce {
+  padding-left: 30rpx;
+  border-left: 8rpx solid #16ac4b;
+  margin: 25rpx 0;
+}
+
+.introduce-t2 {
+  margin-left: 10rpx;
+}
+
+.intro-t3{
+  padding-bottom: 10rpx;
+}
+.introduce-t3 {
+  color: #333;
+  font-size: 28rpx;
+}
+
+.jietu {
+  display: flex;
+}
+
+.jietu-item {
+  width: 250rpx;
+  overflow: hidden;
+  margin: 0 2%;
+}
+
+.jietu-item image {
+  width: 96%;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 30rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  /* background-color: rgba(200, 200, 220, 0.6); */
+}
+
+.bottom-like {
+  display: inline-block;
+  width: 20%;
+}
+
+.bottom image {
+  display: block;
+  width: 50rpx;
+  height: 50rpx;
+  margin: 0 auto;
+}
+
+.jump-view{
+  display: inline-block;
+  padding: 0 160rpx;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #7f7f7f;
+  line-height: 60rpx;
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  color: #666;
+}
+
+.rate-view{
+  display: flex;
+  flex-direction: row;
+  padding: 0 25%;
+  justify-content: space-around;
+  align-items: center;
+  height: 70rpx;
+}
+.star{
+  height: 40rpx;
+  width: 40rpx;
+}
+
+.mini-rate{
+  display: flex;
+  /* align-items: left; */
+  /* justify-content: space-around; */
+}
+.mini-rate-img{
+  display: flex;
+  align-items: center;
+  justify-content: space-around; 
+}
+.mini-rate-img image{
+  height: 28rpx;
+  width: 28rpx;
+   margin: 0 2rpx; 
+}
+
+.submit-btn{
+  line-height: 50rpx;
+  font-size: 24rpx;
+  padding: 0 20rpx;
+  background-color: rgba(220, 220, 220, 0.3);
+}
+button::after{
+  border: none;
+}

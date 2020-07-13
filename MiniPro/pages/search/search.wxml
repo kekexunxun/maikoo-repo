@@ -1,0 +1,72 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-search-bar">
+      <view class="weui-search-bar__form">
+        <view class="weui-search-bar__box">
+          <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+          <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+            <icon type="clear" size="14"></icon>
+          </view>
+        </view>
+        <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+          <icon class="weui-icon-search" type="search" size="14"></icon>
+          <view class="weui-search-bar__text">搜索</view>
+        </label>
+      </view>
+      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="clearInput" wx:if="{{inputVal.length == 0}}">关闭</view>
+      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="search" wx:else>搜索</view>
+    </view>
+  </view>
+</view>
+<!--  展示实时搜索结果  -->
+<view class='container'>
+  <!--  当有搜索结果时展示搜索结果  -->
+  <block wx:if="{{showSearchResult}}">
+    <block wx:if="{{isHaveResult}}">
+      <view class='mini-list'>
+        <block wx:for="{{searchResult}}" wx:key="">
+          <view class='mini-info' bindtap='navToMiniDetail' data-idx='{{index}}' data-w="1">
+            <view class='mini-image'>
+              <image class='mini-pic' src="{{item.avatarUrl}}"> </image>
+            </view>
+            <view class='info-right'>
+              <view class='info-data' bindtap='navToMiniDetail' data-idx='{{index}}' data-w="1">
+                <view class='data-detail'>
+                  <view class='data-detail-left'>名称：</view>
+                  <view class='data-detail-right'>{{item.name}}</view>
+                </view>
+                <view class='data-detail'>
+                  <view class='data-detail-left'>关键词：</view>
+                  <view class='data-detail-right'>{{item.keywords}}</view>
+                </view>
+                <view class='data-detail'>
+                  <view class='data-detail-left'>当前热度：</view>
+                  <view class='data-detail-right'>{{item.views}}</view>
+                </view>
+              </view>
+              <!-- <view class='action'>
+                <navigator target="miniProgram" open-type="navigate" app-id="{{item.appid}}" path="" version="release" catchtap="miniClick" hover-class="none" data-idx="{{index}}">
+                  <image src='../../images/enter.png'></image>
+                </navigator>
+              </view> -->
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <view class='nothing-info'>未找到与{{inputVal}}相关的信息</view>
+    </block>
+  </block>
+  <!--  没有搜索结果时展示列表  -->
+  <block wx:else>
+    <view class='searchList'>
+      <block wx:for="{{searchList}}" wx:key="">
+        <view class='search-item' bindtap='navToMiniDetail' data-idx='{{index}}' data-w="0">
+          <view class="mini-name">{{item.name}}</view>
+        </view>
+      </block>
+    </view>
+  </block>
+</view>

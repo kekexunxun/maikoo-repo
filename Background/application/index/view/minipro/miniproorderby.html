@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+        .Hui-iconfont{
+            font-size: 15px;
+        }
+    </style>
+    <title>小程序排行</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 小程序管理 <span class="c-gray en">&gt;</span> 小程序排行 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+        <a class="btn btn-primary radius"  onclick="orderby_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加排行</a>
+        </span> <span class="r">共有数据：<strong>{:count($orderbydata)}</strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
+            <thead>
+            <tr class="text-c">
+                <th width="50">ID</th>
+                <th width="100">小程序名称</th>
+                <th width="100">小程序头像</th>
+                <th width="50">排序</th>
+                <th width="100">是否展示</th>
+                <th width="80">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if condition="sizeof($orderbydata) == 0"}
+            
+            {else /}
+
+            {volist name="$orderbydata" id="vol"}
+            <tr class="text-c">
+                <td class="td-td" data-idx="{$vol.idx}">{$vol.idx}</td>
+                <td>{$vol.name}</td>
+                <td>
+                    {if condition = "$vol.avatarUrl == '' "}
+                        无
+                    {else}
+                    <img src="{$vol.avatarUrl}" alt="图片" style="width: 100px;height:100px">
+                    {/if}
+                </td>
+                <td class="td-orderby" data-orderby="{$vol.orderby}">{$vol.orderby}</td>
+                <td class="td-status">
+
+                {if condition = "$vol.is_active eq 0 "}
+
+                <span class="label label-defaunt radius" title="不展示" onClick="orderby_start(this,'{$vol.idx}');" style="cursor: pointer;">不展示</span>
+
+                {elseif condition = "$vol.is_active eq 1" /}
+
+                <span class="label label-success radius" title="展示" onClick="orderby_stop(this,'{$vol.idx}');" style="cursor: pointer;">已展示</span>
+
+                {/if}
+                </td>
+        
+                <td class="f-14 td-manage">
+                    <a style="text-decoration:none" onClick="orderby_update(this,'{$vol.idx}','{$vol.orderby}');" href="javascript:;" title="编辑" class="ml-5"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a style="text-decoration:none" class="ml-5" onClick="orderby_del(this,'{$vol.idx}')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            {/volist}
+
+            {/if}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer class="footer mt-20">
+    <div class="container">
+    <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript">
+    $('.table-sort').dataTable({
+        language: {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "从当前数据中检索： ",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        },
+            "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+
+            "bStateSave": true,//状态保存
+
+            "aoColumnDefs": [
+
+                {"orderable":false,"aTargets":[]}// 制定列不参与排序
+
+            ],
+        "aaSorting": [[ 0, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "pading":false,
+        "aoorderbyDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,1,2]}// 不参与排序的列
+        ]
+    });
+
+    /*搜索关键词-添加*/
+    function orderby_add(){
+        var index = layer.open({
+            type: 2,
+            title: '添加搜索关键词',
+            content: 'miniproorderbyadd',
+            end: function(){
+                location.replace(location.href);
+            }
+        });
+        layer.full(index);
+    }
+
+    /*orderby-展示*/
+
+    function orderby_start(obj,id){
+
+        layer.confirm('确认展示吗？',function(index){
+
+            var str = {id : id};
+
+            $.post("startOrderby", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius" title="展示" onClick="orderby_stop(this,'+id+');" style="cursor: pointer;">已展示</span>');
+
+                    $(obj).remove();
+
+                    layer.msg('已展示!',{icon: 6,time:1000});
+
+                } else {
+
+                    layer.msg('操作失败!',{icon: 5,time:1000});
+
+                }
+
+            })
+
+        });
+
+    }
+
+    /*orderby-不展示*/
+
+    function orderby_stop(obj,id){
+
+        layer.confirm('确认不展示吗？',function(index){
+
+            var str = {id : id};
+
+            $.post("stopOrderby", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius" title="不展示" onClick="orderby_start(this,'+id+');" style="cursor: pointer;">不展示</span>');
+
+                    $(obj).remove();
+
+                    layer.msg('不展示!',{icon: 6,time:1000});
+
+                } else {
+
+                    layer.msg('操作失败!',{icon: 5,time:1000});
+
+                }
+
+            })
+
+        });
+
+    }
+
+    /*orderby-删除*/
+
+    function orderby_del(obj,id) {
+
+        layer.confirm('确认要删除吗？', function (index) {
+
+            var str = {id: id};
+
+            $.post("delOrderby", str, function (res) {
+
+                if (res.code == 200) {
+
+                    $(obj).parents("tr").remove();
+
+                    $(obj).remove();
+
+                    layer.msg('删除成功!', {icon: 6, time: 1000});
+                    setTimeout('window.location.reload();',1000);//刷新页面
+                } else {
+
+                    layer.msg('操作失败!', {icon: 5, time: 1000});
+
+                }
+
+            })
+
+        });
+    }
+    // 编辑
+    // function orderby_update(id){
+  
+    //     var index = layer.open({
+
+    //         type: 2,
+
+    //         title: '修改搜索关键词',
+
+    //         content: 'orderbyedit/orderby_id/'+id
+    //     });
+    //     layer.full(index);
+    // }
+
+    /*关键词排序-编辑*/
+    function orderby_update(obj,id,orderby){
+
+        var idx = $(obj).parents("tr").find(".td-td").data("idx");
+        // console.log(idx);
+        var orderby = $(obj).parents("tr").find(".td-orderby").data("orderby");
+        // console.log(orderby);
+
+        layer.prompt({
+            formType: 4,
+            value: orderby,
+            title: '修改排序',
+            idx:idx,
+        }, function(value, index, elem,idx){
+
+            var idx = $(obj).parents("tr").find(".td-td").data("idx");
+
+            $.ajax({
+                type: 'POST',
+                url: 'editOrderby',
+                dataType: 'json',
+                data:{idx:idx,orderby:value},
+                success: function(data){
+                    if(data.code=="200"){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setTimeout("location.replace(location.href);",1000)
+                    }
+                    if(data.code=='300'){
+                        layer.msg(data.msg,{icon:2,time:1000});
+                    }
+                    // if(data.code=='401'){
+                    //     layer.msg(data.msg,{icon:2,time:1000});
+                    //     setTimeout('parent.parent.location.reload();',1000);
+                    // }
+                },
+                error:function(data) {
+                    console.log(data.message);
+                },
+            });
+            // 修改完成之后刷新页面
+            layer.close(index);
+        })
+    }
+
+</script>
+</body>
+</html>

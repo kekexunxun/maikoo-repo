@@ -1,0 +1,161 @@
+page {
+  background: #f2f2f2;
+}
+
+/*  规定本页的navigator展示方式  */
+
+navigator {
+  display: inline-block;
+}
+
+/*主图  */
+
+swiper {
+  height: 350rpx;
+}
+
+.bannerbox {
+  width: 100%;
+  /* height: 350rpx; */
+}
+
+.banner_img {
+  width: 100%;
+  height: 350rpx;
+}
+
+/*专题推荐  */
+
+.recommend_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  margin: 10px 0;
+}
+
+.recommend_title {
+  display: flex;
+  flex-direction: row;
+  line-height: 35px;
+}
+
+.recommend_title_common {
+  width: 50%;
+  line-height: 36px;
+  font-size: 14px;
+}
+
+.left {
+  text-align: left;
+  padding-left: 3%;
+}
+
+.right {
+  text-align: right;
+  padding-right: 3%;
+  position: relative;
+}
+
+.right text {
+  margin-right: 15px;
+  color: gray;
+}
+
+.right image {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  right: 3%;
+  margin-top: 9px;
+}
+
+.recommend_zone {
+  width: 100%;
+  padding: 5px 0;
+}
+
+/*scorll  */
+
+.recommend_scroll_x_box {
+  white-space: nowrap;
+  display: flex;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.recommend_hot_box:first-child {
+  margin-left: 24rpx;
+}
+
+.recommend_hot_box {
+  width: 200px;
+  margin-right: 24rpx;
+  display: inline-block;
+  background: white;
+}
+
+.recommend_hot_image {
+  width: 200px;
+  height: 110px;
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.desc {
+  font-size: 24rpx;
+}
+
+.title, .desc {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*每日精选  */
+
+.choice_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  background: white;
+  padding-bottom: 8px;
+}
+
+.recommend_scroll_x_box2 {
+  white-space: nowrap;
+  display: flex;
+}
+
+.recommend_hot_box2:first-child {
+  margin-left: 24rpx;
+}
+
+.recommend_hot_box2 {
+  width: 80px;
+  display: inline-block;
+  border: 1rpx solid rgba(220, 220, 220, 0.3);
+  border-radius: 10px;
+  padding: 1px;
+}
+
+.recommend_hot_image2 {
+  width: 60px;
+  height: 60px;
+  margin: 0 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+.text-font {
+  font-size: 12px;
+}

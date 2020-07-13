@@ -1,0 +1,8 @@
+<!--pages/theme/theme.wxml-->
+<view class='container'>
+  <block wx:for="{{columnList}}" wx:key="">
+    <view class='column-item' bindtap='navToColumnDetail' data-columnid="{{item.idx}}">
+      <image src='{{item.pic}}' mode='widthFix'></image>
+    </view>
+  </block>
+</view>

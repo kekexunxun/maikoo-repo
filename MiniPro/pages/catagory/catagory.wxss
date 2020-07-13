@@ -1,0 +1,101 @@
+@import '../../style/weui.wxss';
+page,
+.page,
+.page__bd{
+    height: 100%;
+}
+.page__bd{
+    padding-bottom: 0;
+}
+.weui-tab__content{
+    text-align: center;
+}
+/* .weui-navbar__slider{
+  width: 6rem;
+} */
+.weui-navbar__item{
+  padding: 14rpx 0;
+}
+.weui-navbar{
+  height: 80rpx;
+  border-bottom: none;
+}
+.weui-tab__panel{
+  padding-top: 40rpx;
+}
+.justify-style{
+  width: 160rpx;
+}
+
+.scroll-view{
+  overflow-y: hidden;
+  height: 80rpx;
+  white-space: nowrap;
+  display: flex;
+  border-bottom: 1rpx solid #ccc;
+}
+
+/*  小程序信息  */
+.mini-info {
+  display: flex;
+  border: 1rpx solid rgba(220, 220, 220, .8);
+  flex-direction: row;
+  padding: 10rpx 0;
+  border-radius: 10px;
+  margin: 0 2%;
+  margin-bottom: 15rpx;
+}
+.mini-image {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.mini-pic {
+  height: 120rpx;
+  width: 120rpx;
+  border-radius: 50%;
+}
+.info-right {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+}
+.info-data {
+  display: flex;
+  flex-direction: column;
+  line-height: 50rpx;
+  font-size: 26rpx;
+  color: #333;
+  width: 70%;
+  align-items: left;
+}
+.data-detail{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.data-detail-left{
+  /* width: 33%; */
+  text-align: left;
+}
+.action{
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.action image{
+  width: 50rpx;
+  height: 50rpx;
+}
+.action navigator{
+  display: flex;
+}
+
+.no-info{
+  font-size: 30rpx;
+  margin-top: 200rpx;
+  color: #666;
+}

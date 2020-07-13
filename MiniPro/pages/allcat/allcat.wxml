@@ -1,0 +1,22 @@
+<view class="container" wx:if="{{isHaveCat}}">
+  <!--  每一排展示4个分类  -->
+  <view class='cat-list'>
+    <view class="cat-item cat-first" bindtap="navToCat" data-idx="all">
+      <view>
+        <image src='../../images/cat.png'></image>
+      </view>
+      <view class='text'>全部分类</view>
+    </view>
+    <block wx:for="{{catList}}" wx:key="">
+      <view class="cat-item {{index < 2 ? 'border-top' : ''}} {{(index - 1) % 3 == 0 ? 'border-right-none' : ''}}" data-idx="{{index}}" bindtap="navToCat">
+        <view>
+          <image src='{{item.pic}}'></image>
+        </view>
+        <view class='text'>{{item.name}}</view>
+      </view>
+    </block>
+  </view>
+</view>
+<view class='container' wx:else>
+  暂无分类，敬请期待
+</view>

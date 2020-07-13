@@ -1,0 +1,103 @@
+<!--pages/detail/detail.wxml-->
+<view class='container'>
+  <view class='mini-info'>
+    <view class='mini-image'>
+      <image class='mini-pic' src="{{miniInfo.avatarUrl}}"> </image>
+    </view>
+    <view class='info-right'>
+      <view class='info-data'>
+        <view>应用名称：{{miniInfo.name}}</view>
+        <!-- <view>关键词：{{miniInfo.keywords}}</view> -->
+        <view>应用分类：{{miniInfo.father_cat_name}} - {{miniInfo.catagory_name}}</view>
+        <view>当前热度：{{miniInfo.views}}</view>
+        <view class='mini-rate'>
+          <text>用户评分：</text>
+          <view class='mini-rate-img'>
+            <block wx:for="{{rateStar}}" wx:key="">
+              <image class='star' src='../../images/no-star.png' wx:if="{{index >= miniInfo.rate}}"></image>
+              <image class='star' src='../../images/star.png' wx:if="{{index < miniInfo.rate && index + 1 <= miniInfo.rate}}"></image>
+              <image class='star' src='../../images/half-star.png' wx:if="{{index < miniInfo.rate && index + 1 > miniInfo.rate}}"></image>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!--  简介  -->
+  <view class='mini-brief'>
+    <view class='introduce'>
+      <text>{{miniInfo.name}}</text>
+      <text class='introduce-t2'>应用简介</text>
+    </view>
+    <view class='intro-t3'>
+      <text class='introduce-t3'>{{miniInfo.brief}}</text>
+    </view>
+  </view>
+
+  <!--  分割线  -->
+  <view class='line'></view>
+
+  <!--  截图展示  -->
+  <view class='mini-brief'>
+    <view class='introduce'>
+      <text>{{miniInfo.name}}</text>
+      <text class='introduce-t2'>应用截图</text>
+    </view>
+    <view class='sc-view'>
+      <scroll-view scroll-x='ture'>
+        <view class='jietu'>
+          <block wx:for="{{miniInfo.pics}}" wx:key="">
+            <view class='jietu-box'>
+              <view class='jietu-item'>
+                <image src='{{item}}' mode='widthFix' data-idx="{{index}}" bindtap='showPreviewImage'></image>
+              </view>
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!--  分割线  -->
+  <view class='line'></view>
+
+  <!--  应用评价 - 用户评价  -->
+  <view class='mini-brief' style='margin-bottom: 180rpx;'>
+    <view class='introduce'>
+      <text>{{miniInfo.name}}</text>
+      <text class='introduce-t2'>{{miniInfo.user_rate == false ? '我来评分' : '我的评分'}}</text>
+    </view>
+    <view class="rate-view" wx:if="{{miniInfo.user_rate != false}}">
+      <block wx:for="{{rateStar}}" wx:key="">
+        <image class='star' src='../../images/star.png' wx:if="{{miniInfo.user_rate > index}}"></image>
+        <image class='star' src='../../images/no-star.png' wx:else></image>
+      </block>
+    </view>
+    <view class="rate-view" wx:else>
+      <block wx:for="{{rateStar}}" wx:key="">
+        <image class='star' src="{{item == 1 ? '../../images/star.png' : '../../images/no-star.png'}}" data-idx="{{index}}" bindtap='userRate' data-item='{{item}}'></image>
+      </block>
+      <view>
+        <form bindsubmit='submitRate' report-submit='true'>
+          <button class='submit-btn' form-type='submit'>提交</button>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!--  悬浮按钮  -->
+  <view class='bottom'>
+    <view class='bottom-like'>
+      <image src="{{miniInfo.isFav ? '../../images/fav-true.png' : '../../images/fav-false.png'}}" bindtap='addUserFav'></image>
+    </view>
+    <view>
+      <navigator target="miniProgram" open-type="navigate" app-id="{{miniInfo.appid}}" path="{{miniInfo.path}}" extra-data='{{miniInfo.extra_data}}' version="release">
+        <view class="recommend_hot_box2" bindtap="miniClick">
+          <view class='jump-view'>跳转小程序</view>
+        </view>
+      </navigator>
+    </view>
+  </view>
+
+</view>

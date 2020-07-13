@@ -1,0 +1,61 @@
+<!--index.wxml-->
+<view class="container">
+  <!--主图 banner  -->
+  <view class='bannerbox'>
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000">
+      <block wx:for="{{bannerList}}" wx:key="">
+        <swiper-item>
+          <image src="{{item}}" class="banner_img" mode='' data-idx='{{index}}' bindtap='bannerNavigate'/>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!--专题推荐  -->
+  <view class='recommend_box'>
+    <!-- 顶部  -->
+    <view class='recommend_title'>
+      <view class='recommend_title_common left'>专题推荐</view>
+      <view class='recommend_title_common right' bindtap='navToColumn'>
+        <text>全部</text>
+        <image src='../../images/arrow-right.png'></image>
+      </view>
+    </view>
+    <!--推荐展示  -->
+    <view class='recommend_zone'>
+      <scroll-view class="recommend_scroll_x_box" scroll-x="true">
+        <block wx:for="{{column}}" wx:key="" wx:if="{{column}}">
+            <view class="recommend_hot_box" >
+              <image src="{{item.pic}}" class="recommend_hot_image" bindtap='navToColumnDetail' data-idx='{{item.idx}}'></image>
+            </view>
+        </block>
+      </scroll-view>
+    </view>
+  </view>
+  <!--  分类展示  -->
+  <block wx:for="{{catagory}}" wx:key="">
+    <view class='choice_box'>
+      <!-- 顶部  -->
+      <view class='recommend_title'>
+      <view class='recommend_title_common left'>{{item.name}}</view>
+      <view class='recommend_title_common right' bindtap='navToCat' data-catId='{{item.catagory_id}}'>
+        <text>全部</text>
+        <image src='../../images/arrow-right.png'></image>
+      </view>
+      </view>
+      <!--精选展示  -->
+      <view class='recommend_zone'>
+        <scroll-view class="recommend_scroll_x_box2" scroll-x="true">
+          <block wx:for="{{item.minis}}" wx:key="" wx:for-index="idx">
+            <!--  直接跳转  -->
+             <navigator url="../minidetail/minidetail?miniId={{item.mini_id}}">
+              <view class="recommend_hot_box2" bindtap="miniClick" data-mini='{{item.mini_id}}' data-miniappid="{{item.appid}}">
+                <image src="{{item.avatarUrl ? item.avatarUrl : '../../images/example0.png'}}" class="recommend_hot_image2"></image>
+                <view class="title text-font">{{item.name}}</view>
+              </view>
+            </navigator> 
+          </block>
+        </scroll-view>
+      </view>
+    </view>
+  </block>
+</view>

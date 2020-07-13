@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/column/column",
+    "pages/columndetail/columndetail",
+    "pages/catagory/catagory",
+    "pages/search/search",
+    "pages/minidetail/minidetail",
+    "pages/my/my",
+    "pages/userauth/userauth",
+    "pages/clause/clause",
+    "pages/favourite/favourite",
+    "pages/article/article",
+    "pages/allcat/allcat",
+    "pages/articledetail/articledetail",
+    "pages/rank/rank"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "天天应用商店",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#333",
+    "selectedColor": "#919191",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/index.png",
+        "selectedIconPath": "images/index-select.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/allcat/allcat",
+        "iconPath": "images/cat.png",
+        "selectedIconPath": "images/cat-select.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "iconPath": "images/search.png",
+        "selectedIconPath": "images/search-select.png",
+        "text": "搜索"
+      },
+      {
+        "pagePath": "pages/article/article",
+        "iconPath": "images/article.png",
+        "selectedIconPath": "images/article-select.png",
+        "text": "资讯"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "images/my.png",
+        "selectedIconPath": "images/my-select.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "debug": true
+}

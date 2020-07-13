@@ -1,0 +1,11 @@
+
+.column-item{
+  width: 96%;
+  padding: 0 2%;
+  height: 350rpx;
+  padding-bottom: 30rpx;
+}
+.column-item image{
+  width: 100%;
+  border-radius: 20rpx;
+}

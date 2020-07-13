@@ -1,0 +1,35 @@
+<view class='container' wx:if="{{isHaveRank}}">
+  <view class='mini-list'>
+    <block wx:for="{{rankList}}" wx:key="">
+      <view class='mini-info' bindtap='navToMiniDetail' data-idx='{{index}}'>
+        <view class='mini-image'>
+          <image class='mini-pic' src="{{item.avatarUrl}}"> </image>
+        </view>
+        <view class='info-right'>
+          <view class='info-data' bindtap='navToMiniDetail' data-idx='{{index}}'>
+            <view class='data-detail'>
+              <view class='data-detail-left'>名称：</view>
+              <view class='data-detail-right'>{{item.name}}</view>
+            </view>
+            <view class='data-detail'>
+              <view class='data-detail-left'>关键词：</view>
+              <view class='data-detail-right'>{{item.keywords}}</view>
+            </view>
+            <view class='data-detail'>
+              <view class='data-detail-left'>当前热度：</view>
+              <view class='data-detail-right'>{{item.views}}</view>
+            </view>
+          </view>
+          <!-- <view class='action'>
+            <navigator target="miniProgram" open-type="navigate" app-id="{{item.appid}}" path="" version="release" catchtap="miniClick" hover-class="none" data-idx="{{index}}">
+              <image src='../../images/enter.png'></image>
+            </navigator>
+          </view> -->
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+<view class='container' wx:else>
+  <view class='nothing-info'>暂无排行榜数据</view>
+</view>

@@ -1,0 +1,457 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <link href="__ROOT__/public/static/lib/webuploader/webuploader.css" rel="stylesheet" type="text/css" />
+    <title>小程序Banner</title>
+</head>
+
+<body>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> Banner管理 <span class="c-gray en">&gt;</span> 添加小程序Banner <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+    <form class="form form-horizontal" id="form-article-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">banner跳转地址：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_catagory" id="banner_catagory" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">不跳转</option>
+                    <option value="1">小程序</option>
+                    <option value="2">专栏</option>
+                    <option value="3">当日排行</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row cl active" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-3">banner跳转对应的id：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_link" id="banner_link" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+
+                    {volist name="$minipro_data" id="vol"}
+
+                    <option value="{$vol.mini_id}">{$vol.mini_id}-{$vol.name}</option>
+
+                    {/volist}
+
+                </select>
+            </div>
+        </div>
+
+        <div class="row cl active" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-3">banner跳转对应的id：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_link2" id="banner_link2" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+
+                    {volist name="$column_data" id="vol"}
+
+                    <option value="{$vol.idx}">{$vol.idx}-{$vol.name}</option>
+
+                    {/volist}
+
+                </select>
+            </div>
+        </div>
+    
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">轮播图排序：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select name="banner_order" id="banner_order" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3">是否马上启用：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_active" id="banner_active"style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">立刻启用</option>
+                    <option value="0">不启用</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row cl">
+
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>注意：</label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+
+                <label>请按照指定尺寸（1080×470）上传小程序Banner，并将大小保证在200KB以内，否则可能会导致小程序内图片显示异常</label>
+
+            </div>
+
+        </div>
+
+        <div class="row cl" id="bannershow">
+            <label class="form-label col-xs-4 col-sm-3">小程序Banner：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <div style="display: flex; flex-direction: column;">
+                    <img style="display: none;" id="image" src="" width="400px" height="200px"/>
+                    <text onClick="change()" id="change" style="width: 80px; height: 30px;background-color: #cccccc; border: 1px solid #cccccc; text-align: center; line-height: 30px; border-radius: 5px; cursor: pointer;">添加</text>
+                </div>
+        <!--         <div style="display: flex; flex-direction: column;">
+
+                    <text onClick="change()" id="change" style="width: 80px; height: 30px; background-color: #cccccc; border: 1px solid #cccccc; text-align: center; line-height: 30px; border-radius: 5px; cursor: pointer;">点击设置</text>
+
+                </div> -->
+            </div>
+        </div>
+
+        <div class="row cl" id="changeArticleThumb" style="position: absolute; opacity: 0; filter:Alpha(opacity=0); ">
+
+            <label class="form-label col-xs-4 col-sm-3">Banner添加：</label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+
+                <div id="uploader-demo">
+
+                    <!--用来存放item-->
+
+                    <div id="fileList" class="uploader-list"></div>
+
+                    <div id="filePicker">选择图片</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+ <!--        <div class="row cl">
+            <button onclick="form_save_submit();" class="btn btn-primary radius" type="button"><i class="Hui-iconfont"></i> 保存并上传图片</button>
+            <button onclick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+        </div> -->
+
+    </form>
+
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+
+<!--/_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.min.js"></script>
+
+<script type="text/javascript">
+
+    function change(){
+
+
+        if ($("#change").text() == "添加" || $("#change").text() == "点击设置") {
+
+            $("#changeArticleThumb").css("opacity","1");
+
+            $("#changeArticleThumb").css("filter","Alpha(opacity=1)");
+
+            $("#changeArticleThumb").css("position","relative");
+
+            $('#change').text('取消添加');
+
+            $('#change').css('background-color',"#eeeeee");
+
+        }else if ($("#change").text() == "取消添加") {
+
+            $("#changeArticleThumb").css("opacity","0");
+
+            $("#changeArticleThumb").css("filter","Alpha(opacity=0)");
+
+            $("#changeArticleThumb").css("position","absolute");
+
+            $('#change').text('添加');
+
+            $('#change').css('background-color',"#cccccc");
+
+        }
+
+    }
+    // 选择分类
+    $('#banner_catagory').change(function(){
+
+        var catagory_id =  $(this).val();
+
+        if(catagory_id==1){
+            $('.active').hide();  
+            $('.active').eq(0).show();
+        }else if(catagory_id==2){
+            $('.active').hide();  
+            $('.active').eq(1).show();
+        }else if(catagory_id==0){
+            $('.active').hide();  
+        }
+    })
+
+</script>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        var $list = $("#fileList");
+
+        // 优化retina, 在retina下这个值是2
+
+        var ratio = window.devicePixelRatio || 1;
+
+        // 缩略图大小
+
+        var thumbnailWidth = 430 * ratio;
+
+        var thumbnailHeight = 200 * ratio;
+
+        // 初始化Web Uploader
+
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+
+            auto: true,
+
+            // swf文件路径
+
+            swf: '__ROOT__/public/static/lib/webuploader/0.1.5/Uploader.swf',
+
+            // 文件接收服务端。
+
+            server: 'BannerChange',
+
+            // 选择文件的按钮。可选。
+
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+
+            pick: '#filePicker',
+
+            formData: { 
+            //设置传入服务器的参数变量 
+            //注意不要在此赋值 
+    　　　　banner_link:$('#banner_link option:selected').val(),
+    　　　　banner_link2:$('#banner_link2 option:selected').val(),
+            banner_catagory:$('#banner_catagory option:selected').val(),
+    　　　　banner_order:$('#banner_order option:selected').val(),
+            banner_active:$('#banner_active option:selected').val() 
+            }, 
+
+            // 只允许选择图片文件。
+
+            accept: {
+
+                title: 'Images',
+
+                extensions: 'gif,jpg,jpeg,bmp,png',
+
+                mimeTypes: 'image/*'
+
+            },
+
+            thumb: {
+
+                width: 110,
+
+                height: 110,
+
+                // 图片质量，只有type为`image/jpeg`的时候才有效。  
+
+                quality: 100,
+
+                // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.  
+
+                allowMagnify: true,
+
+                // 是否允许裁剪。是否采用裁剪模式。如果采用这样可以避免空白内容。  
+
+                crop: true,
+
+                // 为空的话则保留原有图片格式。  
+
+                // 否则强制转换成指定的类型。  
+
+                type: ''
+
+            },
+
+            disableGlobalDnd: true,
+
+            fileNumLimit: 1,
+
+            fileSizeLimit: 200 * 1024,    // 200 K
+
+            fileSingleSizeLimit: 200 * 1024    // 200 K
+
+        });
+
+        // uploader.options ={formData:"userName":"吉安娜","gender":"女"};
+
+        // 当有文件添加进来的时候
+
+        uploader.on( 'fileQueued', function( file ) {
+
+            var $li = $(
+
+                '<div id="' + file.id + '" class="file-item thumbnail">' +
+
+                '<img>' +
+
+                '<div class="info">' + file.name + '</div>' +
+
+                '</div>'
+
+                ),
+
+                $img = $li.find('img');
+
+            // $list为容器jQuery实例
+
+            $list.append( $li );
+
+            // 创建缩略图
+
+            // 如果为非图片文件，可以不用调用此方法。
+
+            // thumbnailWidth x thumbnailHeight 为 100 x 100
+
+            uploader.makeThumb( file, function( error, src ) {
+
+                if ( error ) {
+
+                    $img.replaceWith('<span>不能预览</span>');
+
+                    return;
+
+                }
+
+                $img.attr( 'src', src );
+
+            }, 400, 200);
+
+        });
+
+        // uploadBeforeSend事件可以允许在上传前修改formData的数据
+        uploader.on( 'uploadBeforeSend', function( object, data, header ) {
+            // 添加data可以控制发送哪些携带数据。
+            data.banner_link = $('#banner_link option:selected').val();
+            data.banner_catagory = $('#banner_catagory option:selected').val();
+        　　data.banner_order = $('#banner_order option:selected').val();
+            data.banner_active = $('#banner_active option:selected').val();
+        });
+
+        // 文件上传过程中创建进度条实时显示
+
+        uploader.on( 'uploadProgress', function( file, percentage ) {
+
+            var $li = $( '#'+file.id ),
+
+                $percent = $li.find('.progress span');
+
+            // 避免重复创建
+
+            if ( !$percent.length ) {
+
+                $percent = $('<p class="progress"><span></span></p>')
+
+                    .appendTo( $li )
+
+                    .find('span');
+
+            }
+
+            $percent.css( 'width', percentage * 100 + '%' );
+
+        });
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+
+        uploader.onUploadSuccess = function(file,response){
+
+            $( '#'+file.id ).addClass('upload-state-done');
+
+            layer.msg('Banner添加成功!',{icon:1,time:1200});
+
+            // 添加对应的css
+
+            // $("#image").attr("src",response.result);
+             // $("#image").show();
+            // 添加成功之后将bannershow 隐藏
+
+            // setTimeout(function(){
+            //     $('#bannershow').hide();
+
+            //     $('#filePicker').hide();
+            // },1000);
+
+            setTimeout("location.replace(location.href)", 1400);
+        };
+
+        uploader.on("error", function (type) {
+
+            if (type == "Q_EXCEED_SIZE_LIMIT") {
+
+                layer.msg("图片大小不能超过200K");
+
+            }else {
+
+                layer.msg("上传出错！请检查后重新上传！错误代码"+type);
+
+            }
+
+        });
+
+        // 文件上传失败，显示上传出错。
+
+        uploader.on( 'uploadError', function( file ) {
+
+            var $li = $( '#'+file.id ),
+
+                $error = $li.find('div.error');
+
+            // 避免重复创建
+
+            if ( !$error.length ) {
+
+                $error = $('<div class="error"></div>').appendTo( $li );
+
+            }
+
+            $error.text('上传失败');
+
+        });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+
+        uploader.on( 'uploadComplete', function( file ) {
+
+            $( '#'+file.id ).find('.progress').remove();
+
+        });
+
+    })
+
+</script>
+
+</body>
+
+</html>

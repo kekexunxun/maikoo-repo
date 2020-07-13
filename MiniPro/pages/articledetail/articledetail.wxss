@@ -1,0 +1,32 @@
+@import "../../utils/wxParse/wxParse.wxss";
+
+.container{
+  padding: 0 2%;
+}
+
+.banner{
+  height: 260rpx;
+}
+.banner image{
+  width: 100%;
+  height: 260rpx;
+  border-radius: 10px;
+}
+
+.title{
+  color: #333;
+  font-size: 34rpx;
+  line-height: 30px;
+}
+.time{
+  color: #999;
+  line-height: 25px;
+  font-size: 22rpx;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+.content{
+  color: #333;
+  font-size: 30rpx;
+  line-height: 25px;
+  margin-top: 20rpx;
+}

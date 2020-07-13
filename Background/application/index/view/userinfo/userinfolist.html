@@ -1,0 +1,343 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lt IE 9]>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+
+    <style>
+    td.details-control {
+        background: url('__ROOT__/public/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('__ROOT__/public/details_close.png') no-repeat center center;
+    }
+    #userlist td{
+        text-align: center;
+    }
+    .Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+    <!--[if IE 6]>
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
+    <script>DD_belatedPNG.fix('*');</script>
+
+    <![endif]-->
+
+    <title>用户管理</title>
+
+</head>
+
+<body>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span> 用户信息 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+
+        <!--<span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="user_add('添加用户','user-add.html','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加用户</a>-->
+
+        </span> <span class="r">共有数据：<strong>{$userinfo}</strong> 条</span> </div>
+
+    <div class="mt-20">
+
+        <table id="userlist" class="table table-border table-bordered table-hover table-bg table-sort">
+
+            <thead>
+
+            <tr class="text-c">
+
+                <th width="20">详情</th>
+
+                <th width="30">邀请码ID</th>
+
+                <th width="50">昵称</th>
+
+                <th width="90">头像</th>
+
+                <th width="40">国家</th>
+
+                <th width="40">省份</th>
+
+                <th width="40">城市</th>
+
+                <th width="40">性别</th>
+
+                <th width="60">用户是否实名认证</th>
+
+            </tr>
+
+            </thead>
+
+
+        </table>
+
+    </div>
+
+</div>
+
+<footer class="footer mt-20">
+    <div class="container">
+    <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+
+<!--_footer 作为公共模版分离出去-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/layer/layer.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+
+
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" src="__ROOT__/public/static/lib/laypage/laypage.js"></script>
+
+<script type="text/javascript">
+// 显示行的附加信息
+function format (data) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td style="font-weight: bold">用户姓名：</td>'+  
+            '<td>'+data.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td style="font-weight: bold">openid：</td>'+  
+            '<td>'+data.user_openid+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td style="font-weight: bold">身份证号：</td>'+
+            '<td>'+data.identID+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td style="font-weight: bold">手机号：</td>'+
+            '<td>'+data.telNum+'</td>'+
+        '</tr>'+
+    '</table>';
+}
+$(document).ready(function() {
+    var table = $('#userlist').DataTable( {
+        language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+        "ajax": {
+              "url": "userDetail",
+              //默认为data,这里定义为空，则只需要传不带属性的数据
+              "dataSrc": ""
+          },
+        "columns": [
+            {
+                "className":     'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": "invite_code_id" },
+            { "data": "nickName" },
+            { "data": "avatarUrl" ,
+            "render": function (data, type, full, callback) {
+                    //类型："" 暂无头像
+                    switch (data) {
+                        case "": return '暂无头像'; 
+                        break;
+                        default:
+                        return '<img style="width:100px;height:100px;" src="'+data+'" alt="用户头像" name="用户头像"/>';
+                    }
+                }
+            },
+            { "data": "country" },
+            { "data": "province" },
+            { "data": "city" },
+            { "data": "gender",
+            "render": function (data, type, full, callback) {
+                    //类型：0女生；1男生
+                    switch (data) {
+                        case 0: return '<span class="label label-defaunt radius" style="background-color: hotpink">女</span>'; 
+                        break;
+                        case 1: return '<span class="label label-success radius" style="background-color: dodgerblue">男</span>'; 
+                        break;
+                    }
+                }
+            },
+            { "data": "is_auth",
+            "render": function (data, type, full, callback) {
+            //类型：0未实名认证；1已经实名认证
+                    switch (data) {
+                        case 0: return '<span class="label label-defaunt radius">未认证</span>'; 
+                        break;
+                        case 1: return '<span class="label label-success radius">已认证</span>'; 
+                        break;
+                    }
+                }
+            }
+        ],
+        "order": [[1, 'asc']]
+    } );
+
+    // Add event listener for opening and closing details
+    $('#userlist tbody').on('click', 'td.details-control', function () {
+
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+        }
+    } );
+
+} );
+
+
+    // /*用户-添加*/
+
+    // function user_add(title,url,w,h){
+
+    //     layer_show(title,url,w,h);
+
+    // }
+
+    // /*用户-查看*/
+
+    // function user_show(title,url,id,w,h){
+
+    //     layer_show(title,url,w,h);
+
+    // }
+
+    // /*用户-停用*/
+
+    // function user_stop(obj,id){
+
+    //     layer.confirm('确认要停用吗？',function(index){
+
+    //         $.ajax({
+
+    //             type: 'POST',
+
+    //             url: '',
+
+    //             dataType: 'json',
+
+    //             success: function(data){
+
+    //                 $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="user_start(this,id)" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+
+    //                 $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+
+    //                 $(obj).remove();
+
+    //                 layer.msg('已停用!',{icon: 5,time:1000});
+
+    //             },
+
+    //             error:function(data) {
+
+    //                 console.log(data.msg);
+
+    //             },
+
+    //         });
+
+    //     });
+
+    // }
+
+    // $('.del').on('click', function () {
+
+    //     var _this = this;
+
+    //     var url = _this.href;
+
+    //     $.get(url, function (rs) {
+
+    //         if (rs.code == 1) {
+
+    //             layer.msg(rs.msg,{icon:1,time:1000});
+
+    //         } else {
+
+    //             layer.msg(rs.msg,{icon:1,time:1000});
+
+    //         }
+
+    //     }, 'json')
+
+    //     return false;
+
+    // })
+
+</script>
+
+</body>
+
+</html>

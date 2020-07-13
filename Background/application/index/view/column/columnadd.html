@@ -1,0 +1,453 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/public/static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <!--/meta 作为公共模版分离出去-->
+
+    <link href="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <style>
+        .minipro_name {
+            height: 30px;
+        }
+
+        .del {
+            width: 13px;
+            height: 25px;
+            border: 0px none;
+            border-radius: 5px;
+            position: absolute;
+            float: right;
+            top: 0px;
+            right: 0px;
+            display: block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <form action="" method="post" class="form form-horizontal" id="form-columnadd-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">专栏名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input style="width: 300px" type="text" class="input-text" maxlength="20" value="" placeholder="最多20个字符" id="column_name" name="column_name">
+                </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">专栏简介：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                <textarea id="column_brief" name="column_brief" cols="" rows="" class="textarea" placeholder="说点什么...最多输入100个字符" maxlength="60" onkeyup="$.Huitextarealength(this,100)"></textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+                </div>
+            </div>
+
+            <div class="row cl" id="addPic">
+                <label class="form-label col-xs-4 col-sm-2">专栏图片添加：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div id="uploader-demo">
+                        <!--用来存放item-->
+                        <div id="fileList" class="uploader-list"></div>
+                        <div id="filePicker">选择图片</div>
+                    </div>
+                    <label class="form-label col-xs-4">图片比例建议690*300</label>
+                </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">专栏包含的小程序：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <select name="minipro" id="minipro" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;float: left;">
+                        {volist name="$miniprodata" id="vol"}
+                        <option class="miniproname" value="{$vol.mini_id}" data="{$vol.avatarUrl}">{$vol.name}</option>
+                        {/volist}
+                    </select>
+
+                    <label class="form-label col-xs-4 col-sm-2">排序：</label>
+                    <input style="width: 100px;float: left;" type="text" class="input-text" max="99" maxlength="2" value="0" placeholder="0-99"
+                        id="orderby" name="orderby" onkeyup="this.value=this.value.replace(/\D/g,'')">
+
+                    <div style="display: flex; flex-direction: column; float: left;margin-left:30px;">
+                        <text onClick="add()" id="add" style="width: 80px; height: 30px; background-color: #eeeeee; border: 1px solid #cccccc; text-align: center; line-height: 25px; border-radius: 5px; cursor: pointer;">添加</text>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">专栏包含的小程序：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div id="miniprolist" style="width: 580px;"></div>
+                </div>
+
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">是否立即展示：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <select name="column_active" id="column_active" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                        <option value="0">不展示</option>
+                        <option value="1">展示</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <a onClick="columnadd_save_submit();" class="btn btn-primary radius" href="javascript:;">
+                        <i class="Hui-iconfont">&#xe632;</i> 保存</a>
+                    <button style="margin-left: 20px;" onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--_footer 作为公共模版分离出去-->
+    <script type="text/javascript" src="__ROOT__/public/static/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/h-ui.admin/js/H-ui.admin.js"></script>
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+
+    <script type="text/javascript" src="__ROOT__/public/static/lib/webuploader/0.1.5/webuploader.min.js"></script>
+    <script type="text/javascript">
+        // $(function(){
+        //     $('.skin-minimal input').iCheck({
+        //         checkboxClass: 'icheckbox-blue',
+        //         radioClass: 'iradio-blue',
+        //         increaseArea: '20%'
+        //     });
+
+        // });
+
+        // 点击创建专栏包含的小程序ID信息
+        function add() {
+            if ($(".mini").length > 19) {
+                layer.msg('添加超出限制', { icon: 2, time: 1000 });
+                return false;
+            }
+            // 不能添加同一个小程序
+            var ary = Array();
+            if ($(".name").length < 1) {
+                ary.push($('#minipro option:selected').val());
+            } else {
+                for (var i = 0; i < $(".name").length; i++) {
+                    ary.push($(".name").eq(i).text());
+                }
+                // console.log(ary);
+                // console.log($('#minipro option:selected').val());
+                if (ary.indexOf($('#minipro option:selected').text()) != -1) {
+                    layer.msg('不能添加同一个小程序！', { icon: 2, time: 1000 });
+                    return false;
+                }
+            }
+
+            var div = $("#miniprolist");
+            var mini = $('<div class="mini" style="width:100px;margin-top:10px;margin-right:10px;float:left;position:relative;border:1px solid rgba(243, 106, 34, 0.5);border-radius:5px;"></div>');
+            var del = $('<div class="del"></div>');
+            del.html('x');
+            del.appendTo(mini);
+
+            var img = $('<img style="width:60px;height:60px;margin:5px 20px;border-radius:50%;">');
+            var src = $("#minipro").find("option:selected").attr("data");//获取自定义属性的值
+            // console.log(src);
+            img.attr({ src: src, alt: "图片" });
+            img.appendTo(mini);
+
+            var p = $('<p class="name" style="width:100px;text-align:center;line-height:20px;margin:0"></p>');
+            p.text($('#minipro option:selected').text());
+            p.appendTo(mini);
+
+            var p1 = $('<p class="minis" style="display:none;"></p>');
+            p1.text($('#minipro option:selected').val());
+            p1.appendTo(mini);
+
+            var p2 = $('<p class="orderby" style="width:100px;text-align:center;line-height:20px;margin:0"></p>');
+            p2.text($("#orderby").val());
+            p2.appendTo(mini);
+
+            div.append(mini);
+            // 删除小程序
+            del.click(function () {
+                $(this).parents('.mini').remove();
+            });
+        }
+        // 提交表单信息
+        function columnadd_save_submit() {
+            var column_name = $('#column_name').val();
+            var column_brief = $('#column_brief').val();
+            var column_active = $('#column_active option:selected').val();
+            var column_minis = '';
+            for (var j = 0; j < $(".minis").length; j++) {
+                column_minis += $(".minis").eq(j).text() + ':' + $(".orderby").eq(j).text() + '*';
+            }
+            // console.log(column_minis);
+
+            if (column_name == '') {
+                layer.msg('专栏名称不能为空！', { icon: 2, time: 1000 });
+                return false;
+            }
+            if (column_brief == '') {
+                layer.msg('专栏简介不能为空！', { icon: 2, time: 1000 });
+                return false;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'addColumn',
+                dataType: 'json',
+                data: { column_name: column_name, column_brief: column_brief, column_minis: column_minis, column_active: column_active },
+                success: function (data) {
+                    if (data.code == "200") {
+                        layer.msg(data.msg, { icon: 1, time: 1000 });
+                        index = parent.layer.getFrameIndex(window.name);
+                        setTimeout('parent.layer.close(index);', 1000);
+                    }
+                    if (data.code == '300') {
+                        layer.msg(data.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });
+        }
+
+
+        $(function () {
+
+            var $list = $("#fileList");
+
+            // 优化retina, 在retina下这个值是2
+
+            var ratio = window.devicePixelRatio || 1;
+
+            // 缩略图大小
+
+            var thumbnailWidth = 430 * ratio;
+
+            var thumbnailHeight = 200 * ratio;
+
+            // 初始化Web Uploader
+
+            var uploader = WebUploader.create({
+
+                // 选完文件后，是否自动上传。
+
+                auto: true,
+
+                // swf文件路径
+
+                swf: '__ROOT__/public/static/lib/webuploader/0.1.5/Uploader.swf',
+
+                // 文件接收服务端。
+
+                server: 'addPic',
+
+                // 选择文件的按钮。可选。
+
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+
+                pick: '#filePicker',
+
+                // 只允许选择图片文件。
+
+                accept: {
+
+                    title: 'Images',
+
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+
+                    mimeTypes: 'image/*'
+
+                },
+
+                thumb: {
+
+                    width: 110,
+
+                    height: 110,
+
+                    // 图片质量，只有type为`image/jpeg`的时候才有效。  
+
+                    quality: 100,
+
+                    // 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.  
+
+                    allowMagnify: true,
+
+                    // 是否允许裁剪。是否采用裁剪模式。如果采用这样可以避免空白内容。  
+
+                    crop: true,
+
+                    // 为空的话则保留原有图片格式。  
+
+                    // 否则强制转换成指定的类型。  
+
+                    type: ''
+
+                },
+
+                disableGlobalDnd: true,
+
+                fileNumLimit: 1,
+
+                fileSizeLimit: 200 * 1024,    // 200 K
+
+                fileSingleSizeLimit: 200 * 1024    // 200 K
+
+            });
+
+            // uploader.options ={formData:"userName":"吉安娜","gender":"女"};
+
+            // 当有文件添加进来的时候
+
+            uploader.on('fileQueued', function (file) {
+
+                var $li = $(
+
+                    '<div id="' + file.id + '" class="file-item thumbnail">' +
+
+                    '<img>' +
+
+                    '<div class="info">' + file.name + '</div>' +
+
+                    '</div>'
+
+                ),
+
+                    $img = $li.find('img');
+
+                // $list为容器jQuery实例
+
+                $list.append($li);
+
+                // 创建缩略图
+
+                // 如果为非图片文件，可以不用调用此方法。
+
+                // thumbnailWidth x thumbnailHeight 为 100 x 100
+
+                uploader.makeThumb(file, function (error, src) {
+
+                    if (error) {
+
+                        $img.replaceWith('<span>不能预览</span>');
+
+                        return;
+
+                    }
+
+                    $img.attr('src', src);
+
+                }, 400, 200);
+
+            });
+
+            // 文件上传过程中创建进度条实时显示
+
+            uploader.on('uploadProgress', function (file, percentage) {
+
+                var $li = $('#' + file.id),
+
+                    $percent = $li.find('.progress span');
+
+                // 避免重复创建
+
+                if (!$percent.length) {
+
+                    $percent = $('<p class="progress"><span></span></p>')
+
+                        .appendTo($li)
+
+                        .find('span');
+
+                }
+
+                $percent.css('width', percentage * 100 + '%');
+
+            });
+
+            // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+
+            uploader.onUploadSuccess = function (file, response) {
+
+                $('#' + file.id).addClass('upload-state-done');
+
+                layer.msg('专栏图片添加成功!', { icon: 1, time: 1200 });
+
+                // 添加成功之后隐藏
+                $('#filePicker').hide();
+            };
+
+            uploader.on("error", function (type) {
+
+                if (type == "Q_EXCEED_SIZE_LIMIT") {
+
+                    layer.msg("图片大小不能超过200K");
+
+                } else {
+
+                    layer.msg("上传出错！请检查后重新上传！错误代码" + type);
+                }
+            });
+
+
+            // 文件上传失败，显示上传出错。
+            uploader.on('uploadError', function (file) {
+
+                var $li = $('#' + file.id),
+
+                    $error = $li.find('div.error');
+
+                // 避免重复创建
+
+                if (!$error.length) {
+
+                    $error = $('<div class="error"></div>').appendTo($li);
+
+                }
+
+                $error.text('上传失败');
+
+            });
+
+            // 完成上传完了，成功或者失败，先删除进度条。
+
+            uploader.on('uploadComplete', function (file) {
+
+                $('#' + file.id).find('.progress').remove();
+
+            });
+
+        })    
+    </script>
+</body>
+
+</html>

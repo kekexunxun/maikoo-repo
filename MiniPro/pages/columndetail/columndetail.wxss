@@ -1,0 +1,128 @@
+/* pages/themedetail/themedetail.wxss */
+
+.container {
+  align-items: left;
+}
+
+.theme-item {
+  padding: 0 2%;
+  width: 96%;
+  height: 100%;
+}
+
+.theme-item image {
+  width: 100%;
+  border-radius: 20rpx;
+}
+
+.time {
+  font-size: 24rpx;
+  line-height: 30px;
+  padding-left: 2%;
+  display: flex;
+  align-items: center;
+}
+
+.time image {
+  vertical-align: text-bottom;
+}
+
+.icon {
+  width: 30rpx;
+  height: 30rpx;
+  padding: 0 10rpx;
+}
+
+.icon-eye {
+  margin-left: 40rpx;
+}
+
+.brief {
+  font-size: 14px;
+  line-height: 25px;
+  padding: 0 20rpx 20rpx 20rpx;
+}
+
+.minis {
+  font-size: 28rpx;
+  width: 96%;
+  padding: 0 2%;
+}
+
+.minis-item {
+  padding: 20rpx 0;
+  display: flex;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+  height: 120rpx;
+}
+
+.logo {
+  width: 110rpx;
+  height: 110rpx;
+  margin-top: 10rpx;
+  border-radius: 50%;
+}
+
+.mini-detail{
+  width: 70%;
+  line-height: 20px;
+}
+
+.minis-item-left{
+  text-align: center;
+  width: 20%;
+}
+
+.minis-item-right {
+  width: 80%;
+  margin-left: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name {
+  color: #030303;
+}
+
+.star-view{
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  padding: 0 2rpx;
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.heat{
+  color: #999;
+}
+
+.action{
+  display: flex;
+  width: 20%;
+  justify-content: space-around;
+  align-items: center;
+}
+.action image{
+  width: 50rpx;
+  height: 50rpx;
+}
+.fav, .enter, .enter navigator{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.enter-img{
+  width: 35rpx;
+  height: 35rpx;
+}
+
+.icon-time{
+  width: 28rpx;
+  height: 28rpx;
+  padding: 1rpx 10rpx;
+}

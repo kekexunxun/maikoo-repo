@@ -1,0 +1,96 @@
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <scroll-view class='scroll-view' scroll-x="true">
+        <view class="weui-navbar">
+          <block wx:for="{{tabs}}" wx:key="*this">
+            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+              <view class="weui-navbar__title">{{item}}</view>
+            </view>
+          </block>
+          <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+        </view>
+      </scroll-view>
+      <view class="weui-tab__panel">
+        <!--  构造评测界面  -->
+        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+          <!--  评测文章列表  -->
+          <view class='container' wx:if="{{evalList}}">
+            <block wx:for="{{evalList}}" wx:key="">
+              <view class='art-item' bindtap='navToAriticle' data-artid='{{item.article_id}}'>
+                <view class='art-pic align-left'>
+                  <image src='{{item.pic}}'></image>
+                </view>
+                <view class='art-title align-left'>{{item.title}}</view>
+                <view class='art-time align-left'>
+                  <!--  当前专题的一些信息展示  -->
+                  <view class='time'>
+                    <image class='icon-time' src='../../images/time.png'></image>
+                    <text>{{item.create_time}}</text>
+                    <image class='icon icon-eye' src='../../images/eye.png'></image>
+                    <text>{{item.views}}</text>
+                  </view>
+                </view>
+                <!-- <view class='art-time align-left'>{{item.create_time}}</view> -->
+                <view class='art-brief align-left'>{{item.brief}}</view>
+              </view>
+              <view class='eval-line'></view>
+            </block>
+          </view>
+          <view class='container' wx:else>
+            <text class='no-info'>当前分类暂无文章</text>
+          </view>
+        </view>
+        <!--  构造评测界面 END  -->
+        <!--  构造资讯界面  -->
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+          <scroll-view class='scroll-view' scroll-x="true">
+            <view class="weui-navbar">
+              <block wx:for="{{subTabs}}" wx:key="*this">
+                <view id="{{index}}" class="weui-navbar__item {{subActiveIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="subTabClick">
+                  <view class="weui-navbar__title {{subTabs.length > 5 ? 'justify-style' : ''}}">{{item.name}}</view>
+                </view>
+              </block>
+              <view class="weui-navbar__slider" style="left: {{subTabs.length > 5 ? subSliderLeft + 'rpx' : subSliderLeft + 'px'}}; transform: translateX({{subSliderOffset}}px); -webkit-transform: translateX({{subSliderOffset}}px);width:{{subTabs.length > 5 ? '100rpx' : itemWidth}}"></view>
+            </view>
+          </scroll-view>
+          <!--  根据subTab 循环构造分类选择  -->
+          <view class="weui-tab__panel">
+            <block wx:for="{{subTabs}}" wx:key="as">
+              <!--  构造评测界面  -->
+              <view class="weui-tab__content" hidden="{{subActiveIndex != index}}">
+                <!--  评测文章列表  -->
+                <view class='container' wx:if="{{item.list}}">
+                  <block wx:for="{{item.list}}" wx:key="" wx:for-item="itm">
+                    <view class='art-item' bindtap='navToAriticle' data-artid='{{itm.article_id}}'>
+                      <view class='art-pic align-left'>
+                        <image src='{{itm.pic}}'></image>
+                      </view>
+                      <view class='art-title align-left'>{{itm.title}}</view>
+                      <!-- <view class='art-time align-left'>{{itm.create_time}}</view> -->
+                      <view class='art-time align-left'>
+                        <view class='time'>
+                          <image class='icon-time' src='../../images/time.png'></image>
+                          <text>{{itm.create_time}}</text>
+                          <image class='icon icon-eye' src='../../images/eye.png'></image>
+                          <text>{{itm.views}}</text>
+                        </view>
+                      </view>
+                      <view class='art-brief align-left'>{{itm.brief}}</view>
+                    </view>
+                    <view class='eval-line'></view>
+                  </block>
+                </view>
+                <view class='container' wx:else>
+                  <text class='no-info'>当前分类暂无文章</text>
+                </view>
+              </view>
+            </block>
+          </view>
+          <!--  循环构造分类结束  -->
+        </view>
+        <!--  构造资讯界面 END  -->
+      </view>
+    </view>
+  </view>
+</view>

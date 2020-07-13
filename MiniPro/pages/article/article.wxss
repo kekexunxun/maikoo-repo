@@ -1,0 +1,119 @@
+@import '../../style/weui.wxss';
+page,
+.page,
+.page__bd{
+    height: 100%;
+}
+.page__bd{
+    padding-bottom: 0;
+}
+.weui-tab__content{
+    text-align: center;
+}
+ .weui-navbar__slider{
+  width: 5rem;
+} 
+.weui-navbar__item{
+  padding: 14rpx 0;
+}
+.weui-navbar{
+  height: 80rpx;
+  border-bottom: none;
+}
+.weui-tab__panel{
+  padding-top: 30rpx;
+}
+
+.scroll-view{
+  overflow-y: hidden;
+  height: 80rpx;
+  white-space: nowrap;
+  display: flex;
+  border-bottom: 1rpx solid #ccc;
+}
+
+.container{
+  padding: 0 2%;
+}
+
+/*  文章信息  */
+.art-item{
+  display: flex;
+  flex-direction: column;
+  /* border: 1rpx solid rgba(220, 220, 220, 0.6);
+  border-radius: 10rpx; */
+  padding: 10rpx;
+  margin-bottom: 20rpx
+}
+.art-pic{
+   height: 260rpx; 
+}
+.art-pic image{
+  width: 100%;
+  border-radius: 10rpx;
+  height: 260rpx;
+}
+.art-title{
+  font-size: 32rpx;
+  color: #333;
+  line-height: 25px;
+}
+.art-time{
+  line-height: 20px;
+  font-size: 22rpx;
+  color: #999;
+}
+.art-brief{
+  line-height: 20px;
+  font-size: 28rpx;
+  color: #666;
+}
+.align-left{
+  text-align: left;
+}
+
+/*  测评文章之间的线  */
+.eval-line{
+  margin: 10rpx;
+  height: 1rpx;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+.no-info{
+  font-size: 30rpx;
+  margin-top: 200rpx;
+  color: #666;
+}
+
+.justify-style{
+  width: 160rpx;
+}
+
+.time {
+  font-size: 24rpx;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.time image {
+  vertical-align: text-bottom;
+}
+
+.icon {
+  width: 30rpx;
+  height: 30rpx;
+  padding: 0 10rpx;
+}
+
+.icon-eye {
+  margin-left: 40rpx;
+}
+.icon-time{
+  width: 28rpx;
+  height: 28rpx;
+  padding: 1rpx 10rpx 1rpx 0;
+}
+.icon-eye {
+  margin-left: 40rpx;
+}
