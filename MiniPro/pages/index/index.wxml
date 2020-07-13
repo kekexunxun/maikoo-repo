@@ -1,0 +1,31 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 文字公告 -->
+  <view class="example" bindtap='navToMyMsg' wx:if="{{notice}}">
+    <view class="marquee_box">
+      <view class='notice-img'>
+        <image src='/images/icon-notice.png'></image>
+      </view>
+      <view class="marquee_text" style="{{orientation}}:{{marqueeDistance}}px;font-size: {{size}}rpx;">
+        {{notice}}
+      </view>
+    </view>
+  </view>
+  <!-- banner -->
+  <view class='banner'>
+    <swiper autoplay="true" duration="800">
+      <block wx:for="{{banner}}" wx:key="">
+        <swiper-item>
+          <image src='{{item.img}}'></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!-- 事项列表 -->
+  <block wx:for="{{list}}" wx:key="">
+    <view class='list-item' bindtap='{{item.tap}}' wx:if="{{item.isAll ? true : item.isTeacher == isTeacher}}">
+      <image src='{{item.img}}'></image>
+      <text>{{item.text}}</text>
+    </view>
+  </block>
+</view>

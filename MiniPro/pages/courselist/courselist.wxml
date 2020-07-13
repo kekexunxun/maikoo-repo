@@ -1,0 +1,41 @@
+<view class="container" wx:if="{{courseList.length > 0}}">
+  <block wx:for="{{courseList}}" wx:key="course_id">
+    <view class='class-item'>
+      <view class='class-item-title'>
+        <text>课程名称：{{item.course_name}} </text>
+        <text class='invaild-class' wx:if="{{item.course_status == 1}}">(未开始)</text>
+        <text class='invaild-class' wx:if="{{item.class_status == 2}}">(已暂停)</text>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>科目名称</text>
+        <text class='class-item-right'>{{item.subject_name}}</text>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>课程价格</text>
+        <text class='class-item-right'>￥{{item.course_price}}</text>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>课程周期</text>
+        <view class='class-item-right'>{{item.course_period}} 天</view>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>课程课时</text>
+        <text class='class-item-right'>{{item.course_times}} 课时</text>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>拥有班级</text>
+        <text class='class-item-right'>{{item.course_classes}} 个</text>
+      </view>
+      <view class='class-item-line'>
+        <text class='class-item-left'>课程简介</text>
+        <text class='class-item-right'>{{item.course_brief}}</text>
+      </view>
+      <view class='class-item-bottom' bindtap='courseDetail' data-courseid='{{item.course_id}}'>
+        查看详情
+      </view>
+    </view>
+  </block>
+</view>
+<view class='nothing' wx:else>
+  <view>暂时还没有参加课程哦</view>
+</view>

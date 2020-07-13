@@ -1,0 +1,14 @@
+<view class="container">
+  <view class='pro-name'>
+    <view class='pro-img'>
+      <image src='/images/logo.jpg'></image>
+    </view>
+    <view class='title'>吸铁石美术兄弟小程序</view>
+  </view>
+  <view class='explain'>您已被管理员禁止访问该小程序，请及时联系管理员核实相关信息。</view>
+  <view class='line'></view>
+
+  <view class="weui-btn-area">
+    <button class="weui-btn" type="primary" bindtap='callManage'>联系管理员</button>
+  </view>
+</view>

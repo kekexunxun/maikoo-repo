@@ -1,0 +1,7 @@
+.idea
+composer.lock
+*.log
+.DS_Store
+runtimes
+sftp-config.json
+.vscode

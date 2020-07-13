@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/userauth/userauth",
+    "pages/coursedetail/coursedetail",
+    "pages/message/message",
+    "pages/messagedetail/messagedetail",
+    "pages/course/course",
+    "pages/myclock/myclock",
+    "pages/clause/clause",
+    "pages/sendmsg/sendmsg",
+    "pages/feedback/feedback",
+    "pages/sendfeedback/sendfeedback",
+    "pages/userinfo/userinfo",
+    "pages/startclock/startclock",
+    "pages/classmanage/classmanage",
+    "pages/tschedule/tschedule",
+    "pages/classdetail/classdetail",
+    "pages/notallow/notallow",
+    "pages/courselist/courselist"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "吸铁石兄弟美术",
+    "navigationBarTextStyle": "black"
+  }
+}

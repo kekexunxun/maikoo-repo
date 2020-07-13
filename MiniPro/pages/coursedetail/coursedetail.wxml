@@ -1,0 +1,5 @@
+<view class='container'>
+  <view class='desc-img' wx:for="{{courseDesc}}" key="">
+    <image src='{{item}}' mode='widthFix' bindtap='previewImage' data-img='{{item}}'></image>
+  </view>
+</view>
