@@ -1,0 +1,22 @@
+<view class="container" wx:if="{{columnList.length > 0}}">
+  <!-- 会员版块 -->
+  <block wx:for="{{columnList}}" wx:key="column_id">
+    <view class='mem-sec'>
+      <view class='mem-sec-banner' bindtap='navToColumn' data-colid='{{item.column_id}}' data-colname="{{item.column_name}}">
+        <image src='{{item.column_img}}'></image>
+      </view>
+      <view class='mem-sec-content'>
+        <scroll-view class="recommend_scroll_x_box" scroll-x="true">
+          <block wx:for="{{item.goods}}" wx:for-item="goods" wx:key="">
+            <view class="recommend_hot_box" bindtap='navToGoods' data-goodsid="{{goods.goods_id}}">
+              <image src="{{goods.goods_img}}" class="recommend_hot_image"></image>
+              <view class="scroll-title text-overflow">{{goods.goods_name}}</view>
+              <view class="scroll-price">￥{{goods.shop_price}}</view>
+            </view>
+          </block>
+        </scroll-view>
+      </view>
+    </view>
+  </block>
+</view>
+<view class='nothing' wx:else>敬请期待</view>

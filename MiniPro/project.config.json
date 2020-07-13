@@ -1,0 +1,144 @@
+{
+	"description": "项目配置文件。",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"nodeModules": false
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.3.0",
+	"appid": "wx15e6d50b54a64ca2",
+	"projectname": "store",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 16,
+			"list": [
+				{
+					"id": -1,
+					"name": "搜索界面",
+					"pathName": "pages/search/search",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "分类",
+					"pathName": "pages/catagory/catagory",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "认证",
+					"pathName": "pages/userauth/userauth",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/my/my",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "问题",
+					"pathName": "pages/question/question",
+					"query": ""
+				},
+				{
+					"id": 5,
+					"name": "会员商城",
+					"pathName": "pages/member/member",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "购物车",
+					"pathName": "pages/cart/cart",
+					"query": ""
+				},
+				{
+					"id": 7,
+					"name": "购买",
+					"pathName": "pages/pay/pay",
+					"query": "goodsFee=2.00&totalNum=3&isCart=1"
+				},
+				{
+					"id": 8,
+					"name": "优惠券",
+					"pathName": "pages/coupon/coupon",
+					"query": "way=1"
+				},
+				{
+					"id": 9,
+					"name": "商品详情",
+					"pathName": "pages/goodsdetail/goodsdetail",
+					"query": "goodsid=2"
+				},
+				{
+					"id": 10,
+					"name": "商品列表",
+					"pathName": "pages/goodslist/goodslist",
+					"query": "type=2&catid=6"
+				},
+				{
+					"id": -1,
+					"name": "会员购买",
+					"pathName": "pages/memberpay/memberpay",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的收藏",
+					"pathName": "pages/favourite/favourite",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "授权",
+					"pathName": "pages/userauth/userauth",
+					"query": ""
+				},
+				{
+					"id": 14,
+					"name": "我的订单",
+					"pathName": "pages/order/order",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "订单详情",
+					"pathName": "pages/orderdetail/orderdetail",
+					"query": "ordersn=180828324888"
+				},
+				{
+					"id": 16,
+					"name": "评论",
+					"pathName": "pages/comment/comment",
+					"query": "ordersn=180827138888"
+				}
+			]
+		}
+	}
+}

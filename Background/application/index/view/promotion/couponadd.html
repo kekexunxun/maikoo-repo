@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+        <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <style>
+    </style>
+    <title>添加优惠券</title>
+    </head>
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 营销管理 <span class="c-gray en">&gt;</span> 添加优惠券 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="/" method="post" class="form form-horizontal" id="form-coupon-add">
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">优惠券名称：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="13" class="input-text" value="" placeholder="优惠券名称" id="coupon_name" name="coupon_name" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">优惠券金额：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="8" class="input-text" value="" placeholder="优惠券金额" id="money" name="money" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">开始时间：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="10" class="input-text" value="" placeholder="开始时间" id="send_start_at" name="send_start_at" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">过期时间：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="10" class="input-text" value="" placeholder="过期时间" id="send_end_at" name="send_end_at" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">满金额可用：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="8" class="input-text" value="" placeholder="满金额可用" id="condition" name="condition" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-5 col-sm-5">发放总数：</label>
+            <div class="formControls col-xs-7 col-sm-6">
+                <input style="width: 200px;" type="text" maxlength="13" class="input-text" value="" placeholder="发放总数" id="total_num" name="total_num" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-5 col-xs-offset-7 col-sm-6 col-sm-offset-5">
+                <button class="btn btn-success radius" type="submit">
+                    &nbsp;&nbsp;提交&nbsp;&nbsp;
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<footer class="footer mt-20">   
+    <div class="container">
+        <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+//开始时间
+$('#send_start_at').on('focus',function(){
+    WdatePicker({
+        onpicked:function(){
+        },
+        dateFmt: 'yyyy-MM-dd',
+        minDate: '{$nowDay}',
+    });
+});
+//结束时间
+$('#send_end_at').on('focus',function(){
+    WdatePicker({
+        onpicked:function(){
+        },
+        dateFmt: 'yyyy-MM-dd',
+        minDate: '{$nowDay}',
+    });
+});
+//表单提交
+$("#form-coupon-add").validate({
+    rules: {
+        coupon_name : {
+            required:true,
+            maxlength:13,
+            minlength:3,
+        },
+        money : {
+            required:true,
+            number:true,
+            range:[0.01,10000000],
+        },
+        condition : {
+            required:true,
+            number:true,
+            range:[0,10000000],
+        },
+        total_num : {
+            required:true,
+            number:true,
+            range:[0,1000000000],
+        },
+        send_start_at : {
+            required:true,
+        },
+        send_end_at : {
+            required:true,
+        }
+    },
+    onkeyup:false,
+    focusCleanup:true,
+    success:"valid",
+    submitHandler:function(form){
+        var condition = $('#condition').val();
+        var condition = parseFloat(condition);
+        if( condition < 0.01 && condition != 0 ){
+            layer.alert('满金额可用不得小于0.01,但可以为0.');
+            return;
+        }
+        layer.confirm('确定添加吗?',function(){
+            $(form).ajaxSubmit({
+                type : 'POST',
+                url  : '/index/promotion/couponadd',
+                typeData : 'JSON',
+                success : function (result){
+                    if( result.code < 400 ){
+                        layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+                            window.parent.location.href = window.parent.location.href;
+                        });
+                    }else{
+                        layer.alert(result.msg);
+                    }
+                },
+                error : function(){
+                    layer.alert('请求失败!');
+                }
+            });
+        });
+    }
+});
+</script>

@@ -1,0 +1,615 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/layer/layer.css" />
+    <link rel="stylesheet" href="__ROOT__/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link href="__ROOT__/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <title>分类信息</title>
+</head>
+<body class="pos-r">
+<div class="pos-a" style="width:200px;left:0;top:0; bottom:0; height:100%; border-right:1px solid #e5e5e5; background-color:#f5f5f5; overflow:auto;">
+    <ul id="treeDemo" class="ztree"></ul>
+</div>
+<div style="margin-left:200px;">
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>商品管理 <span class="c-gray en">&gt;</span> 分类管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container add">
+    <form action="" method="post" class="form form-horizontal" id="add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否父级：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="catagory_parent" id="catagory_parent" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">否</option>
+                    <option value="0">是</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl show">
+            <label class="form-label col-xs-4 col-sm-2">子级对应父级：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="catagory_cat_id" id="catagory_cat_id" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    {if condition = "$catagoryData == null"}
+                    <span>无</span>
+                    {else/}
+                    {volist name="$catagoryData" id="vol"}
+                        <option value="{$vol.cat_id}">{$vol.cname}</option>
+                    {/volist}
+                    {/if}
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                分类名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="" maxlength="10" id="catagory_name" name="catagory_name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">分类排序：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" value="" placeholder="0-100" maxlength="3" id="catagory_orderby" name="catagory_orderby" onkeyup="this.value=this.value.replace(/\D/g,'')">
+            </div>
+        </div>
+        <div class="row cl pic_upload">
+            <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <div class="uploader-thum-container">
+                    <div id="fileList" class="uploader-list"></div>
+                    <div id="filePicker">选择图片</div>
+                    <!-- <input type="button" id="btn-star" style="height: 30px;" class="btn btn-default btn-uploadstar radius ml-10" value="开始上传"> -->
+                    <span style="margin-left: 20px;line-height: 30px;">（建议图片大小200*200 大小100kb）</span> 
+                </div>
+            </div> 
+        </div> 
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否启用：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="catagory_active" id="catagory_active" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">启用</option>
+                    <option value="0">不启用</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <a onClick="catagory_save_submit();" class="btn btn-primary radius" href="javascript:;">
+                    <i class="Hui-iconfont">&#xe632;</i> 新增</a>
+            </div>
+        </div>
+    </form>    
+</div>
+
+<div class="page-container parent" style="display: none;">
+    <form action="" method="post" class="form form-horizontal">
+        <p id="f_id" style="display: none;"></p>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                父类名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="" maxlength="10" id="catagory_parent_name" name="catagory_parent_name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">分类排序：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" value="" placeholder="0-100" maxlength="3" id="catagory_parent_orderby" name="catagory_parent_orderby" onkeyup="this.value=this.value.replace(/\D/g,'')">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否启用：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="catagory_parent_active" id="catagory_parent_active" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">启用</option>
+                    <option value="0">不启用</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <a onClick="catagory_parent_submit();" class="btn btn-primary radius" href="javascript:;">
+                    <i class="Hui-iconfont">&#xe632;</i> 修改</a>
+                    <button style="margin-left: 20px;" onClick="parent_del()" class="btn btn-default radius" type="button">&nbsp;&nbsp;删除&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>        
+</div>
+
+<div class="page-container cat" style="display: none;">
+    <form action="" method="post" class="form form-horizontal">
+        <p id="c_id" style="display: none;"></p>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">子级对应父级：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="cat_id" id="cat_id" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    {if condition = "$catagoryData == null"}
+                    <span>无</span>
+                    {else/}
+                    {volist name="$catagoryData" id="vol"}
+                        <option value="{$vol.cat_id}">{$vol.cname}</option>
+                    {/volist}
+                    {/if}
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                子类名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="" maxlength="10" id="catagory_cat_name" name="catagory_cat_name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">分类排序：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" value="" placeholder="0-99" id="catagory_cat_orderby" name="catagory_cat_orderby" onkeyup="this.value=this.value.replace(/\D/g,'')">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">原图片：</label>
+            <div class="formControls col-xs-6 col-sm-6 pic_src">
+                
+            </div>
+        </div>        
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">图片上传：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="file" name="pic" id="pic" accept="image/gif,image/jpeg,image/x-png"/>
+            </div> 
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否启用：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <select name="catagory_cat_active" id="catagory_cat_active" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">启用</option>
+                    <option value="0">不启用</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <a onClick="catagory_cat_submit();" class="btn btn-primary radius" href="javascript:;">
+                    <i class="Hui-iconfont">&#xe632;</i> 修改</a>
+                    <button style="margin-left: 20px;" onClick="cat_del()" class="btn btn-default radius" type="button">&nbsp;&nbsp;删除&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>        
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+        <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $.ajax({
+        async:false,
+        cache:false,
+        type: 'POST',
+        data:{},
+        dataType : "json",
+        url: 'catagoryZtree',//请求的action路径
+        success:function(res){ //请求成功后处理函数
+            // console.log(data);
+            if(res.code == 0){
+                treeNodes = res.data; //把后台封装好的简单Json格式赋给treeNodes
+                $.fn.zTree.init($("#treeDemo"), setting, treeNodes);
+                // var zTree = $.fn.zTree.getZTreeObj("tree");  
+            }
+            if (res.code == 400) {
+                layer.msg(data.msg, { icon: 2, time: 1000 });
+            }  
+        },
+        error: function(){
+            layer.msg('网络出错！请刷新！',{icon:2,time:1000});
+        },
+    });    
+})
+// 上传单张图片
+$('#pic').change(function(event) {
+    var formData = new FormData();
+    formData.append("file", $(this).get(0).files[0]);
+    $.ajax({
+        url:'addPic',
+        type:'POST',
+        data:formData,
+        cache: false,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+        success:function(res){
+            if(res.code== 0){
+                layer.msg(res.msg, { icon: 1, time: 1000 }); 
+            }
+            if(res.code == 400){
+                layer.msg(res.msg,{icon:2,time:1000});
+            }              
+        },
+        error:function(res) {
+            layer.msg('出错！请刷新！',{icon:2,time:1000});
+        },
+    });
+});
+// ztree插件
+var setting = {
+    view: {
+        dblClickExpand: true,
+        showLine: false,
+        selectedMulti: false
+    },
+    data: {
+        simpleData: {
+            enable:true,
+            idKey: "id",
+            pIdKey: "pId",
+            rootPId: ""
+        }
+    },
+    callback: {
+        beforeClick: function(treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("tree");
+            if (treeNode.isParent) { 
+                // console.log(treeNode.id);
+                $("#f_id").text(treeNode.id);
+                $.ajax({
+                    url: 'selectCatagory',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { cat_id: treeNode.id },
+                    success: function(res){
+                        if(res.code== 0){
+                            $('.add').hide();
+                            $('.cat').hide();
+                            $('.parent').show();
+                            $('#catagory_parent_name').val(res.data.cname);
+                            $('#catagory_parent_orderby').val(res.data.sort);
+                            $('#catagory_parent_active').val(res.data.is_active);
+                        }
+                        if(res.code == 400){
+                            layer.msg(res.msg,{icon:2,time:1000});
+                        }                      
+                    },
+                    error:function(res) {
+                        layer.msg('网络出错！请刷新！',{icon:2,time:1000});
+                    },
+                });                
+            } else {
+                // demoIframe.attr("src",treeNode.file + ".html");
+                // console.log(treeNode.id);
+                $("#c_id").text(treeNode.id);
+                $.ajax({
+                    url: 'selectCatagory',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { cat_id: treeNode.id },
+                    success: function(res){
+                        if(res.code== 0){
+                            $('.add').hide();
+                            $('.parent').hide();
+                            $('.cat').show();
+                            $('#catagory_cat_name').val(res.data.cname);
+                            $('#catagory_cat_orderby').val(res.data.sort);
+                            $('#catagory_cat_active').val(res.data.is_active);
+                            $('#cat_id').val(res.data.parent_id);
+                            $('.pic_src').html('<img src="/static'+res.data.img+'" alt="图片" style="width:100px;height:100px;">');
+                        }
+                        if(res.code == 400){
+                            layer.msg(res.msg,{icon:2,time:1000});
+                        }                                                  
+                    },
+                    error:function(res) {
+                        layer.msg('网络出错！请刷新！',{icon:2,time:1000});
+                    },
+                });
+            }
+        }
+    }
+};
+    // 选择框事件
+    $("#catagory_parent").change(function() {
+        if($("#catagory_parent").val()==0){
+            $(".show").hide();
+            $(".pic_upload").hide();
+        }else {
+            $(".show").show();
+            $(".pic_upload").show();
+        }
+    });
+
+    // 表单提交-添加节点
+    function catagory_save_submit(){
+        var catagory_parent = $('#catagory_parent option:selected').val();
+        console.log(catagory_parent);
+        var catagory_name = $('#catagory_name').val();
+        var catagory_orderby = $('#catagory_orderby').val();
+        var catagory_active = $('#catagory_active').val();
+        var catagory_cat_id = $("#catagory_cat_id").val();
+        if (catagory_name == '') {
+            layer.msg('分类名称不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }
+        if (catagory_orderby == '') {
+            layer.msg('分类排序不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }
+        layer.confirm('确认要提交吗？',function(){
+            $.ajax({
+                type: 'POST',
+                url: 'addCatagory',
+                dataType: 'json',
+                data: {catagory_parent:catagory_parent,catagory_name:catagory_name,catagory_orderby:catagory_orderby,catagory_active:catagory_active,catagory_cat_id:catagory_cat_id},
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg(data.msg, { icon: 1, time: 1000 });
+                        setTimeout('window.location.reload();', 1000);//刷新页面        
+                    }
+                    if (data.code == 400) {
+                        layer.msg(data.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });
+        });
+    }
+    // 表单提交-修改父节点
+    function catagory_parent_submit(){
+        var catagory_parent_name = $('#catagory_parent_name').val();
+        var catagory_parent_orderby = $('#catagory_parent_orderby').val();
+        var catagory_parent_active = $('#catagory_parent_active option:selected').val();
+        var catagory_cat_id = $("#f_id").text();
+        // console.log(catagory_cat_id);
+        if (catagory_parent_name == '') {
+            layer.msg('分类名称不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }
+        if (catagory_parent_orderby == '') {
+            layer.msg('分类排序不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }     
+        layer.confirm('确认要提交吗？',function(){ 
+            $.ajax({
+                type: 'POST',
+                url: 'editCatagory',
+                dataType: 'json',
+                data: {catagory_parent_id:10001,catagory_parent_name:catagory_parent_name,catagory_parent_orderby:catagory_parent_orderby,catagory_parent_active:catagory_parent_active,catagory_cat_id:catagory_cat_id},
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.msg(res.msg, { icon: 1, time: 1000 });
+                        setTimeout('window.location.reload();', 1000);//刷新页面        
+                    }
+                    if (res.code == 400) {
+                        layer.msg(res.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });        
+        });        
+    }        
+    // 表单提交-修改子节点
+    function catagory_cat_submit(){
+        var catagory_parent_id = $('#cat_id').val();
+        var catagory_cat_name = $('#catagory_cat_name').val();
+        var catagory_cat_orderby = $('#catagory_cat_orderby').val();
+        var catagory_cat_active = $('#catagory_cat_active option:selected').val();
+        var catagory_cat_id = $("#c_id").text();
+        console.log(catagory_cat_id);
+        if (catagory_cat_name == '') {
+            layer.msg('分类名称不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }
+        if (catagory_cat_orderby == '') {
+            layer.msg('分类排序不能为空！', { icon: 2, time: 1000 });
+            return false;
+        }
+        layer.confirm('确认要提交吗？',function(){           
+            $.ajax({
+                type: 'POST',
+                url: 'editCatagory',
+                dataType: 'json',
+                data: {catagory_parent_id:catagory_parent_id,catagory_cat_name:catagory_cat_name,catagory_cat_orderby:catagory_cat_orderby,catagory_cat_active:catagory_cat_active,catagory_cat_id:catagory_cat_id},
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.msg(res.msg, { icon: 1, time: 1000 });
+                        setTimeout('window.location.reload();', 1000);//刷新页面        
+                    }
+                    if (res.code == 400) {
+                        layer.msg(res.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });        
+        });        
+    } 
+    // 表单提交-删除父节点
+    function parent_del(){
+        var catagory_cat_id = $("#f_id").text();
+        var showMessage = '确定要删除吗？';
+        layer.confirm(showMessage,function(index){        
+            $.ajax({
+                type: 'POST',
+                url: 'delParent',
+                dataType: 'json',
+                data: {catagory_cat_id:catagory_cat_id},
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.msg(res.msg, { icon: 1, time: 1000 });
+                        setTimeout('window.location.reload();', 1000);//刷新页面        
+                    }
+                    if (res.code == 400) {
+                        layer.msg(res.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });         
+        });         
+    }
+    // 表单提交-删除子节点
+    function cat_del(){
+        var catagory_cat_id = $("#c_id").text();
+        var showMessage = '确定要删除吗？';
+        layer.confirm(showMessage,function(index){
+            $.ajax({
+                type: 'POST',
+                url: 'delCat',
+                dataType: 'json',
+                data: {catagory_cat_id:catagory_cat_id},
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.msg(res.msg, { icon: 1, time: 1000 });
+                        setTimeout('window.location.reload();', 1000);//刷新页面        
+                    }
+                    if (res.code == 400) {
+                        layer.msg(res.msg, { icon: 2, time: 1000 });
+                    }
+                },
+                error: function () {
+                    layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+                },
+            });
+        });     
+    }
+// 上传小程序分类图片
+$(function(){
+    $list = $("#fileList"),
+    $btn = $("#btn-star"),
+    state = "pending",
+    uploader;
+
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: '__ROOT__/public/static/lib/webuploader/0.1.5/Uploader.swf',
+    
+        // 文件接收服务端。
+        server: 'addPic',
+    
+        // 选择文件的按钮。可选。
+        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+        // pick: '#filePicker',
+        pick: {
+                id: '#filePicker',
+                multiple:false, 
+                // label: '点击选择图片'
+            },
+        fileNumLimit: 1,
+        // fileSizeLimit: '200',
+        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+        resize: false,
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+    uploader.on( 'fileQueued', function( file ) {
+        var $li = $(
+            '<div id="' + file.id + '" class="item">' +
+                '<div class="pic-box"><img></div>'+
+                '<div class="info">' + file.name + '</div>' +
+                '<p class="state">等待上传...</p>'+
+            '</div>'
+        ),
+        $img = $li.find('img');
+        $list.append( $li );
+    
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+    
+            $img.attr( 'src', src );
+        }, 150, 100 );
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on( 'uploadProgress', function( file, percentage ) {
+        var $li = $( '#'+file.id ),
+            $percent = $li.find('.progress-box .sr-only');
+    
+        // 避免重复创建
+        if ( !$percent.length ) {
+            $percent = $('<div class="progress-box"><span class="progress-bar radius"><span class="sr-only" style="width:0%"></span></span></div>').appendTo( $li ).find('.sr-only');
+        }
+        $li.find(".state").text("上传中");
+        $percent.css( 'width', percentage * 100 + '%' );
+    });
+    
+    // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+    uploader.on( 'uploadSuccess', function( file ) {
+        $( '#'+file.id ).addClass('upload-state-success').find(".state").text("已上传");
+    });
+    
+    // 文件上传失败，显示上传出错。
+    uploader.on( 'uploadError', function( file ) {
+        $( '#'+file.id ).addClass('upload-state-error').find(".state").text("上传出错");
+    });
+    
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on( 'uploadComplete', function( file ) {
+        $( '#'+file.id ).find('.progress-box').fadeOut();
+    });
+    uploader.on('all', function (type) {
+        if (type === 'startUpload') {
+            state = 'uploading';
+        } else if (type === 'stopUpload') {
+            state = 'paused';
+        } else if (type === 'uploadFinished') {
+            state = 'done';
+        }
+
+        if (state === 'uploading') {
+            $btn.text('暂停上传');
+        } else {
+            $btn.text('开始上传');
+        }
+    });
+
+    $btn.on('click', function () {
+        if (state === 'uploading') {
+            uploader.stop();
+        } else {
+            uploader.upload();
+        }
+    });
+});    
+</script>
+</body>
+</html>

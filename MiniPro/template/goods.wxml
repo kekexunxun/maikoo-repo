@@ -1,0 +1,22 @@
+<template name="goods">
+  <view class='goods goods-bottom-line' bindtap='navToGoods' data-goodsid='{{goods_id}}'>
+    <view class='goods-left'>
+      <image src='{{goods_img}}'></image>
+    </view>
+    <view class='goods-middle'>
+      <view class='goods-title text-overflow'>{{goods_name}}</view>
+      <view class='goods-keywords text-overflow'>{{keywords}}</view>
+      <view class='goods-spec text-overflow'>
+        <text>{{unit}}</text>
+      </view>
+      <view class='goods-price text-overflow'>￥{{shop_price}}
+        <text>￥{{market_price}}</text>
+      </view>
+    </view>
+    <view class='goods-right'>
+      <view class='goods-right-image' catchtap='addToCart' data-goodsid="{{goods_id}}">
+        <image src='/images/icon-plus.png'></image>
+      </view>
+    </view>
+  </view>
+</template>

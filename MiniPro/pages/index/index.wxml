@@ -1,0 +1,106 @@
+<import src="/template/goods.wxml" />
+
+<view class="container">
+  <!-- header -->
+  <view class='header'>
+    <view class='location'>
+      <view class='image-view location-left'>
+        <image class="icon-image" src='/images/icon-location-white.png'></image>
+      </view>
+      <view class='location-middle'>{{userLocation}}</view>
+      <view class='image-view location-right'>
+        <image class="icon-image" src='/images/icon-arrow-right-green.png'></image>
+      </view>
+    </view>
+    <view class='search'>
+      <form report-submit='true' bindsubmit='navToSearch'>
+        <button form-type='submit'>
+          <view class='search-in-button'>
+            <view class='image-view'>
+              <image class='icon-image' src='/images/icon-search-index.png'></image>
+            </view>
+            <view class='search-text'>30分钟极速达</view>
+          </view>
+        </button>
+      </form>
+    </view>
+  </view>
+  <!-- banner -->
+  <view class='banner'>
+    <swiper autoplay="true" duration="1000">
+      <block wx:for="{{bannerList}}" wx:key="img_id">
+        <swiper-item>
+          <image class='banner-image' src='{{item.img_src}}' data-idx='{{index}}' bindtap='bannerNav'></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!-- cat -->
+  <view class='cat'>
+    <block wx:for="{{catList}}" wx:key="cat_id">
+      <view class='cat-item' bindtap='navToCat' data-catid="{{item.cat_id}}">
+        <image src='{{item.img}}'></image>
+        <text>{{item.cname}}</text>
+      </view>
+    </block>
+  </view>
+  <!-- today-count -->
+  <view class='today-count'>
+    <view class='count-title'>
+      <view class='count-title-style'>
+        <view>{{topColumn.column_name}}</view>
+        <view class='image-view' bindtap='navToColumn' data-colid='{{topColumn.column_id}}'>
+          <image class='icon-image' src='/images/icon-arrow-right-round.png'></image>
+        </view>
+      </view>
+    </view>
+    <view class='count-content'>
+      <scroll-view class="recommend_scroll_x_box" scroll-x="true">
+        <view class="recommend_hot_box" wx:for="{{topColumn.goods}}" wx:key="">
+          <image src="{{item.goods_img}}" class="recommend_hot_image" bindtap="navToGoods" data-goodsid="{{item.goods_id}}"></image>
+          <view class="scroll-title text-overflow">{{item.goods_name}}</view>
+          <view class="scroll-price">{{item.shop_price}}</view>
+          <view class="scroll-btn">
+            <form report-submit='true' bindsubmit='addToCart' data-goodsid="{{item.goods_id}}">
+              <button form-type='submit'>
+                <view class='btn-content'>
+                  <image src='/images/icon-plus.png'></image>
+                  <text>购物车</text>
+                </view>
+              </button>
+            </form>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+  <!-- section -->
+  <block wx:for="{{columnList}}" wx:key="column_id">
+    <view class='section'>
+      <view class='sec-banner' bindtap='navToColumn' data-colid='{{item.column_id}}'>
+        <image src='{{item.column_img}}'></image>
+      </view>
+      <view class='sec-content'>
+        <block wx:for="{{item.goods}}" wx:key="goods_id">
+          <template is="goods" data="{{...item}}" />
+        </block>
+      </view>
+      <view class='sec-all'>
+        <view class='sec-all-content' bindtap='navToColumn' data-colid='{{item.column_id}}'>
+          <view>
+            <text>查看全部</text>
+          </view>
+          <view class='image-view'>
+            <image src='/images/icon-arrow-right-666.png'></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+<!-- 自定义遮罩层 -->
+<view class='modal' bindtouchmove='preventTouchMove' wx:if="{{modalShow}}"></view>
+<view class='modal-container' wx:if="{{modalShow}}">
+  <image class='modal-img' src='{{layerImg}}' bindtap='layerNav'></image>
+  <image class='modal-close' src='/images/icon-close.png' bindtap='closeLayer'></image>
+</view>

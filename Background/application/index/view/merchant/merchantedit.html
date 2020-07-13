@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datapond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="__ROOT__/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <link href="__ROOT__/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+    	.add_border{
+    		border-bottom: 1px solid #eff2f7;
+    		height:15px;
+    	}
+    	.fileupload .thumbnail {
+		    overflow: hidden;
+		    display: inline-block;
+		    margin-bottom: 5px;
+		    vertical-align: middle;
+		    text-align: center;
+		}
+		.thumbnail {
+		    display: block;
+		    padding: 4px;
+		    margin-bottom: 20px;
+		    line-height: 1.42857143;
+		    background-color: #fff;
+		    border: 1px solid #ddd;
+		    border-radius: 4px;
+		    -webkit-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.fileupload-preview {
+		    width: 400px;
+		    display: block;
+		    color: #666;
+		}
+		.fileupload-preview img{
+			width:100%;
+			height:100%;
+		}
+		.fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
+		    display: none;
+		}
+    	.fileupload .btn {
+		    vertical-align: middle;
+		    line-height: 18px;
+		    margin-left: 0px;
+		}
+		.btn-file {
+		    overflow: hidden;
+		    position: relative;
+		    vertical-align: middle;
+		}
+    	.fa {
+		    display: inline-block;
+		    font-family: FontAwesome;
+		    font-style: normal;
+		    font-weight: normal;
+		    line-height: 1;
+		    -webkit-font-smoothing: antialiased;
+		    -moz-osx-font-smoothing: grayscale;
+		}
+		.btn-file>input{
+			position: absolute;
+		    top: 0;
+		    right: 0;
+		    margin: 0;
+		    opacity: 0;
+		    filter: alpha(opacity=0);
+		    transform: translate(-300px, 0) scale(4);
+		    font-size: 23px;
+		    direction: ltr;
+		    cursor: pointer;
+		}
+		.btn {
+		    display: inline-block;
+		    margin-bottom: 0;
+		    font-weight: 400;
+		    text-align: center;
+		    vertical-align: middle;
+		    cursor: pointer;
+		    background-image: none;
+		    border: 1px solid transparent;
+		    white-space: nowrap;
+		    padding: 6px 12px;
+		    font-size: 14px;
+		    line-height: 1.42857143;
+		    border-radius: 4px;
+		    -webkit-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+		.add_margin{
+			margin-left:15px;
+		}
+    </style>
+    <title>编辑商家资料</title>
+</head>
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商家管理 <span class="c-gray en">&gt;</span> 编辑商家资料 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container add">
+        <form action="/index/merchant/uploadimage" method="post" class="form form-horizontal" id="form-merchant-edit" enctype="multipart/form-data">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">商家名称：</label>
+                <div class="formControls col-xs-6 col-sm-6">
+                     <input value="{$data.mch_name}" style="width: 300px" type="text" class="input-text" id="mch_name" name="mch_name"/>
+                </div>
+            </div>
+            <div class="add_border"></div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">商家申请证书资质：</label>
+                <div class="formControls col-xs-6 col-sm-6">
+                <div class="fileupload fileupload-new add_margin" data-provides="fileupload" style="width: 34%;float: left;">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img src="{$image[0]}" alt="" style="width:100%;height:100%;"/>
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="line-height: 20px;"></div>
+                    <div style="width:197px;">
+                        <span class="btn btn-default btn-file">
+	                       	<span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+	                       	<span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+	                       	<input type="file" class="default" name="image_one" value="{$image[0]}" />
+                        </span>
+                        {notempty name="$image[0]"}
+                        <a href="{$image[0]}"  class="btn btn-success" target="_blank" style="margin:0px 2px;">
+                        	新窗口预览
+                        </a>
+                        {/notempty}
+                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">
+                        	<i class="fa fa-trash"></i>
+                        	清除
+                        </a>
+                    </div>
+                </div>
+                <div class="fileupload fileupload-new add_margin" data-provides="fileupload" style="width: 34%;float: left;">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img src="{$image[1]}" alt="" style="width:100%;height:100%;"/>
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="line-height: 20px;"></div>
+                    <div style="width:197px;">
+                        <span class="btn btn-default btn-file">
+	                       	<span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+	                       	<span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+	                       	<input type="file" class="default" name="image_two" value="{$image[0]}" />
+                        </span>
+                        {notempty name="$image[1]"}
+                        <a href="{$image[1]}"  class="btn btn-success" target="_blank" style="margin:0px 2px;">
+                        	新窗口预览
+                        </a>
+                        {/notempty}
+                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">
+                        	<i class="fa fa-trash"></i>
+                        	清除
+                        </a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="add_border"></div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button style="margin-left: 20px;background-color:#A444BB;color:#fff;" class="btn btn-default radius" type="submit">
+                    	&nbsp;&nbsp;提交&nbsp;&nbsp;
+                    </button>
+                </div>
+            </div>            
+        </form>    
+    </div>
+	<footer class="footer mt-20">   
+	    <div class="container">
+	    <p>Powered By 福建麦口信息科技有限公司</p>
+	    </div>
+	</footer>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+<script type="text/javascript">
+	$("#form-merchant-edit").validate({
+        rules: {
+        	mch_name: {
+        		required: true,
+        		maxlength: 30,
+          	},
+        },
+    	onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			layer.confirm('确定修改吗?',function(){
+				$(form).ajaxSubmit({
+					type : 'POST',
+					url  : '/index/merchant/uploadimage/idx/{$data.idx}',
+					typeData : 'JSON',
+					success : function (result){
+						if( result.code < 400 ){
+							layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+								window.parent.location.href = window.parent.location.href;
+							});
+						}else{
+							layer.alert(result.msg);
+						}
+					},
+					error : function(){
+						layer.alert('请求失败!');
+					}
+				});
+			});
+		}
+    });
+</script>

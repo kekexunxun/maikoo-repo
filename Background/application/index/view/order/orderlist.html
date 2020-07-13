@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datapond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+        table{
+            table-layout: fixed;
+            word-wrap: break-spaces;
+        }
+        .text{
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        #ordertable td{
+            text-align: center;
+        }
+        .Hui-iconfont{
+            font-size: 15px;
+        }
+    </style>
+    <title>订单管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>订单管理 <span class="c-gray en">&gt;</span> 订单管理<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a href="javascript:;" class="btn btn-warning radius" onClick="order_unpay()" ><i class="Hui-iconfont">&#xe606;</i> 未付款</a>   <a href="javascript:;" onClick="order_undeliver()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe608;</i> 待发货</a> <a href="javascript:;" onClick="order_deliver()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe669;</i> 已发货</a> <a href="javascript:;" onClick="order_unevaluate()" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe647;</i> 待评价</a> <a href="javascript:;" onClick="order_success()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe6a7;</i> 已完成</a> <a href="javascript:;" onClick="order_cancel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6a6;</i> 已取消</a> <a style="margin-left: 20px;" href="javascript:;" onClick="order_download()" class="btn btn-success radius"><i class="Hui-iconfont">&#xe641;</i> 表格下载</a>
+    </span> <span class="r" style="margin-top:5px;">共有：<strong class="datalength"></strong> 条数据</span> </div>
+  <form action="" method="post" id="dataform">
+    <div class="mt-20">
+        <table style="margin-top: 20px;" id="ordertable" class="table table-border table-bordered table-bg table-hover table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="30">ID</th>
+                <th width="60">订单编号</th>
+                <th width="60">店铺名称</th>
+                <th width="100">用户信息</th>
+    <!--             <th width="60">用户电话</th>
+                <th width="100">用户地址</th>
+                <th width="60">用户留言</th>   --> 
+                <!-- <th width="50">商品数量与价格</th> -->
+                <th width="100">订单详情</th>
+                <th width="70">订单时间</th>
+                <th width="50">状态</th>
+                <th width="50">操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+  </form>
+</div>
+
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content radius">
+            <div class="modal-header">
+                <h3 class="modal-title">选择时间</h3>
+                <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+            </div>
+            <div class="modal-body">
+                <!-- <p>对话框内容…</p> -->
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <div class="datepicker"> 日期范围：
+                        <input type="text" name="countTimestart" id="countTimestart" onfocus="selecttime(1)" value="" size="31" readonly="" style="font-size: 14px;height: 30px;line-height: 1.42857;border: solid 1px #ddd; text-align: center;">
+                        -
+                        <input type="text" name="countTimeend" id="countTimeend" onfocus="selecttime(2)" value="" size="31" readonly="" style="font-size: 14px;height: 30px;line-height: 1.42857;border: solid 1px #ddd; text-align: center;">
+                        <!-- <button class="btn btn-success" id="search"><i class="Hui-iconfont"></i> 搜索</button> -->
+                    </div>
+                </div>
+                <div class="link" style="margin-top: 20px;margin-left: 45%;"></div>                    
+            </div>
+            <div class="modal-footer">
+                <button id="confirm" class="btn btn-primary">确定</button>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+    <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+<!-- <script type="text/javascript" src="__ROOT__/static/js/catagory.js"></script> -->
+<script type="text/javascript">
+// 初始化表格
+$(document).ready(function() {
+    $('#ordertable').DataTable({
+        language: {
+        "sProcessing": "处理中...",
+        "sLengthMenu": "显示 _MENU_ 项结果",
+        "sZeroRecords": "没有匹配结果",
+        "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+        "sInfoPostFix": "",
+        "sSearch": "从当前数据中检索： ",
+        "sUrl": "",
+        "sEmptyTable": "表中数据为空",
+        "sLoadingRecords": "载入中...",
+        "sInfoThousands": ",",
+        "oPaginate": {
+            "sFirst": "首页",
+            "sPrevious": "上页",
+            "sNext": "下页",
+            "sLast": "末页"
+        },
+        "oAria": {
+            "sSortAscending": ": 以升序排列此列",
+            "sSortDescending": ": 以降序排列此列"
+        }
+    },
+        "processing": true,//刷新的那个对话框
+        "serverSide": true,//服务器端获取数据
+        // "bLengthChange": false,//去掉每页显示多少条数据方法
+        "paging": true,//开启分页
+        "lengthMenu": [ //自定义分页长度
+           [ 10 ],
+           [ '10' ]   
+        ],
+        "ajax": ({
+              "type": "POST",
+              "url": "getOrderData",
+              //默认为data,这里定义为空，则只需要传不带属性的数据
+              // "data": "",
+              //这是从服务器接受的数据（名称、格式）
+              // "dataSrc": "",
+              // "success": function(res){
+              //   //绑定table数据
+              //   // $('#ordertable').dataTable().fnAddData(res);                         
+              //  // 数据条数
+              //   $(".datalength").html(res.data.length);
+              //   return res;       
+              // },
+               // "dataType" : "json",
+               // "dataFilter": function (res){ //json是服务器端返回的数据
+               //      console.log(res);
+                   // res = JSON.parse(res);
+                   //  // console.log(res);
+                   // var returnData = {};
+                   // returnData.draw = res.draw;
+                   // returnData.recordsTotal = res.recordsTotal;//返回数据全部记录
+                   // returnData.recordsFiltered = res.recordsFiltered;//后台不实现过滤功能，每次查询均视作全部结果
+                   // // console.log(res.data);
+                   // returnData.data = res.data;//返回的数据列表
+                   // console.log(JSON.stringify(returnData));
+                   // return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+               //     return res; 
+               // }
+          }),
+
+        "columns": [
+            { "data": "order_id" },
+            { "data": "order_sn" },
+            {"data": "mch_name" },
+            {"data": "username",
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (row){
+                        default:
+                        return  showUserInfo(row);
+                        break;                        
+                    }
+                }             
+            },           
+            { "data":  "goods_name",
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (row){
+                        default:
+                        return  showOrderDetail(row);
+                        break;                        
+                    }
+                }
+            },
+            {"data": "created_at",
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (row){
+                        default:
+                        return  showTime(row);
+                        break;                        
+                    }
+                }
+            },    
+            { "className": "td-status",
+            "data": "status" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    switch (data) {
+                        case '1': 
+                        return '<span class="label label-defaunt radius">未付款</span>'; 
+                        break;
+                        case '2': 
+                        return '<span class="label label-success radius onClick="orderstart(this,'+data+')"">待发货</span>'; 
+                        break;                                                 
+                        case '3': 
+                        return '<span class="label label-success radius">已发货</span>'; 
+                        break;                         
+                        case '4': 
+                        return '<span class="label label-defaunt radius">待评价</span>'; 
+                        break;
+                        case '5': 
+                        return '<span class="label label-defaunt radius">已完成</span>'; 
+                        break;
+                        case '6': 
+                        return '<span class="label label-defaunt radius">已取消</span>'; 
+                        break;                           
+                    }
+                }
+            },
+            {   "className": "td-manage",
+                "data": "order_id" ,
+            "render": function (data, type, row, meta) {
+                    //类型："" 暂无
+                    return '<a style="text-decoration:none" onClick="order_update('+data+');" href="javascript:;" title="编辑" class="ml-5"><i class="Hui-iconfont">&#xe6df;</i></a>  <a style="text-decoration:none" onClick="order_del(this,'+data+');" href="javascript:;" title="删除" class="ml-5"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+                }
+            }            
+        ]
+    });
+})
+// 显示用户信息的方法
+function showUserInfo(row){
+    // console.log(row);
+    return '<p>用户名称：￥'+row.username +'</p>'+'<p>用户电话：￥'+row.phone+'</p>'+'<p>用户地址：￥'+ row.address +'</p>'+'<p>用户留言：￥'+row.message+'</p>';     
+}
+// 显示订单详情的方法
+function showOrderDetail(row){
+    // console.log(row);
+    return '<p>商品名称：￥'+row.goods_name +'</p>'+'<p>商品数量：￥'+row.quantity+'</p>'+'<p>商品单价：￥'+ row.fee +'</p>'+'<p>订单总价：￥'+row.total_fee+'</p>';     
+}
+// 显示时间的方法
+function showTime(row){
+    // console.log(row);
+    return '<p>订单生产时间：￥'+row.created_at +'</p>'+'<p>订单付款时间：￥'+row.pay_at+'</p>'+'<p>订单完成时间：￥'+ row.finish_at +'</p>'+'<p>订单取消时间：￥'+row.cancel_at+'</p>';     
+}
+// 代付款 
+function order_unpay(){
+    ajaxData(1);
+}
+// 待发货
+function order_undeliver(){
+    ajaxData(2);
+}
+// 已发货
+function order_deliver(){
+    ajaxData(3);
+}
+// 待评价
+function order_unevaluate(){
+    ajaxData(4);
+}
+// 已完成
+function order_success(){
+    ajaxData(5);
+}
+// 已取消
+function order_cancel(){
+    ajaxData(6);
+}
+// 请求数据
+function ajaxData(data){
+    // 发送ajax请求数据
+    $.ajax({
+        data:{num:data},
+        datatype: "POST",
+        url: "getOrderStat",
+        success:function(res){
+            if(res.code == 0){
+                $('#ordertable').dataTable().fnClearTable();   //将数据清除
+                $('#ordertable').dataTable().fnAddData(res.data); //重新绑定table数据                       
+            }
+            if(res.code == 400){
+                layer.msg(res.msg,{icon:2,time:1300}); 
+            }
+        },
+        error: function(){
+            layer.msg('错误，请稍后重试!',{icon:2,time:1300});
+        }
+    });    
+}
+// 点击下载
+function order_download(){
+   // 显示模态框
+    $("#modal-demo").modal("show");
+}
+// 设置时间选择器的时间范围
+function selecttime(flag){
+    var myDate = new Date();    
+    var year = myDate.getFullYear();   //获取完整的年份(4位,1970-????)
+    var month = myDate.getMonth()+1;   //获取当前月份(1-12)
+    var day = myDate.getDate();        //获取当前日(1-31)
+    //获取完整年月日
+    var newDay = year + "-" + month + "-" + day;
+    var minDate = year + "-" + (month-6) + "-" + day;
+    if(flag==1){
+        var endTime = $("#countTimeend").val();
+        if(!endTime){
+            WdatePicker({dateFmt:'yyyy-MM-dd', maxDate: newDay, minDate: minDate})
+        }else{
+            WdatePicker({dateFmt:'yyyy-MM-dd', maxDate: endTime, minDate: minDate})
+        }
+    }else{
+        var startTime = $("#countTimestart").val();
+        if(startTime != "" || !startTime){
+            WdatePicker({dateFmt:'yyyy-MM-dd', minDate: minDate, maxDate: newDay})
+        }else{
+            WdatePicker({dateFmt:'yyyy-MM-dd', minDate: minDate, maxDate: newDay})
+        }
+    }
+}
+// 点击确定
+$('#confirm').click(function(){
+    if ($('#countTimestart').val() == "" || $('#countTimeend').val() == "") {
+        layer.msg('请选择时间！',{icon:2,time:1000});
+        return;
+    }else{
+        // 当前选择的时间
+        var countTimestart =  $('#countTimestart').val();
+        var countTimeend =  $('#countTimeend').val();
+        $(".link").html('');
+        // 发送ajax请求数据
+        $.ajax({
+            data:{ startTime: countTimestart,endTime:countTimeend},
+            datatype: "POST",
+            url: "downloadExcel",
+            success:function(res){
+                // layer.msg('下载中>>>',{icon:2,time:1300});
+                // console.log(res);
+                if(res.code == 0){
+                    //$("#modal-demo").modal("hide");
+                    var a = $('<a id="alink" href="'+res.data+'" style="font-size:20px;">点击下载</a> ');
+                    a.appendTo($(".link"));
+                    $("#confirm").hide();
+                    // var Timer = setTimeout(function(){
+                    //     $("#alink").trigger();
+                    // },1000);
+                    layer.msg(res.msg,{icon:2,time:1000});
+                }
+                // if(res.code == 400){
+                //     layer.msg(res.msg,{icon:2,time:1000});
+                // }
+
+            },
+            error: function(){
+                layer.msg('错误，请稍后重试!',{icon:2,time:1300});
+            }
+        });        
+    }
+});
+</script>
+</body>
+</html>

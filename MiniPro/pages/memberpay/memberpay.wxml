@@ -1,0 +1,13 @@
+<view clas="container">
+
+  <!-- 顶部展示会员卡 -->
+
+  <!-- 展示购买说明 -->
+
+  <!-- 购买按钮 -->
+  <view class='member-pay'>
+    <form report-submit='true' bindsubmit='memberPay'>
+      <button type='primary' form-type='submit'>成为会员</button>
+    </form>
+  </view>
+</view>

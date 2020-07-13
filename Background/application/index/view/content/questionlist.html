@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>问答管理</title> 
+    <style>
+    .Hui-iconfont{
+        font-size: 15px;
+    }
+    </style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 内容管理<span class="c-gray en">&gt;</span> 问答管理 </nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="javascript:;" onclick="questionAdd()" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i>
+                添加问答
+            </a>
+        </span>
+        <span class="r">
+            共有数据：
+            <strong>{:sizeof($data)}</strong>
+            条
+        </span>
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="30">ID</th>
+                <th width="50">问题</th>
+                <th width="50">回答</th>
+                <th width="50">创建时间</th>
+                <th width="50">更新时间</th>
+                <th width="50">状态</th>
+                <th width="50">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if condition="sizeof($data) == 0"}
+            {else /}
+            {foreach name="$data" key="k" item="v"}
+            <tr class="text-c">
+                <td>{$v.question_id}</td>  
+                <td>{$v.question}</td> 
+                <td>{$v.answer}</td>
+                <td>{$v.created_at}</td>
+                <td>{$v.update_at}</td>
+                <td class="td-status">
+                {if condition="$v.status eq 0"}
+                <span class="label label-defaunt radius" title="启用" onClick="questionServerChange(this,'{$v.question_id}','{$v.status}');" style="cursor: pointer;">未上线</span>
+                {else/}
+                <span class="label label-success radius" title="停用" onClick="questionServerChange(this,'{$v.question_id}','{$v.status}');" style="cursor: pointer;">已上线</span>
+                {/if}
+                </td>
+                <td class="td-manage">
+                    <a style="text-decoration:none"  href="javascript:;" onclick="questionEdit('{$v.question_id}')" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a style="text-decoration:none"  href="javascript:;" onclick="questionDelete(this,'{$v.question_id}')" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            {/foreach}
+            {/if}
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+    <p>Powered By 福建麦口信息科技有限公司</p>  
+    </div>
+</footer>
+</body>
+</html>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/laypage/laypage.js"></script>
+<script type="text/javascript">
+/*改变问答状态*/
+function questionServerChange(obj,question_id,status)
+{
+    var str = '';
+    if( status == 0 ){
+        str = '确认要启用吗?';
+    }else{
+        str = '确认要关闭吗?';
+    }
+    layer.confirm(str,function(index){
+        var data = {'question_id':question_id,'status':status};
+        $.ajax({
+            type : 'POST',
+            url  : '/index/content/questionchange',
+            data : data,
+            typeData : 'JSON',
+            success : function (result){
+                if( result.code < 400 ){
+                    var el = '';
+                    if( status == 0 ){
+                        status = 1;
+                        el = '<span class="label label-success radius" title="停用" onClick="questionServerChange(this,'+question_id+','+status+');" style="cursor: pointer;">已上线</span>';
+                    }else{
+                        status = 0;
+                        el = '<span class="label label-defaunt radius" title="启用" onClick="questionServerChange(this,'+question_id+','+status+');" style="cursor: pointer;">未上线</span>';
+                    }
+                    $(obj).parent().html(el);
+                    layer.msg(result.msg,{icon:1,time:1000});
+                }else{
+                    layer.alert(result.msg,{icon:2});
+                }
+            },
+            error : function(){
+                layer.alert('请求失败!',{icon:2});
+            }
+        });
+    });
+}
+/*问答删除*/
+function questionDelete(obj,question_id)
+{
+    layer.confirm('确认要删除吗？',function(index){
+        var data = {'question_id':question_id};
+        $.ajax({
+            type : 'POST',
+            url  : '/index/content/questiondelete',
+            data : data,
+            typeData : 'JSON',
+            success : function (result){
+                if( result.code < 400 ){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                }else{
+                    layer.alert(result.msg);
+                }
+            },
+            error : function(){
+                layer.alert('请求失败!');
+            }
+        });
+    });
+}
+/*添加问答*/
+function questionAdd(){
+    var index = layer.open({
+        type: 2,
+        title: '添加问答',
+        content: '/index/content/questionadd',
+        end: function(){
+            location.replace(location.href);
+        }
+    });
+    layer.full(index);
+}
+/*编辑问答*/
+function questionEdit(question_id)
+{
+    var index = layer.open({
+        type: 2,
+        title: '问答编辑',
+        content: '/index/content/questionedit/question_id/'+question_id,
+        end: function(){
+            location.replace(location.href);
+        }
+    });
+    layer.full(index);
+}
+$(function(){
+    $('.table-sort').dataTable({
+        language: {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "从当前数据中检索： ",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        },
+        "aaSorting": [[ 0, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            {"orderable":false,"aTargets":[]}// 制定列不参与排序
+        ]
+    });
+});
+</script>>

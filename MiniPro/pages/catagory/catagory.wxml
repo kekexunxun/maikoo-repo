@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="left_tabbar">
+    <scroll-view scroll-y="true" style="height:{{deviceHeight}}px;" class="left_tabbar_list">
+      <view bindtap="changeTab" data-index="{{index}}" class="left_tabbar_item {{activeIndex==index?'active':''}}" wx:for="{{catList}}" wx:key="cat_id">{{item.cname}}</view>
+    </scroll-view>
+  </view>
+  <view class="right_content">
+    <!-- AD 广告位 -->
+    <view class='ad'>
+      <image src='{{ad}}'></image>
+    </view>
+    <!-- 具体分类 -->
+    <view class='cat' wx:if="{{catList[activeIndex].list.length > 0}}">
+      <block wx:for="{{catList[activeIndex].list}}" wx:key="cat_id">
+        <view class='cat-item' bindtap='navToCat' data-catname="{{item.cname}}" data-catid="{{item.cat_id}}">
+          <image src='{{item.img}}'></image>
+          <text>{{item.cname}}</text>
+        </view>
+      </block>
+    </view>
+    <view class='nothing' wx:else>当前分类暂时没有其它选项</view>
+  </view>
+</view>

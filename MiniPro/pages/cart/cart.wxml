@@ -1,0 +1,54 @@
+<view class="container" wx:if="{{cartList.length > 0}}">
+  <view class='logi-fee-content' wx:if="{{logiFreeFeeOff >= 0}}">
+    <view class='logi-fee-text'>满￥{{logiFreeFee}}免配送费，还差￥{{logiFreeFeeOff}} <text class='logi-text' bindtap='navToIndex'>去凑单</text></view>
+  </view>
+  <block wx:for="{{cartList}}" wx:key="">
+    <view class='goods' bindtap='navToGoods' data-goodsid="{{item.goodsid}}">
+      <view class='goods-right'>
+        <view class='goods-right-image' bindtap='chooseGoods' data-idx="{{index}}">
+          <image src="{{item.select ? iconSelect : iconNotSelect}}"></image>
+        </view>
+      </view>
+      <view class='goods-left'>
+        <image src='{{item.goods_img}}'></image>
+      </view>
+      <view class='goods-middle'>
+        <view class='goods-title text-overflow'>{{item.goods_name}}</view>
+        <view class='goods-keywords text-overflow'>{{item.keywords}}</view>
+        <view class='goods-spec text-overflow'>
+          <text>{{item.unit}}</text>
+        </view>
+        <view class='goods-count'>
+          <view class='goods-price text-overflow'>
+            ￥{{item.shop_price}}
+            <text>￥{{item.market_price}}</text>
+          </view>
+          <view class='goods-num'>
+            <view class='goods-num-content'>
+              <image src='/images/icon-num-plus.png' bindtap='quantityPlus' data-idx='{{index}}'></image>
+              <input bindblur='quantityChange' data-idx='{{index}}' value='{{item.quantity}}'></input>
+              <image src='/images/icon-num-sub.png' bindtap='quantitySub' data-idx='{{index}}'></image>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class='bottom-btn'>
+    <view class='all-select-image' bindtap='selectAll'>
+      <image src="{{isAllSelect ? iconSelect : iconNotSelect}}"></image>
+    </view>
+    <view class='btn-text'>
+      全选
+    </view>
+    <view class='bottom-price'>合计：
+      <text>￥{{totalFee}}</text>
+    </view>
+    <view class='pay-btn'>
+      <button bindtap='navToBuy'>去下单</button>
+    </view>
+  </view>
+</view>
+<view class='nothing' wx:else>
+  <text>购物车为空</text>
+</view>

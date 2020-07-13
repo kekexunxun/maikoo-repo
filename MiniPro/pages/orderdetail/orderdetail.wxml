@@ -1,0 +1,96 @@
+<view class="container">
+  <!-- 订单详情 -->
+  <view class='order-info'>
+    <!-- 顶部绿色 bar -->
+    <view class='top-bar'></view>
+    <!-- 订单状态 -->
+    <view class='order-state'>
+      <view class='order-state-img'>
+        <image src='/images/icon-order-state.png'></image>
+      </view>
+    </view>
+    <view class="state-text">
+      订单已取消
+    </view>
+    <view class="state-text-spec">
+      10分钟内未支付的订单将自动取消
+    </view>
+    <view class="state-btn">
+      <button open-type="contact">客服</button>
+      <!-- <form report-submit='true' bindsubmit=''>
+        <button form-type='submit' class='one-more-btn'>再来一单</button>
+      </form> -->
+    </view>
+  </view>
+
+  <!-- 订单商品 -->
+  <view class='order-goods'>
+    <view class='order-goods-title'>商品信息</view>
+    <block wx:for="{{orderInfo.detail}}" wx:key="goods_id">
+      <view class='order-goods-detail'>
+        <view class='order-goods-image'>
+          <image src='{{item.goods_img}}'></image>
+        </view>
+        <view class='order-goods-info'>
+          <view class='order-goods-line'>
+            <view class='order-goods-first-left'>{{item.goods_name}}</view>
+            <view class='order-goods-first-right'>￥{{item.fee}}</view>
+          </view>
+          <view class='order-goods-line'>
+            <view class='order-goods-first-left'></view>
+            <view class='order-goods-first-right'>
+              <text>x {{item.quantity}}</text>
+            </view>
+          </view>  
+        </view>
+      </view>
+    </block>
+    <view class='order-goods-logi'>
+      <view class='logi-left'>配送费</view>
+      <view class='logi-right'>￥{{orderInfo.logi_fee}}</view>
+    </view>
+    <view class='order-goods-count'>合计
+      <text>￥{{orderInfo.total_fee}}</text>
+    </view>
+  </view>
+
+  <!-- 配送信息 -->
+  <view class='order-detail'>
+    <view class='detail-title'>配送信息</view>
+    <view class='detail-item border-bottom'>
+      <view class='detail-item-left'>配送时间：</view>
+      <view class='detail-item-right'>{{orderInfo.delivery}}</view>
+    </view>
+    <view class='detail-item border-bottom'>
+      <view class='detail-item-left'>收货人员：</view>
+      <view class='detail-item-right'>{{orderInfo.username}} {{orderInfo.phone}}</view>
+    </view>
+    <view class='detail-item'>
+      <view class='detail-item-left'>收货地址：</view>
+      <view class='detail-item-right'>{{orderInfo.address}}</view>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class='order-detail'>
+    <view class='detail-title'>订单详情</view>
+    <view class='detail-item border-bottom'>
+      <view class='detail-item-left'>订单编号：</view>
+      <view class='detail-item-right detail-item-spec'>
+        <text>{{orderInfo.order_sn}}</text>
+        <form report-submit='true' bindsubmit='copyOrdersn' data-ordersn='{{orderInfo.order_sn}}'>
+          <button form-type='submit'>复制</button>
+        </form>
+      </view>
+    </view>
+    <view class='detail-item border-bottom'>
+      <view class='detail-item-left'>支付方式：</view>
+      <view class='detail-item-right'>微信支付</view>
+    </view>
+    <view class='detail-item'>
+      <view class='detail-item-left'>下单时间：</view>
+      <view class='detail-item-right'>{{orderInfo.created_at}}</view>
+    </view>
+  </view>
+
+</view>

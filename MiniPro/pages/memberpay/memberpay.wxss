@@ -1,0 +1,12 @@
+.member-pay {
+  display: flex;
+  flex-direction: column;
+  margin-top: 180rpx;
+}
+
+.member-pay button {
+  width: 80%;
+  line-height: 90rpx;
+  font-size: 28rpx;
+  color: #fff;
+}

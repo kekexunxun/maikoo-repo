@@ -1,0 +1,11 @@
+<view class="container" wx:if="{{questionList.length > 0}}">
+  <block wx:for="{{questionList}}" wx:key="question_id">
+    <view class='question-item'>
+      <view class='item-title'>Q{{index + 1}}：{{item.question}}</view>
+      <view class='item-content'>{{item.answer}}</view>
+    </view>
+  </block>
+</view>
+<view class='nothing' wx:else>
+  敬请期待...
+</view>

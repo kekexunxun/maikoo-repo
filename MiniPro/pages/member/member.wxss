@@ -1,0 +1,117 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 会员版块 */
+
+.mem-sec {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  margin-bottom: 15rpx;
+}
+
+.mem-sec-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 96%;
+  padding: 20rpx 2%;
+  height: 200rpx;
+}
+
+.mem-sec-banner image {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 5px;
+}
+
+/* mem-sec-count x-scorll */
+
+.recommend_scroll_x_box {
+  height: 260rpx;
+  white-space: nowrap;
+  display: flex;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.recommend_hot_box:first-child {
+  margin-left: 24rpx;
+}
+
+.recommend_hot_box {
+  width: 160rpx;
+  margin-right: 50rpx;
+  display: inline-block;
+  line-height: 40rpx;
+}
+
+.recommend_hot_image {
+  width: 160rpx;
+  height: 160rpx;
+}
+
+.scroll-title {
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+  height: 40rpx;
+}
+
+.scroll-price {
+  font-size: 32rpx;
+  color: #ff9000;
+  text-align: center;
+  height: 40rpx;
+}
+
+.scroll-btn {
+  margin-top: 10rpx;
+  height: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.scroll-btn button {
+  display: flex;
+  flex-direction: row;
+  height: 46rpx;
+  line-height: 46rpx;
+  background-color: #17b356;
+  width: 140rpx;
+  border-radius: 20px;
+  padding: 0;
+}
+
+.btn-content {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.btn-content image {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+.btn-content text {
+  margin-left: 10rpx;
+  font-weight: 500;
+  color: #fff;
+  font-size: 22rpx;
+}
+
+/* button */
+
+button::after {
+  border: none;
+}

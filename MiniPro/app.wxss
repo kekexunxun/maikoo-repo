@@ -1,0 +1,177 @@
+/**app.wxss**/
+@import 'style/weui.wxss';
+
+page {
+  background: #f8f8f8;
+}
+
+.container{
+  box-sizing: border-box;
+}
+
+.banner-image {
+  height: 260rpx;
+  width: 100%;
+}
+
+.text-overflow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.nothing {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 180rpx 0;
+  justify-content: space-around;
+  font-size: 34rpx;
+  color: #999;
+}
+
+/* goods */
+
+.goods {
+  display: flex;
+  flex-direction: row;
+  padding: 20rpx 0;
+  width: 100%;
+}
+
+.goods:last-child{
+  border-bottom: none;
+}
+
+.goods-bottom-line {
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+.goods-left {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.goods-left image {
+  width: 160rpx;
+  height: 160rpx;
+}
+
+.goods-middle {
+  display: flex;
+  flex-direction: column;
+  line-height: 50rpx;
+  width: 60%;
+}
+
+.goods-title {
+  color: #333;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.goods-keywords {
+  color: #999;
+  font-size: 28rpx;
+}
+
+.goods-spec {
+  display: flex;
+  align-items: center;
+  height: 50rpx;
+}
+
+.goods-spec text {
+  background: #f6f6f6;
+  color: #999;
+  font-size: 24rpx;
+  padding: 0 10rpx;
+  line-height: 40rpx;
+  height: 40rpx;
+}
+
+.goods-price {
+  color: #ff9000;
+  font-size: 34rpx;
+}
+
+.goods-price text {
+  color: #666;
+  font-size: 26rpx;
+  text-decoration: line-through;
+}
+
+.goods-right {
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.goods-right-image {
+  width: 40rpx;
+  height: 40rpx;
+  background-color: #17b356;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.goods-right-image image {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+/* section */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15rpx;
+  background-color: #fff;
+  width: 100%;
+  padding-bottom: 20rpx;
+}
+
+.sec-banner {
+  height: 220rpx;
+  width: 96%;
+  padding: 10rpx 2%;
+  display: flex;
+  align-items: center;
+}
+
+.sec-banner image {
+  width: 100%;
+  height: 220rpx;
+  border-radius: 10px;
+}
+
+.sec-content {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.sec-all {
+  display: flex;
+  align-items: center;
+}
+
+.sec-all-content {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  line-height: 60rpx;
+  font-size: 30rpx;
+  color: #666;
+}
+
+.sec-all-content image {
+  width: 35rpx;
+  height: 35rpx;
+}

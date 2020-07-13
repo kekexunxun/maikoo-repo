@@ -1,0 +1,180 @@
+/* 重写部分weui */
+
+page, .page, .page__bd {
+  height: 100%;
+}
+
+.page__bd {
+  padding-bottom: 0;
+}
+
+.weui-tab__content {
+  text-align: center;
+}
+
+.weui-navbar{
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+.weui-navbar__slider {
+  height: 4rpx;
+}
+
+.weui-navbar__item {
+  padding: 20rpx;
+}
+
+.weui-navbar__title {
+  font-size: 28rpx;
+}
+
+.weui-navbar {
+  background: #fff;
+}
+
+/* order-item */
+
+.container, .order-item, .order-goods {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-item {
+  background: #fff;
+  margin: 0 2% 15rpx 2%;
+  border-radius: 8px;
+}
+
+.order-item-title, .goods-item {
+  display: flex;
+  flex-direction: row;
+  line-height: 80rpx;
+}
+
+.order-item-title {
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.3);
+}
+
+.order-item-title .wait-pay{
+  color: #ff9000;
+}
+
+.order-item-title-left {
+  width: 90%;
+  font-size: 30rpx;
+  color: #666;
+  text-align: left;
+  padding-left: 3%;
+  align-items: baseline;
+}
+
+.order-item-title-left text {
+  font-size: 24rpx;
+  margin-left: 20rpx;
+  color: #333;
+}
+
+.order-item-title-right {
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.order-item-title-right image {
+  height: 60rpx;
+  width: 60rpx;
+}
+
+.goods-item {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 60rpx;
+  padding: 10rpx 0;
+}
+
+.goods-item-left {
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.goods-item-middle {
+  width: 70%;
+  text-align: left;
+  padding-left: 5rpx;
+}
+
+.goods-item-right {
+  width: 15%;
+  text-align: right;
+  padding-right: 3%;
+}
+
+.goods-item-left image {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 5px;
+}
+
+.goods-item-right text {
+  margin-left: 10rpx;
+}
+
+/* order-count */
+
+.order-count {
+  display: flex;
+  flex-direction: row-reverse;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.3);
+}
+
+.order-count-item {
+  padding-right: 3%;
+  line-height: 60rpx;
+  color: #666;
+  font-size: 24rpx;
+  display: flex;
+  align-items: baseline;
+}
+
+.order-count text {
+  color: #333;
+  font-size: 30rpx;
+}
+
+/* 按钮 */
+
+.order-btn {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 80rpx;
+}
+
+.order-btn button {
+  margin: 15rpx 5px;
+  border-radius: 20px;
+  line-height: 50rpx;
+  font-size: 24rpx;
+  padding: 0 20rpx;
+  background: #fff;
+}
+
+button::after{
+  border: none;
+}
+
+/* .btn-detail{
+  border: 
+} */
+
+.btn-pay{
+  border: 1rpx solid #ff9000;
+  color: #ff9000;
+}
+
+.btn-default{
+  border: 1rpx solid #d0d0d0;
+  color: #3e4244;
+}
