@@ -1,0 +1,36 @@
+.logo-img {
+  margin-top: 150rpx;
+}
+
+.logo-img image {
+  width: 400rpx;
+}
+
+.a-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 60rpx;
+  margin-left: 150rpx;
+}
+
+.a-title {
+  font-size: 32rpx;
+  color: #2d2922;
+}
+
+.a-detail {
+  font-size: 26rpx;
+  color: #989898;
+}
+
+.default-btn {
+  margin-top: 80rpx;
+}
+
+.s-text{
+  margin-top: 40rpx;
+  font-size: 30rpx;
+  color: #2d2922;
+  line-height: 60rpx;
+  text-align: center;
+}

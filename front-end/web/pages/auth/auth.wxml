@@ -1,0 +1,32 @@
+<view class="container">
+  <block wx:if="{{authFlag}}">
+    <!-- Image -->
+    <view class='logo-img img-ctn'>
+      <image src='/images/logo_with_slogan.png' mode='widthFix'></image>
+    </view>
+    <!-- Text -->
+    <view class='a-text'>
+      <view class='a-title'>该小程序将获取一下权限：</view>
+      <view class='a-detail'>· 获得您的公开信息（昵称、头像等）</view>
+    </view>
+    <!-- Btn -->
+    <view class='default-btn default-bg'>
+      <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" lang="zh_CN">微信授权登录</button>
+    </view>
+  </block>
+  <block wx:else>
+    <!-- Image -->
+    <view class='logo-img img-ctn'>
+      <image src='/images/icon_set.png' mode='widthFix'></image>
+    </view>
+    <!-- Text -->
+    <view class='s-text'>需要在设置里开启“使用我的用户信息”才可以使用哦</view>
+    <!-- Btn -->
+    <view class='default-btn default-bg'>
+      <button bindtap='showSetting'>设置</button>
+    </view>
+  </block>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

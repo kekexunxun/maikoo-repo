@@ -1,0 +1,46 @@
+<view class="container">
+  <!-- Menu -->
+  <view class='nav-menu display-row'>
+    <block wx:for="{{group}}" wx:key="">
+      <view class="display-row nav-menu-item formControl" bindtap='groupChange' data-idx='{{index}}'>
+        <view class="formControl">
+          <view class="nav-menu-item-text {{gIndex == index ? 'active' : ''}}">{{item.name}}</view>
+          <view class='red-dot' wx:if="{{item.spot}}"></view>
+        </view>
+        <view class="border-line" wx:if="{{gIndex == index}}"></view>
+      </view>
+    </block>
+  </view>
+  <!-- List -->
+  <view class='list'>
+    <block wx:if="{{groupList[gIndex].list.length > 0}}">
+      <block wx:for="{{groupList[gIndex].list}}" wx:key="apply_id">
+        <view class='list-item display-row' bindtap='navToMemDetail' data-applyid='{{item.apply_id}}'>
+          <view class='item-left img-ctn'>
+            <image src="{{item.user_avatar_url}}"></image>
+          </view>
+          <view class='item-right display-col'>
+            <view class='line1 display-row'>
+              <view class='u-name'>{{item.user_name}}</view>
+              <view class='g-name'>{{item.group_name}}</view>
+            </view>
+            <view class='u-comp'>{{item.user_company}}</view>
+            <view class='line1 display-row'>
+              <view class='apply-at'>时间：{{item.apply_at}}</view>
+              <view wx:if="{{item.review_status == '已驳回'}}" class="c-status reject">已驳回</view>
+              <view wx:if="{{item.review_status == '已通过'}}" class="c-status approve">已通过</view>
+              <view wx:if="{{item.review_status == '待审核'}}" class="c-status pending">待审核</view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <view class='no-fav'>您还没有{{group[gIndex].name}}下需要审核的数据</view>
+    </block>
+
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

@@ -1,0 +1,121 @@
+<view class="container">
+  <!-- Top User Info -->
+  <view class='user-detail-container'>
+    <view class='user-detail formControl display-row'>
+      <view class='user-avatar img-ctn formControl'>
+        <image src="{{userInfo.user_avatar_url}}"></image>
+        <image class='u-gender' src="{{userInfo.user_gender == 'MALE' ? '/images/icon_male.png' : '/images/icon_female.png'}}"></image>
+      </view>
+      <view class='user-info display-col'>
+        <view class='user-name display-row'>
+          <text>{{userInfo.user_name}}</text>
+          <text class='gap-both-3'>|</text>
+          <text>{{userInfo.user_position}}</text>
+        </view>
+        <text class='user-comp'>{{userInfo.user_company}}</text>
+      </view>
+      <view class='action-area img-ctn' wx:if="{{action == 'detail' && !userInfo.is_self}}">
+        <image src="{{userInfo.is_fav ? '/images/icon_fav.png' : '/images/btn_favorite.png'}}" bindtap="{{userInfo.is_fav ? 'unFav' : 'fav'}}"></image>
+      </view>
+    </view>
+  </view>
+  <!-- User More -->
+  <view class='more-title display-row'>
+    <view class='title-line'></view>
+    <text>个人信息</text>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'COUNTRY'}}">
+    <view class='more-left'>同乡名称</view>
+    <view class='more-middle'>{{userInfo.group_name}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'SCHOOL' || userInfo.group_type == 'CLASS'}}">
+    <view class='more-left'>学校名称</view>
+    <view class='more-middle'>{{userInfo.school_name}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'CLASS'}}">
+    <view class='more-left'>班级名称</view>
+    <view class='more-middle'>{{userInfo.class_name}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'COMMUNITY'}}">
+    <view class='more-left'>社区名称</view>
+    <view class='more-middle'>{{userInfo.community_name}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'COUNTRY'}}">
+    <view class='more-left'>年龄段</view>
+    <view class='more-middle'>{{userInfo.user_tag}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'SCHOOL' && userInfo.user_type == '学生'}}">
+    <view class='more-left'>毕业时间</view>
+    <view class='more-middle'>{{userInfo.user_graduate_at}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'COMMUNITY'}}">
+    <view class='more-left'>楼号</view>
+    <view class='more-middle'>{{userInfo.user_building}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type == 'COMMUNITY'}}">
+    <view class='more-left'>房号</view>
+    <view class='more-middle'>{{userInfo.user_room}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row' wx:if="{{userInfo.group_type != 'COUNTRY'}}">
+    <view class='more-left'>身份</view>
+    <view class='more-middle'>{{userInfo.user_type}}</view>
+    <view class='more-right img-ctn'></view>
+  </view>
+  <view class='more-item display-row'>
+    <view class='more-left'>手机号码</view>
+    <view class='more-middle'>{{userInfo.user_mobile}}</view>
+    <view class='more-right img-ctn' bindtap='makePhoneCall'>
+      <image src='/images/btn_dial.png'></image>
+    </view>
+  </view>
+  <!-- User Brief -->
+  <view class='more-title display-row brief-title'>
+    <view class='title-line'></view>
+    <text>个人简介</text>
+  </view>
+  <view class='brief-text'>{{userInfo.user_brief}}</view>
+  <!-- Approve Btn -->
+  <view class='btn-container' wx:if="{{action == 'approve' && userInfo.review_status == 'PENDING'}}">
+    <view class='default-btn default-bg'>
+      <form report-submit='true' bindsubmit='approve'>
+        <button form-type='submit'>通过</button>
+      </form>
+    </view>
+    <view class='cancel-btn'>
+      <form report-submit='true' bindsubmit='reject'>
+        <button form-type='submit'>驳回</button>
+      </form>
+    </view>
+  </view>
+  <!-- Apply Reject Btn -->
+  <view class='btn-container' wx:if="{{action == 'apply' && userInfo.review_status == 'REJECT'}}">
+    <view class='default-btn reject-btn'>
+      <button>已驳回</button>
+    </view>
+  </view>
+  <!-- Apply Pending Btn -->
+  <view class='btn-container' wx:if="{{action == 'apply' && userInfo.review_status == 'PENDING'}}">
+    <view class='default-btn default-bg'>
+      <button>待审核</button>
+    </view>
+  </view>
+  <!-- Update Btn -->
+  <view class='btn-container' wx:if="{{action == 'detail' && userInfo.is_self}}">
+    <view class='default-btn default-bg'>
+      <form report-submit='true' bindsubmit='update'>
+        <button form-type='submit'>修改信息</button>
+      </form>
+    </view>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="{{toastCancel}}" title="{{toastTitle}}"></c-modal>

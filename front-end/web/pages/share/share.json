@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "邀请卡",
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

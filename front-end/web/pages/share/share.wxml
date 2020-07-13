@@ -1,0 +1,79 @@
+<view class="container">
+  <view class="modal-container" style="height: {{modalHeight}}px">
+    <view class='qyml-form formControl' style="height: {{formHeight}}px">
+      <!-- Nav Bar -->
+      <view class='nav-bar'>
+        <view class='line'></view>
+        <view class='text'>/ 邀请卡 /</view>
+        <view class='line'></view>
+      </view>
+      <!-- Group Info -->
+      <!-- Avatar -->
+      <view class='g-avatar img-ctn'>
+        <image src="{{siteroot + groupInfo.group_avatar_url}}"></image>
+      </view>
+      <!-- G-name -->
+      <view class='g-name display-row'>{{groupInfo.group_name}}</view>
+      <!-- G-tag -->
+      <view class='g-tag display-row'>
+        <view class='tag default-bg display-row' wx:if="{{gtype == 0}}">同乡群</view>
+        <view class="tag default-bg display-row {{gtype == 2 ? 'gap-right' : ''}}" wx:if="{{gtype == 1 || gtype == 2}}">{{groupInfo.group_school_name}}</view>
+        <view class='tag default-bg display-row' wx:if="{{gtype == 2}}">{{groupInfo.group_class_name}}</view>
+        <view class='tag default-bg display-row' wx:if="{{gtype == 3}}">{{groupInfo.group_community_name}}</view>
+      </view>
+      <!-- Location & Brief -->
+      <view class='g-loc-bri'>
+        <view class='g-brief display-row'>
+          <view class='g-brief-left display-row'>
+            <view class='g-brief-left-line'></view>
+            <view>简介：</view>
+          </view>
+          <view class='g-brief-right'>{{groupInfo.group_brief}}</view>
+        </view>
+        <view class='g-brief display-row'>
+          <view class='g-brief-left display-row'>
+            <view class='g-brief-left-line'></view>
+            <view>地区：</view>
+          </view>
+          <view class='g-brief-right'>{{groupInfo.group_address}}</view>
+        </view>
+      </view>
+      <!-- QRCode -->
+      <view class="{{action == 'poster' ? 'g-qrcode img-ctn' : 'share-container display-col'}} ">
+        <block wx:if="{{action == 'poster'}}">
+          <image src="{{siteroot + qrcode}}"></image>
+        </block>
+        <block wx:if="{{action == 'into'}}">
+          <view class='btn-ctn display-row'>
+            <form report-submit='true' bindsubmit='navToIndex'>
+              <button class='cancel-btn' form-type='submit'>进入首页</button>
+            </form>
+            <form report-submit='true' bindsubmit='navToDetail'>
+              <button class='default-bg' form-type='submit'>{{hasApplied ? '查看申请' : '查看详情'}}</button>
+            </form>
+          </view>
+        </block>
+        <block wx:if="{{action == 'share'}}">
+          <span>邀请好友加入</span>
+          <view class='btn-ctn display-row'>
+            <form report-submit='true' bindsubmit='cancel'>
+              <button class='cancel-btn' form-type='submit'>取消</button>
+            </form>
+            <form>
+              <button open-type='share' class='default-bg'>分享</button>
+            </form>
+          </view>
+        </block>
+      </view>
+      <!-- Share Btn -->
+      <view class='s-btn default-bg' wx:if="{{action == 'poster'}}">
+        <form report-submit='true' bindsubmit='savePhoto'>
+          <button form-type='submit'>保存到相册</button>
+        </form>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

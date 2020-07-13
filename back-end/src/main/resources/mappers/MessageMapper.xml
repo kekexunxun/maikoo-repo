@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.MessageDao">
+    <resultMap id="messageResultMap" type="MessageDO">
+        <result property="msgId" column="msg_id" />
+        <result property="msgContent" column="msg_content" />
+        <result property="msgTitle" column="msg_title" />
+        <result property="sendTo" column="send_to" />
+        <result property="sentAt" column="sent_at" />
+    </resultMap>
+
+    <select id="selectByIds" resultMap="messageResultMap">
+        SELECT
+               msg_id,
+               msg_content,
+               msg_title,
+               send_to,
+               sent_at
+        FROM
+             comm_msg
+        WHERE
+            msg_id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+          ORDER BY msg_id DESC
+    </select>
+
+    <insert id="createMessage">
+        insert into comm_msg (msg_content, msg_title, send_to, sent_at) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.msgContent},#{item.msgTitle},#{item.sendTo},UNIX_TIMESTAMP(NOW()))
+        </foreach>
+    </insert>
+
+</mapper>

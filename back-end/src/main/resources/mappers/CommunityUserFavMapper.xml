@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.CommunityUserFavDao">
+    <resultMap id="communityUserFavResultMap" type="CommunityUserFavDO">
+        <result property="idx" column="idx" />
+        <result property="userId" column="user_id" />
+        <result property="createdAt" column="created_at" />
+
+        <association property="communityUserDO" resultMap="com.maikoo.businessdirectory.dao.CommunityUserDao.communityUserResultMap" columnPrefix="community_user_" />
+    </resultMap>
+
+    <select id="selectByIds" resultMap="communityUserFavResultMap">
+        SELECT
+            cuf.idx AS idx,
+            u.user_id AS community_user_user_user_id,
+            cu.name AS community_user_name,
+            u.avatar_url AS community_user_user_avatar_url,
+            cg.group_name AS community_user_community_group_group_name,
+            cg.group_id AS community_user_community_group_group_id,
+            cu.company AS community_user_company,
+            cuf.created_at AS created_at
+        FROM
+            grtu_community_user_fav cuf
+            JOIN grtu_community_user cu ON cuf.community_user_idx = cu.idx
+            JOIN gr_community_group cg ON cu.group_id = cg.group_id
+            JOIN u_user u ON cu.user_id = u.user_id
+        WHERE
+            cuf.idx IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+</mapper>

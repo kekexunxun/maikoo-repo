@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.AddressDao">
+    <resultMap id="addressResultMap" type="AddressDO">
+        <result property="addrId" column="addr_id" />
+        <result property="addrName" column="addr_name"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="addrCode" column="addr_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,28 @@
+<view class="container">
+  <!-- Menu -->
+  <view class='nav-menu display-row'>
+    <block wx:for="{{group}}" wx:key="">
+      <view class="display-row nav-menu-item" bindtap='groupChange' data-idx='{{index}}'>
+        <text class="{{gIndex == index ? 'active' : ''}}">{{item}}</text>
+        <view class="border-line" wx:if="{{gIndex == index}}"></view>
+      </view>
+    </block>
+  </view>
+  <!-- Menu End -->
+  <!-- Img -->
+  <swiper style="height: {{imgCtnHeight}}px" bindchange="swiperChange" current="{{gIndex}}">
+    <block wx:for="{{groupImgArr}}" wx:key="">
+      <swiper-item>
+        <image src="{{item}}"></image>
+      </swiper-item>
+    </block>
+  </swiper>
+  <!-- Img End -->
+  <!-- Create Btn -->
+  <view class='default-btn default-bg'>
+    <form report-submit='true' bindsubmit='createGroup'>
+      <button form-type='submit'>开始创建</button>
+    </form>
+  </view>
+  <!-- Create Btn End -->
+</view>

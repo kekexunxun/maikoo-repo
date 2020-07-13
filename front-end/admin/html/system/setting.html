@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>小程序设置</title>
+</head>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span>
+        小程序设置 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <form action="" method="post" class="form form-horizontal" id="form-system-setting">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">小程序名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text text-center fifth-width" value="" placeholder="请输入小程序名称" id="mini_name" name="mini_name" maxlength="15">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">小程序分享时的文字：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text text-center fifth-width" value="" placeholder="请输入小程序分享时的文字" id="share_text" name="share_text" maxlength="20">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">腾讯地理位置接口开发密钥：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text text-center fifth-width" value="" placeholder="若不清楚则点击下方链接进行申请" id="lbs_key" name="lbs_key" maxlength="50">
+                    <div class="lbs-key"><a href="https://lbs.qq.com/">腾讯位置服务JSAPI申请地址</a></div>
+                </div>
+            </div>
+            <div class="row cl submit-btn">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <a onclick="saveSetting()" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</a>
+                    <button class="btn btn-default radius" type="reset">&nbsp;&nbsp;重置&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../static/qyml/js/validate.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/qyml/js/request.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<script type="text/javascript">
+    // 获取相关数据
+    request('/admin/api/setting', {}, 400).then(res => {
+        $('#mini_name').val(res.data.mini_name);
+        $('#share_text').val(res.data.share_text);
+        $('#lbs_key').val(res.data.lbs_key);
+    }).catch(error => {
+        console.log(error);
+        layer.msg(error.toString(), { icon: 2, time: 1300 });
+    })
+
+    // 修改设置
+    function saveSetting() {
+        var flag = $("#form-system-setting").valid();
+        if (!flag) {
+            layer.msg('信息不完整，请检查后重试', { icon: 2, time: 1300 });
+            return;
+        }
+        layer.confirm('您确定要提交并保存吗？', function () {
+            request('/admin/api/setting/common', {
+                miniName: $('#mini_name').val(),
+                shareText: $('#share_text').val(),
+                LBSKey: $('#lbs_key').val()
+            }, 400).then(res => {
+                layer.msg('更新成功', { icon: 1, time: 1300 });
+                setTimeout(() => {
+                    location.replace(location.href);
+                }, 1300)
+            }).catch(error => {
+                console.log(error);
+                layer.msg(error.toString(), { icon: 2, time: 1300 });
+            })
+        })
+    }
+</script>
+
+</html>

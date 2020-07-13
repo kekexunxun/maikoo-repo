@@ -1,0 +1,154 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"autoAudits": false,
+		"uglifyFileName": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.1.0",
+	"appid": "wx0340cb3798eeffc5",
+	"projectname": "qyml",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 14,
+			"list": [
+				{
+					"id": 0,
+					"name": "创建群",
+					"pathName": "pages/gcreate/gcreate",
+					"query": "gIdx=1"
+				},
+				{
+					"id": 1,
+					"name": "申请信息填写页面1",
+					"pathName": "pages/ginfofirst/ginfofirst",
+					"query": "gname=张三&gid=10&gtype=0"
+				},
+				{
+					"id": 2,
+					"name": "申请信息填写页面2",
+					"pathName": "pages/ginfosec/ginfosec",
+					"query": "gtype=0&gid=10"
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/my/my",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的群",
+					"pathName": "pages/group/group",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "群设置",
+					"pathName": "pages/gsetting/gsetting",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "权限设置",
+					"pathName": "pages/gauth/gauth",
+					"query": ""
+				},
+				{
+					"id": 7,
+					"name": "会员详情",
+					"pathName": "pages/memdetail/memdetail",
+					"query": "action=apply&applyid=14&gtype=0"
+				},
+				{
+					"id": 8,
+					"name": "我的收藏",
+					"pathName": "pages/fav/fav",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的审核",
+					"pathName": "pages/approve/approve",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "意见反馈",
+					"pathName": "pages/feedback/feedback",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的消息",
+					"pathName": "pages/msg/msg",
+					"query": ""
+				},
+				{
+					"id": 12,
+					"name": "群详情",
+					"pathName": "pages/gdetail/gdetail",
+					"query": "gid=15&gtype=COUNTRY"
+				},
+				{
+					"id": 13,
+					"name": "群详情（分享进入）",
+					"pathName": "pages/gdetails/gdetails",
+					"query": "gid=15&gtype=0"
+				},
+				{
+					"id": 14,
+					"name": "分享",
+					"pathName": "pages/share/share",
+					"query": "gid=11&gtype=2&action=into"
+				},
+				{
+					"id": -1,
+					"name": "进入设置",
+					"pathName": "pages/setting/setting",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "用户授权",
+					"pathName": "pages/auth/auth",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的申请",
+					"pathName": "pages/apply/apply",
+					"query": ""
+				}
+			]
+		}
+	}
+}

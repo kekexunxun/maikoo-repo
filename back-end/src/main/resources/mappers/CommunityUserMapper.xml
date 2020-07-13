@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.CommunityUserDao">
+    <resultMap id="communityUserResultMap" type="CommunityUserDO">
+        <result property="idx" column="idx"  />
+        <result property="name" column="name"  />
+        <result property="gender" column="gender"  />
+        <result property="type" column="type"  />
+        <result property="mobile" column="mobile"  />
+        <result property="company" column="company"  />
+        <result property="position" column="position"  />
+        <result property="brief" column="brief"  />
+        <result property="status" column="status"  />
+        <result property="communityName" column="community_name"  />
+        <result property="building" column="building"  />
+        <result property="room" column="room"  />
+        <result property="joinedAt" column="joined_at"  />
+        <result property="quitedAt" column="quited_at"  />
+
+        <association property="userDO" resultMap="com.maikoo.businessdirectory.dao.UserDao.userResultMap" columnPrefix="user_" />
+        <association property="communityGroupDO" resultMap="com.maikoo.businessdirectory.dao.CommunityGroupDao.communityGroupResultMap" columnPrefix="community_group_" />
+        <association property="processedRemoveCommunityUserDO" resultMap="communityUserResultMap" columnPrefix="processed_remove_community_user_" />
+    </resultMap>
+
+    <select id="selectByGroupIdAndUserId" resultMap="communityUserResultMap">
+        SELECT
+            cu.idx AS idx,
+            u.user_id AS user_user_id,
+            u.avatar_url AS user_avatar_url,
+            cu.name AS `name`,
+            cu.position AS `position`,
+            cu.company AS company,
+            cu.mobile AS mobile,
+            cu.brief AS brief,
+            cu.type AS `type`,
+            cu.community_name AS community_name,
+            cu.building AS building,
+            cu.room AS room,
+            cg.group_name AS community_group_group_name,
+            cg.user_id as community_group_user_user_id
+        FROM
+            grtu_community_user cu
+            JOIN gr_community_group cg ON cu.group_id = cg.group_id
+            JOIN u_user u ON cu.user_id = u.user_id
+        WHERE
+            cu.status = 1
+            AND cu.group_id = #{groupId}
+            AND cu.user_id = #{userId}
+    </select>
+
+    <select id="selectByIds" resultMap="communityUserResultMap">
+        SELECT
+        u.user_id AS user_user_id,
+        u.avatar_url AS user_avatar_url,
+        cg.user_id AS community_group_user_user_id,
+        cu.name AS name
+        FROM
+        grtu_community_user cu
+        JOIN gr_community_group cg ON cu.group_id = cg.group_id
+        JOIN u_user u ON cu.user_id = u.user_id
+        WHERE
+        cu.idx IN
+        <foreach item="id" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectInformationByIds" resultMap="communityUserResultMap">
+        SELECT
+        u.user_id AS user_user_id,
+        u.avatar_url AS user_avatar_url,
+        cu.position AS `position`,
+        cu.company AS company,
+        cu.room as room ,
+        cu.type,
+        cu.building as building ,
+        cg.user_id AS community_group_user_user_id,
+        cu.name AS name
+        FROM
+        grtu_community_user cu
+        JOIN gr_community_group cg ON cu.group_id = cg.group_id
+        JOIN u_user u ON cu.user_id = u.user_id
+        WHERE
+        cu.idx IN
+        <foreach item="id" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="selectUserInformationListByGroupId" resultMap="communityUserResultMap">
+       SELECT
+            uu.user_id AS user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcu.NAME AS NAME,
+            gcu.position AS position,
+            gcu.company AS company,
+            gcu.joined_at AS joined_at,
+            gcu.type AS type,
+            gcu.`status` AS STATUS,
+            gcg.user_id AS community_group_user_user_id
+        FROM
+            grtu_community_user gcu
+            LEFT JOIN u_user uu ON uu.user_id = gcu.user_id
+            LEFT JOIN gr_community_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.joined_at = ( SELECT max( joined_at ) FROM grtu_community_user gsu WHERE gcu.user_id = gsu.user_id AND gsu.group_id=#{groupId} )
+            AND gcu.group_id = #{groupId}
+        ORDER BY
+            gcu.user_id
+    </select>
+
+    <select id="selectUserListInfoExportExcel" resultMap="communityUserResultMap">
+        SELECT
+            gcu.user_id AS user_user_id,
+            gcu.`name`,
+            gcu.gender,
+            gcu.mobile,
+            gcu.company,
+            gcu.position,
+            gcu.brief,
+            gcu.joined_at,
+            gcu.quited_at,
+            gcu.`status`,
+            gcu.type,
+            gcu.community_name,
+            gcu.building,
+            gcu.room,
+            gcg.user_id AS community_group_user_user_id,
+            gcg.group_name AS community_group_group_name
+        FROM
+            grtu_community_user gcu
+            LEFT JOIN gr_community_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.joined_at = (SELECT	max( joined_at ) FROM	grtu_community_user gsu WHERE	gcu.user_id = gsu.user_id 	AND gsu.group_id = #{groupId})
+            AND gcu.group_id = #{groupId}
+        ORDER BY
+            gcu.user_id
+    </select>
+
+    <select id="userInfoAdmin" resultMap="communityUserResultMap">
+        SELECT
+            uu.user_id as user_user_id,
+            gcu.`name`,
+            gcu.gender,
+            gcg.user_id AS community_group_user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcu.mobile,
+            gcu.company,
+            gcu.position,
+            gcu.community_name,
+            gcu.brief,
+            gcu.type,
+            gcu.building,
+            gcu.room,
+            gcu.`status`,
+            gcu.joined_at,
+            gcu.quited_at
+        FROM
+            grtu_community_user gcu
+            LEFT JOIN u_user uu ON uu.user_id = gcu.user_id
+            LEFT JOIN gr_community_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.user_id = #{userId}
+            AND gcu.group_id =#{groupId}
+            AND gcu.joined_at=(SELECT MAX(joined_at) FROM grtu_community_user WHERE group_id = #{groupId} AND user_id = #{userId})
+    </select>
+
+    <select id="searchUserInfo" resultMap="communityUserResultMap">
+        SELECT
+            gcu.user_id AS user_user_id,
+            name,
+            uu.avatar_url AS user_avatar_url,
+            gcu.position,
+            gcu.company,
+            gcu.type,
+            gcu.building,
+            gcu.room,
+            gcg.user_id AS community_group_user_user_id
+
+        FROM
+            grtu_community_user  gcu
+            LEFT JOIN u_user uu ON uu.user_id=gcu.user_id
+            LEFT JOIN gr_community_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.group_id = #{communityGroupDO.groupId}
+            AND gcu.`status` = 1
+            AND CONCAT( gcu.mobile, gcu.NAME, gcu.position, gcu.company, gcu.brief ) LIKE  CONCAT('%',#{search},'%')
+    </select>
+
+</mapper>

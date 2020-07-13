@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.FormIdDao">
+    <resultMap id="formIdResultMap" type="FormIdDO">
+        <result property="idx" column="idx" />
+        <result property="userId" column="user_id"/>
+        <result property="formId" column="form_id"/>
+        <result property="expireAt" column="expire_at"/>
+        <result property="isUsed" column="is_used"/>
+    </resultMap>
+</mapper>

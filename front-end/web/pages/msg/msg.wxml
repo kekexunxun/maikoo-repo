@@ -1,0 +1,22 @@
+<view class="container" wx:if="{{msgList.length > 0}}">
+  <block wx:for="{{msgList}}" wx:key="">
+    <view class='msg-item'>
+      <view class='msg-title'>{{item.send_at}}</view>
+      <view class='msg-content display-col'>
+        <view class='msg-content-title display-row'>
+          <image src='/images/icon_ring.png'></image>
+          <text>{{item.msg_title}}</text>
+        </view>
+        <view class='msg-content-text'>{{item.msg_content}}</view>
+      </view>
+    </view>
+  </block>
+</view>
+<view class='container' wx:else>
+  <view class='msg-item'>
+    <view class='msg-title'>暂无消息</view>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

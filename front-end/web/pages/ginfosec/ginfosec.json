@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "信息登记",
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

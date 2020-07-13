@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="modal-container" style="height: {{modalHeight}}px">
+    <view class='qyml-form formControl' style="height: {{formHeight}}px">
+      <!-- Nav Bar -->
+      <view class='nav-bar'>
+        <view class='line'></view>
+        <view class='text'>/ {{action == 'update' ? '信息修改' : '信息登记'}} /</view>
+        <view class='line'></view>
+      </view>
+      <!-- Company Name -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>公司</view>
+        <view class='qyml-form-item-right display-row'>
+          <input placeholder='请输入您的公司名称' value='{{ucomp}}' maxlength='15' bindinput='inputCo'></input>
+        </view>
+      </view>
+      <!-- Company Position -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>职位</view>
+        <view class='qyml-form-item-right display-row'>
+          <input placeholder='请输入您的职位' value='{{upos}}' maxlength='15' bindinput='inputPos'></input>
+        </view>
+      </view>
+      <!-- User Brief -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row form-for-textarea brief-text'>个人简介</view>
+        <view class='qyml-form-item-right display-row form-for-textarea'>
+          <view class='hidden-textarea-view' wx:if="{{!toastHidden}}">{{ubrief}}</view>
+          <textarea wx:else placeholder='请输入个人简介（最多80字）' value='{{ubrief}}' maxlength='80' bindinput='inputUBrief'></textarea>
+        </view>
+      </view>
+      <!-- Confirm Btn -->
+      <view class='default-btn default-bg'>
+        <form report-submit='true' bindsubmit='confirmInfo'>
+          <button form-type='submit'>{{action == 'update' ? '确定修改' : '保存信息'}}</button>
+        </form>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" show-cancel="{{toastCancel}}" hidden="{{toastHidden}}" title="{{toastTitle}}"></c-modal>

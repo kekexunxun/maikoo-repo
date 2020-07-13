@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/my",
+    "pages/group/group",
+    "pages/gcreate/gcreate",
+    "pages/ginfofirst/ginfofirst",
+    "pages/ginfosec/ginfosec",
+    "pages/gsetting/gsetting",
+    "pages/gauth/gauth",
+    "pages/memdetail/memdetail",
+    "pages/fav/fav",
+    "pages/approve/approve",
+    "pages/feedback/feedback",
+    "pages/msg/msg",
+    "pages/gdetail/gdetail",
+    "pages/gdetails/gdetails",
+    "pages/share/share",
+    "pages/setting/setting",
+    "pages/auth/auth",
+    "pages/apply/apply",
+    "pages/gupdate/gupdate"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "首页",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#695A4066",
+    "selectedColor": "#695A40FF",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/icon_home_nor.png",
+        "selectedIconPath": "images/icon_home_pre.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/group/group",
+        "iconPath": "images/icon_group_nor.png",
+        "selectedIconPath": "images/icon_group_pre.png",
+        "text": "名录群"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "images/icon_me_nor.png",
+        "selectedIconPath": "images/icon_me_pre.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

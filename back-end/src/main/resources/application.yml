@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  servlet:
+    multipart:
+      max-file-size: 4MB
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.maikoo.businessdirectory.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 15000
+custom:
+  page-number: 1
+  per-page: 10
+  image-location: image/
+  excel-location: excel/
+  mini-app-id: wx0340cb3798eeffc5
+  mini-app-secret: 0851c4d487f5d9076929d6de9d002262
+  mini-apply-result-template-id: dIeRlwRksCnXB_QDQuBw_q3Al4bhF3bJwP_D003gvHg
+  mini-community-apply-template-id: dbhkYoWpXhiE3yi3-3534X75fb1k77iFR9CTfDuhMis
+  mini-change-owner-template-id: erK2Bg1IerdQsDejcmYU5RgTOuplEH-dMrS4dX9E_uc
+  app-id: wxf6b1434765a35ede
+  review-template-id: i_XPdD8uKyeNkugZVt1sDNsbfVUWQcpnGBLg3C9fGk0
+  dismiss-template-id: nbS3Puio2YTeUERKwZIWvm4xa6i44qmLl91BNsssgL8
+  change-owner-template-id: BgxnwguQ-KKt5V-jv-_rOlyQlcbVu2HV8tz4r1xaa_8

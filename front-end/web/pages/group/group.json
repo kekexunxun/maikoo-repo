@@ -1,0 +1,8 @@
+{
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": -50,
+  "navigationBarTitleText": "我的群",
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3306/mk_business_directory?useUnicode=true&characterEncoding=UTF-8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      pool-name: mkBusinessDirectoryPoolName
+      connectionInitSql: SET NAMES utf8mb4
+      connection-test-query: SELECT 1
+  resources:
+    static-locations: file:/Users/lianyu/www/assets
+custom:
+  upload-location: /Users/lianyu/www/assets/
+  vertical-image-location: vertical.png
+  common-poster-image-location: commonPoster.png
+  country-poster-image-location: countryPoster.png
+  base-url: http://localhost:15000

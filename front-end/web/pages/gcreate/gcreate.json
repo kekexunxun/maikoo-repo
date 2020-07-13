@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "创建名录群",
+  "usingComponents": {
+    "city-picker": "/component/city-picker/city-picker",
+    "c-modal": "/component/c-modal/modal"
+  }
+}

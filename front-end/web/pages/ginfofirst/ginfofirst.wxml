@@ -1,0 +1,116 @@
+<view class="container">
+  <view class="modal-container" style="height: {{modalHeight}}px">
+    <view class='qyml-form formControl' style="height: {{formHeight}}px">
+      <!-- Nav Bar -->
+      <view class='nav-bar'>
+        <view class='line'></view>
+        <view class='text'>/ {{action == 'update' ? '信息修改' : '信息登记'}} /</view>
+        <view class='line'></view>
+      </view>
+      <!-- Group Name -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>群名称</view>
+        <view class='qyml-form-item-right display-row'>
+          <input value="{{gname}}" disabled='disabled'></input>
+        </view>
+      </view>
+      <!-- School Name -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 1 || gtype == 2}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>学校名称</view>
+        <view class='qyml-form-item-right display-row'>
+          <input value="{{schName}}" disabled='disabled'></input>
+        </view>
+      </view>
+      <!-- ClassName Name -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 2}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>班级名称</view>
+        <view class='qyml-form-item-right display-row'>
+          <input value="{{clsName}}" disabled='disabled'></input>
+        </view>
+      </view>
+      <!-- Community Name -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 3}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>社区名称</view>
+        <view class='qyml-form-item-right display-row'>
+          <input value="{{commName}}" disabled='disabled'></input>
+        </view>
+      </view>
+      <!-- User Name -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>姓名</view>
+        <view class='qyml-form-item-right display-row'>
+          <input placeholder='请输入姓名' value="{{uname}}" maxlength='4' bindinput='inputUName'></input>
+        </view>
+      </view>
+      <!-- User Gender -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>性别</view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <input placeholder='请选择性别' value="{{ugender}}" disabled='disabled' bindtap='chooseUGender'></input>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </view>
+      <!-- User Age(TAG) -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 0}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>年龄段</view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <input placeholder='请选择年龄段' value="{{uage}}" disabled='disabled' bindtap='chooseUAge'></input>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </view>
+      <!-- User Type -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype != 0}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>身份</view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <input placeholder='请选择身份' value="{{utype}}" disabled='disabled' bindtap='chooseUType'></input>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </view>
+      <!-- Graduate At -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 1 && utype != '教师'}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>毕业时间</view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <input placeholder='请选择毕业时间' value="{{ugraduate}}" disabled='disabled' bindtap='chooseUGraduate'></input>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </view>
+      <!-- Buliding -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 3 && utype == '业主'}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>楼号</view>
+        <view class='qyml-form-item-right display-row'>
+          <input type='number' value='{{ubuilding}}' placeholder='请输入楼号' maxlength='3' bindinput='inputBuilding'></input>
+        </view>
+      </view>
+      <!-- Room -->
+      <view class='qyml-form-item display-row' wx:if="{{gtype == 3 && utype == '业主'}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>房号</view>
+        <view class='qyml-form-item-right display-row'>
+          <input type='number' value='{{uroom}}' placeholder='请输入房号' maxlength='10' bindinput='inputRoom'></input>
+        </view>
+      </view>
+      <!-- User Mobile -->
+      <view class='qyml-form-item display-row'>
+        <view class='qyml-form-item-left display-row text-left-flex'>手机号码</view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <input disabled='disabled' value="{{mobile}}"></input>
+          <button wx:if="{{action != 'update' && !mobile}}" class='mobile-text' open-type="getPhoneNumber" bindgetphonenumber="getUserPhoneNumber">自动获取</button>
+        </view>
+      </view>
+      <!-- Next Btn -->
+      <view class='default-btn default-bg'>
+        <form report-submit='true' bindsubmit='nextInfo'>
+          <button form-type='submit'>下一步</button>
+        </form>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- Form B-Modal -->
+<b-modal id='form-modal' hidden="{{formModalHidden}}" bind:itemClick="formModalClick" first="{{first}}" second="{{second}}"></b-modal>
+
+<!-- Form Picker -->
+<nor-picker id='form-picker' hidden="{{pickerHidden}}" title-text="{{pickerTitle}}" bind:confirm="pickerConfirm" columnArr="{{pickerData}}"></nor-picker>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' hidden="{{toastHidden}}" bind:itemClick="toastConfirm" show-cancel="0" title="{{toastTitle}}"></c-modal>

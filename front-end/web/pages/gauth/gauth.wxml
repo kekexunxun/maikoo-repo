@@ -1,0 +1,28 @@
+<view class="container">
+  <view class='auth-list display-col'>
+    <!-- item -->
+    <block wx:for="{{groupMem}}" wx:key="user_id">
+      <view class='auth-item display-row'>
+        <view class='user-img img-ctn'>
+          <image src="{{item.user_avatar_url}}"></image>
+        </view>
+        <view class='user-info display-row'>
+          <text class='user-name'>{{item.user_name}}</text>
+          <text class='user-grant user-admin' wx:if="{{item.mem_type == 'ADMIN'}}">管理员</text>
+          <text class='user-grant user-nor' wx:if="{{item.mem_type == 'MEMBER'}}">成员</text>
+        </view>
+        <view class='user-setting display-col'>
+          <form report-submit='true' bindsubmit='assignMem' data-uid='{{item.user_id}}'>
+            <button form-type='submit' class='be-admin default-bg' disabled="{{item.mem_type == 'ADMIN'}}">设为管理员</button>
+          </form>
+          <form report-submit='true' bindsubmit='delMem' data-uid='{{item.user_id}}' data-idx='{{index}}'>
+            <button form-type='submit' class='del-mem' disabled="{{item.mem_type == 'ADMIN'}}">删除成员</button>
+          </form>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" title="{{toastTitle}}" show-cancel="{{toastCancel}}"></c-modal>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.AppletDao">
+    <resultMap id="appletResultMap" type="AppletDO">
+        <result property="miniName" column="mini_name"></result>
+        <result property="shareText" column="share_text"></result>
+        <result property="LBSKey" column="lbs_key"></result>
+    </resultMap>
+
+</mapper>

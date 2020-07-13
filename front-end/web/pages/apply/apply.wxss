@@ -1,0 +1,119 @@
+page {
+  background: #fff;
+}
+
+.nav-menu {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1rpx solid rgba(220, 220, 220, 0.6);
+}
+
+.nav-menu-item {
+  width: 25%;
+  height: 100rpx;
+}
+
+.nav-menu-item-text {
+  font-size: 32rpx;
+  color: #b6b6b6;
+}
+
+.nav-menu .active {
+  color: #2d2922;
+}
+
+.border-line {
+  position: absolute;
+  width: 40%;
+  bottom: 0;
+  height: 4rpx;
+  background: #eccd67;
+}
+
+.red-dot {
+  position: absolute;
+  top: 0;
+  right: -15rpx;
+  height: 12rpx;
+  width: 12rpx;
+  background: #d0021b;
+  border-radius: 50%;
+}
+
+/* list */
+
+.list {
+  margin: 0 30rpx;
+}
+
+.list-item {
+  border-bottom: 1rpx solid #ececec;
+}
+
+.item-left {
+  width: 20%;
+  height: 180rpx;
+}
+
+.item-left image {
+  height: 120rpx;
+  width: 120rpx;
+  border-radius: 20px;
+}
+
+.img-ctn {
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.text-right {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.text-left {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.g-name {
+  color: #2d2922;
+  font-size: 28rpx;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.apply-at {
+  color: rgba(105, 90, 64, 0.4);
+  font-size: 26rpx;
+}
+
+.item-right {
+  width: 80%;
+  height: 180rpx;
+  margin: 10rpx 0;
+  line-height: 53rpx;
+}
+
+.c-status {
+  font-size: 26rpx;
+}
+
+.reject {
+  color: #b6b6b6;
+}
+
+.approve {
+  color: #417505;
+}
+
+.pending {
+  color: #d0021b;
+}
+
+.no-fav {
+  font-size: 32rpx;
+  color: #93928e;
+  margin-top: 350rpx;
+  text-align: center;
+}

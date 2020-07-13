@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "群详情",
+  "usingComponents": {
+    "b-modal": "/component/b-modal/modal",
+    "c-modal": "/component/c-modal/modal"
+  },
+  "enablePullDownRefresh": true
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "群信息修改",
+  "usingComponents": {
+    "city-picker": "/component/city-picker/city-picker",
+    "c-modal": "/component/c-modal/modal"
+  }
+}

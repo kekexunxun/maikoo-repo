@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的审核",
+  "onReachBottomDistance": -50,
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

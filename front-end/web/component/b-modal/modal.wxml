@@ -1,0 +1,7 @@
+<view class="modal-container animated fadeIn" catchtouchmove='_preventTouchMove' bindtap='_hideModal' wx:if="{{!hidden}}">
+  <view class='modal-section animated fadeInUp'>
+    <view class='modal-item' catchtap='itemClick' data-idx='1' wx:if="{{!isShare}}">{{first}}</view>
+    <button open-type="share" hover-class='none' class='modal-item' catchtap='itemClick' data-idx='1' wx:else>{{first}}</button>
+    <view class='modal-item' catchtap='itemClick' data-idx='2'>{{second}}</view>
+  </view>
+</view>

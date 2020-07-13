@@ -1,0 +1,15 @@
+<view class="container">
+  <!-- Image -->
+  <view class='s-img img-ctn'>
+    <image src='/images/icon_set.png'></image>
+  </view>
+  <!-- Text -->
+  <view class='s-text'>请在设置中开启「{{authName}}」</view>
+  <!-- Btn -->
+  <view class='default-btn default-bg'>
+    <button bindtap='showSetting'>设置</button>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

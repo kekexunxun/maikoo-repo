@@ -1,0 +1,29 @@
+page {
+  background: #f5f3f0;
+}
+
+.qyml-form-item {
+  padding: 0 50rpx;
+  background: #fff;
+}
+
+.arrow-img {
+  position: absolute;
+  width: 24rpx;
+  height: 24rpx;
+  right: 0;
+}
+
+.my-form {
+  margin-top: 20rpx;
+}
+
+.my-form-img {
+  width: 42rpx;
+  height: 42rpx;
+  margin-right: 22rpx;
+}
+
+.t-r {
+  color: #d0021b;
+}

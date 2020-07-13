@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.GroupDao">
+    <resultMap id="groupResultMap" type="GroupDO">
+        <result property="groupId" column="group_id" />
+        <result property="groupName" column="group_name" />
+        <result property="groupAvatarUrl" column="group_avatar_url" />
+        <result property="groupAddrCode" column="group_addr_code" />
+        <result property="groupAddrDetail" column="group_addr_detail" />
+        <result property="groupMemCount" column="group_mem_count" />
+        <result property="groupType" column="group_type" />
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="groupResultMap">
+        ( SELECT
+              cg.group_id,
+              cg.group_name,
+              cg.group_avatar_url,
+              cg.group_addr_code,
+              cg.group_addr_detail,
+              'CLASS' AS group_type,
+              COUNT( cu.idx ) AS group_mem_count
+          FROM
+              gr_class_group cg
+                  JOIN grtu_class_user gcu ON cg.group_id = gcu.group_id
+                  AND gcu.user_id = #{userId}
+                  JOIN grtu_class_user cu ON cg.group_id = cu.group_id
+          WHERE
+              cu.STATUS = 1
+              AND gcu.`status` = 1
+              AND cg.is_enable = 1
+          GROUP BY
+              cg.group_id
+        ) UNION
+        (
+            SELECT
+                sg.group_id,
+                sg.group_name,
+                sg.group_avatar_url,
+                sg.group_addr_code,
+                sg.group_addr_detail,
+                'SCHOOL' AS group_type,
+                COUNT( su.idx ) AS group_mem_count
+            FROM
+                gr_school_group sg
+                    JOIN grtu_school_user gsu ON sg.group_id = gsu.group_id
+                    AND gsu.user_id = #{userId}
+                    JOIN grtu_school_user su ON sg.group_id = su.group_id
+            WHERE
+                su.STATUS = 1
+                AND gsu.`status` = 1
+                AND sg.is_enable = 1
+            GROUP BY
+                sg.group_id
+        ) UNION
+        (
+            SELECT
+                cg.group_id,
+                cg.group_name,
+                cg.group_avatar_url,
+                cg.group_addr_code,
+                cg.group_addr_detail,
+                'COMMUNITY' AS group_type,
+                COUNT( cu.idx ) AS group_mem_count
+            FROM
+                gr_community_group cg
+                    JOIN grtu_community_user gcu ON cg.group_id = gcu.group_id
+                    AND gcu.user_id = #{userId}
+                    JOIN grtu_community_user cu ON cg.group_id = cu.group_id
+            WHERE
+                cu.STATUS = 1
+                AND gcu.`status` = 1
+                AND cg.is_enable = 1
+            GROUP BY
+                cg.group_id
+        ) UNION
+        (
+            SELECT
+                cg.group_id,
+                cg.group_name,
+                cg.group_avatar_url,
+                cg.group_addr_code,
+                cg.group_addr_detail,
+                'COUNTRY' AS group_type,
+                COUNT( cu.idx ) AS group_mem_count
+            FROM
+                gr_country_group cg
+                    JOIN grtu_country_user gcu ON cg.group_id = gcu.group_id
+                    AND gcu.user_id = #{userId}
+                    JOIN grtu_country_user cu ON cg.group_id = cu.group_id
+            WHERE
+                cu.STATUS = 1
+                AND gcu.`status` = 1
+                AND cg.is_enable = 1
+            GROUP BY
+                cg.group_id
+        )
+        LIMIT #{offset}, #{perPage}
+    </select>
+</mapper>

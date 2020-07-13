@@ -1,0 +1,58 @@
+@import "/style/animate.wxss";
+
+.modal-container {
+  position: fixed;
+  z-index: 50;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background: rgba(81, 81, 81, 0.5);
+}
+
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 12;
+  background: #fff;
+  top: 430rpx;
+  border-radius: 15px;
+  color: #2d2922;
+  width: 474rpx;
+  margin: 0 138rpx;
+}
+
+.modal-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-top: 1rpx solid #ececec;
+}
+
+.modal-item {
+  width: 50%;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 94rpx;
+  line-height: 94rpx;
+}
+
+.modal-item:first-child {
+  border-right: 1rpx solid #ececec;
+}
+
+.modal-text {
+  font-size: 28rpx;
+  align-self: center;
+  line-height: 40rpx;
+  margin: 50rpx 30rpx;
+}
+
+.resize {
+  width: 100%;
+  border-right: none !important;
+}

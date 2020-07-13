@@ -1,0 +1,37 @@
+<view class="container">
+  <!-- Menu -->
+  <view class='nav-menu display-row'>
+    <block wx:for="{{group}}" wx:key="">
+      <view class="display-row nav-menu-item" bindtap='groupChange' data-idx='{{index}}'>
+        <text class="{{gIndex == index ? 'active' : ''}}">{{item.name}}</text>
+        <view class="border-line" wx:if="{{gIndex == index}}"></view>
+      </view>
+    </block>
+  </view>
+  <!-- List -->
+  <view class='list'>
+    <block wx:if="{{groupList[gIndex].list.length > 0}}">
+      <block wx:for="{{groupList[gIndex].list}}" wx:key="user_id">
+        <view class='list-item display-row' bindtap='navToMemDetail' data-uid='{{item.user_id}}' data-gid="{{item.group_id}}">
+          <view class='item-left img-ctn'>
+            <image src="{{item.user_avatar_url}}"></image>
+          </view>
+          <view class='item-right display-col'>
+            <view class='line1 display-row'>
+              <view class='u-name'>{{item.user_name}}</view>
+              <view class='g-name'>{{item.group_name}}</view>
+            </view>
+            <view class='u-comp'>{{item.user_company}}</view>
+            <view class='apply-at'>时间：{{item.fav_at}}</view>
+          </view>
+        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <view class='no-fav'>您还没有{{group[gIndex].name}}对应收藏的用户哦</view>
+    </block>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

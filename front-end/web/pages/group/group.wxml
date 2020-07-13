@@ -1,0 +1,38 @@
+<view class="container" wx:if="{{hasGroup}}">
+  <!-- Search Bar -->
+  <view class='search-bar display-row'>
+    <image src='/images/icon_search.png'></image>
+    <input placeholder='输入要搜索的群名称' bindconfirm='searchGroup' confirm-type="搜索" bindinput="onInputSearch">
+    </input>
+  </view>
+  <!-- Group Item -->
+  <block wx:for="{{groupList}}" wx:key="">
+    <view class='group-item display-col formControl' bindtap='navToGroupDetail' data-gid='{{item.group_id}}' data-gtype='{{item.group_type}}'>
+      <image src="{{siteroot + item.group_avatar_url}}"></image>
+      <view class='group-info display-row'>
+        <view class='group-name'>{{item.group_name}}</view>
+        <view class='group-mem-count'>{{item.group_mem_count + '人'}}</view>
+      </view>
+      <view class='group-address'>{{item.group_address}}</view>
+      <view class='tag display-row default-bg' wx:if="{{item.group_type == 'COUNTRY'}}">同乡群</view>
+      <view class='tag display-row xy-tag' wx:if="{{item.group_type == 'SCHOOL'}}">校友群</view>
+      <view class='tag display-row tb-tag' wx:if="{{item.group_type == 'CLASS'}}">同班群</view>
+      <view class='tag display-row sq-tag' wx:if="{{item.group_type == 'COMMUNITY'}}">社区群</view>
+    </view>
+  </block>
+</view>
+<view class='container' wx:else>
+  <view class='no-group'>您还没有名录群哦，快去加入或创建一个吧！</view>
+</view>
+<!-- 浮动的建群标志 -->
+<view class='create-group display-col'>
+  <form report-submit='true' bindsubmit='createGroup'>
+    <button form-type='submit' class='display-col'>
+      <image src='/images/icon_add.png'></image>
+      <text>立即建群</text>
+    </button>
+  </form>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" show-cancel="{{toastCancel}}" hidden="{{toastHidden}}" title="{{toastTitle}}"></c-modal>

@@ -1,0 +1,44 @@
+<view class="container">
+  <!-- Form One -->
+  <view class='my-form'>
+    <!-- Auth Setting -->
+    <form report-submit='true' bindsubmit='updateAuth'>
+      <button class='qyml-form-item display-row' form-type='submit'>
+        <view class='qyml-form-item-left display-row text-left-flex'>
+          <text>权限设置</text>
+        </view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </button>
+    </form>
+    <!-- Group Detail -->
+    <form report-submit='true' bindsubmit='updateGroupInfo'>
+      <button class='qyml-form-item display-row' form-type='submit'>
+        <view class='qyml-form-item-left display-row text-left-flex'>
+          <text>修改群信息</text>
+        </view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </button>
+    </form>
+  </view>
+  <!-- Form Two -->
+  <view class='my-form'>
+    <form report-submit='true' bindsubmit='dismissGroup'>
+      <!-- Group Dismiss -->
+      <button class='qyml-form-item display-row' form-type='submit'>
+        <view class='qyml-form-item-left display-row text-left-flex'>
+          <text class='t-r'>解散该群</text>
+        </view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </button>
+    </form>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" show-cancel="{{toastCancel}}" hidden="{{toastHidden}}" title="{{toastTitle}}"></c-modal>

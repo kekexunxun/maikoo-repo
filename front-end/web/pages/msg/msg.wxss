@@ -1,0 +1,49 @@
+page {
+  background: #f5f3f0;
+}
+
+.msg-item {
+  margin: 0 42rpx 50rpx 42rpx;
+}
+
+.msg-item:first-child {
+  margin-top: 50rpx;
+}
+
+.msg-title {
+  color: #a5a5a5;
+  line-height: 36rpx;
+  font-size: 26rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.msg-content {
+  background: #fff;
+  border-radius: 10px;
+  padding-bottom: 20rpx;
+}
+
+.msg-content-title {
+  font-size: 30rpx;
+  color: #2d2922;
+  width: 100%;
+  justify-content: flex-start;
+  padding-left: 34rpx;
+  height: 90rpx;
+}
+
+.msg-content-title image {
+  height: 46rpx;
+  width: 46rpx;
+  margin-right: 10rpx;
+}
+
+.msg-content-text {
+  color: #acacac;
+  font-size: 26rpx;
+  width: 90%;
+  justify-content: flex-start;
+  text-indent: 2em;
+  line-height: 60rpx;
+}

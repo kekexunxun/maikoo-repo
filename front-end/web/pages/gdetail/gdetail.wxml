@@ -1,0 +1,83 @@
+<view class="container">
+  <!-- Top Group Detail -->
+  <view class='group-detail display-col formControl'>
+    <!-- Avatar -->
+    <view class='img-ctn'>
+      <image class='g-avatar' src="{{siteroot + groupInfo.group_avatar_url}}"></image>
+    </view>
+    <!-- Group name -->
+    <view class='g-name'>{{groupInfo.group_name}}</view>
+    <!-- G Setting -->
+    <view class='g-setting' wx:if="{{groupInfo.mem_type == 'ADMIN'}}" bindtap='navToGroupSetting'>∙∙∙</view>
+    <!-- G Tag -->
+    <view class='tag-container display-row'>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 0}}">同乡群</view>
+      <view class="tag default-bg display-row {{gtype == 2 ? 'gap-right' : ''}}" wx:if="{{gtype == 1 || gtype == 2}}">{{groupInfo.group_school_name}}</view>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 2}}">{{groupInfo.group_class_name}}</view>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 3}}">{{groupInfo.group_coummunity_name}}</view>
+    </view>
+    <!-- Line -->
+    <view class='line display-row'></view>
+    <!-- Brief -->
+    <view class='g-brief display-row'>
+      <view class='g-brief-left display-row'>
+        <view class='g-brief-left-line'></view>
+        <view>简介：</view>
+      </view>
+      <view class='g-brief-right'>{{groupInfo.group_brief}}</view>
+    </view>
+    <!-- Area -->
+    <view class='g-brief display-row'>
+      <view class='g-brief-left display-row'>
+        <view class='g-brief-left-line'></view>
+        <view>地区：</view>
+      </view>
+      <view class='g-brief-right'>{{groupInfo.group_address}}</view>
+    </view>
+  </view>
+  <!-- Search Bar -->
+  <view class='search-bar display-row formControl'>
+    <image src='/images/icon_search.png'></image>
+    <input placeholder='输入要搜索的成员名称' bindconfirm='searchGroupMem' confirm-type="搜索" bindinput='onInputSearch'>
+    </input>
+  </view>
+  <!-- Member List -->
+  <block wx:for="{{groupMem}}" wx:key="user_id">
+    <view class='mem-item display-row' bindtap='navToMemDetail' data-uid='{{item.user_id}}'>
+      <view class='mem-left display-row'>
+        <image src="{{item.user_avatar_url}}"></image>
+      </view>
+      <view class='mem-right'>
+        <view class='mem-right-line1 display-row'>
+          <view class='u-info display-row'>
+            <view class='u-name'>{{item.user_name}}</view>
+            <view class='u-pos' wx:if="{{gtype != 3}}">{{item.user_position}}</view>
+          </view>
+          <view class='u-admin' wx:if="{{item.mem_type == 'ADMIN'}}">管理员</view>
+          <view class='u-nor' wx:else>成员</view>
+        </view>
+        <view class='mem-right-comp' wx:if="{{gtype != 3}}">{{item.user_company}}</view>
+        <view class='mem-right-community' wx:else>
+          <block wx:if="{{item.user_type == 'MANAGER'}}">
+            物业
+          </block>
+          <block wx:else>
+            业主 楼幢号：{{item.user_building}} 房间号：{{item.user_room}}
+          </block>
+        </view>
+      </view>
+    </view>
+  </block>
+  <!-- Share Btn -->
+  <view class='share-btn'>
+    <form report-submit='true' bindsubmit='shareGroup'>
+      <button class='default-bg' form-type='submit'>邀请群友加入</button>
+    </form>
+  </view>
+</view>
+
+<!-- Modal -->
+<b-modal id='modal' bind:itemClick="shareType" hidden="{{shareHidden}}" first="分享邀请" second="生成海报"></b-modal>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" show-cancel="{{toastCancel}}" hidden="{{toastHidden}}" title="{{toastTitle}}"></c-modal>

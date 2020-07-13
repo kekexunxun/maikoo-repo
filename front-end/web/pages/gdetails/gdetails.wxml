@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- Top Group Detail -->
+  <view class='group-detail display-col formControl'>
+    <!-- Avatar -->
+    <view class='img-ctn'>
+      <image class='g-avatar' src="{{siteroot + groupInfo.group_avatar_url}}"></image>
+    </view>
+    <!-- Group name -->
+    <view class='g-name'>{{groupInfo.group_name}}</view>
+    <!-- G Tag -->
+    <view class='tag-container display-row'>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 0}}">同乡群</view>
+      <view class="tag default-bg display-row {{gtype == 2 ? 'gap-right' : ''}}" wx:if="{{gtype == 1 || gtype == 2}}">{{groupInfo.group_school_name}}</view>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 2}}">{{groupInfo.group_class_name}}</view>
+      <view class='tag default-bg display-row' wx:if="{{gtype == 3}}">{{groupInfo.group_community_name}}</view>
+    </view>
+    <!-- Line -->
+    <view class='line display-row'></view>
+    <!-- Brief -->
+    <view class='g-brief display-row'>
+      <view class='g-brief-left display-row'>
+        <view class='g-brief-left-line'></view>
+        <view>简介：</view>
+      </view>
+      <view class='g-brief-right'>{{groupInfo.group_brief}}</view>
+    </view>
+    <!-- Area -->
+    <view class='g-brief display-row'>
+      <view class='g-brief-left display-row'>
+        <view class='g-brief-left-line'></view>
+        <view>地区：</view>
+      </view>
+      <view class='g-brief-right'>{{groupInfo.group_address}}</view>
+    </view>
+  </view>
+  <!-- Member List -->
+  <view class='member-section'>
+    <!-- List Title -->
+    <view class='sec-title display-row'>
+      <view class='text'>成员列表</view>
+      <view class='mem-count'>{{groupInfo.group_mem_count}}人</view>
+    </view>
+    <!-- List Item -->
+    <view class='sec-list display-row'>
+      <block wx:for="{{groupMem}}" wx:key="user_id">
+        <view class='sec-item display-col'>
+          <image src="{{item.user_avatar_url}}"></image>
+          <text>{{item.user_name}}</text>
+        </view>
+      </block>
+      <view class='sec-item display-col' wx:if="{{hasMore}}">
+        <text>∙∙∙∙∙∙</text>
+      </view>
+    </view>
+  </view>
+  <!-- Join Btn -->
+  <view class='share-btn'>
+    <form report-submit='true' bindsubmit='joinGroup'>
+      <button class='default-bg' form-type='submit'>加入</button>
+    </form>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" title="{{toastTitle}}" show-cancel="{{toastCancel}}"></c-modal>

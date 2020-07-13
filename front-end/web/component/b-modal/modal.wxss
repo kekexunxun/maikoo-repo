@@ -1,0 +1,39 @@
+@import "/style/animate.wxss";
+
+.modal-container {
+  position: fixed;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background: rgba(81, 81, 81, 0.5);
+}
+
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 12;
+  background: #fff;
+  bottom: 40rpx;
+  margin: 0 62rpx;
+  width: 626rpx;
+  border-radius: 15px;
+}
+
+.modal-item {
+  color: #2d2922;
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 130rpx;
+}
+
+button {
+  background: #fff;
+}
+
+.modal-item:last-child {
+  border-top: 1rpx solid #ececec;
+}

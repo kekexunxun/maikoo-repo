@@ -1,0 +1,43 @@
+<view class="container">
+  <!-- Content -->
+  <view class='fb-item display-row'>
+    <view class='item-left display-row fb-title'>反馈意见</view>
+    <view class='item-right fb-content'>
+      <view class='hidden-textarea-view' wx:if="{{!toastHidden}}">{{content}}</view>
+      <textarea wx:else placeholder='请简单描述情况，尽快为您处理' maxlength='150' bindinput='inputContent'></textarea>
+    </view>
+  </view>
+  <!-- Mobile -->
+  <view class='fb-item display-row'>
+    <view class='item-left display-row u-mobile'>手机号</view>
+    <view class='item-right formControl'>
+      <input placeholder='请输入您的手机号' maxlength='11' type='number'></input>
+      <text class='notice-text mobile-notice'>（选填）</text>
+    </view>
+  </view>
+  <!-- Snapshot -->
+  <view class='fb-item display-row'>
+    <view class='item-left display-row fb-img'>上传截图</view>
+    <view class='item-right fb-img img-ctn formControl'>
+      <image bindtap='previewImg' class='chosen-img' src="{{imgPath}}" wx:if="{{imgPath}}"></image>
+      <image bindtap='chooseImage' src='/images/icon_addpic.png'></image>
+      <text class='notice-text'>（选填）</text>
+    </view>
+  </view>
+  <!-- Btn -->
+  <view class="btn-container">
+    <view class='default-btn default-bg'>
+      <form report-submit='true' bindsubmit='submit'>
+        <button form-type='submit'>提交</button>
+      </form>
+    </view>
+    <view class='cancel-btn'>
+      <form report-submit='true' bindsubmit='cancel'>
+        <button form-type='submit'>放弃</button>
+      </form>
+    </view>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="{{toastCancel}}" title="{{toastTitle}}"></c-modal>

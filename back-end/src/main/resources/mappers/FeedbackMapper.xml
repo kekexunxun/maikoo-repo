@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.FeedbackDao">
+    <resultMap id="feedbackResultMap" type="FeedbackDO">
+        <result property="fbId" column="fb_id" />
+        <result property="content" column="content" />
+        <result property="mobile" column="mobile" />
+        <result property="imageUrl" column="image_url" />
+        <result property="createdAt" column="created_at" />
+
+        <association property="userDO" resultMap="com.maikoo.businessdirectory.dao.UserDao.userResultMap" columnPrefix="user_"></association>
+    </resultMap>
+
+    <select id="adminGetFeedBackList" resultMap="feedbackResultMap">
+         SELECT
+            cf.fb_id,
+            cf.content,
+            cf.mobile,
+            cf.image_url,
+            cf.created_at,
+            uu.nickname AS user_nickname
+          FROM
+            comm_feedback cf
+          LEFT JOIN u_user uu ON uu.user_id = cf.user_id
+    </select>
+</mapper>

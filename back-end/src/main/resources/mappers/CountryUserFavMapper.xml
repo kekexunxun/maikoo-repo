@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.CountryUserFavDao">
+    <resultMap id="countryUserFavResultMap" type="CountryUserFavDO">
+        <result property="idx" column="idx" />
+        <result property="userId" column="user_id" />
+        <result property="createdAt" column="created_at" />
+
+        <association property="countryUserDO" resultMap="com.maikoo.businessdirectory.dao.CountryUserDao.countryUserResultMap" columnPrefix="country_user_" />
+    </resultMap>
+
+    <select id="selectByIds" resultMap="countryUserFavResultMap">
+        SELECT
+            cuf.idx AS idx,
+            u.user_id AS country_user_user_user_id,
+            cu.name AS country_user_name,
+            u.avatar_url AS country_user_user_avatar_url,
+            cg.group_name AS country_user_country_group_group_name,
+            cg.group_id AS country_user_country_group_group_id,
+            cu.company AS country_user_company,
+            cuf.created_at AS created_at
+        FROM
+            grtu_country_user_fav cuf
+            JOIN grtu_country_user cu ON cuf.country_user_idx = cu.idx
+            JOIN gr_country_group cg ON cu.group_id = cg.group_id
+            JOIN u_user u ON cu.user_id = u.user_id
+        WHERE
+            cuf.idx IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+</mapper>

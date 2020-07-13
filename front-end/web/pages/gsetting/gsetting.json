@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "群设置",
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

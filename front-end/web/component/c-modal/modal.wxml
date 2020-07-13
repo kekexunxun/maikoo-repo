@@ -1,0 +1,9 @@
+<view class="modal-container animated fadeIn" catchtouchmove='_preventTouchMove' wx:if="{{!hidden}}">
+  <view class='modal-section animated fadeInUp'>
+    <view class='modal-text'>{{title}}</view>
+    <view class='modal-btn'>
+      <view class='modal-item' wx:if="{{showCancel}}" catchtap='itemClick' data-idx='1'>{{cancel}}</view>
+      <view class="modal-item {{showCancel ? '' : 'resize'}}" catchtap='itemClick' data-idx='2'>{{confirm}}</view>
+    </view>
+  </view>
+</view>

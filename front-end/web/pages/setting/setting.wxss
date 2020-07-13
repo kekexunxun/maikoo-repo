@@ -1,0 +1,20 @@
+.s-img{
+  margin-top: 150rpx;
+}
+
+.s-img image {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.s-text{
+  margin-top: 40rpx;
+  font-size: 30rpx;
+  color: #2d2922;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.default-btn{
+  margin-top: 80rpx;
+}

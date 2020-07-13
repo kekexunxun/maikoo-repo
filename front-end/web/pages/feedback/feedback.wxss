@@ -1,0 +1,75 @@
+.container {
+  border-top: 1rpx solid #ececec;
+}
+
+.fb-item {
+  margin: 0 30rpx;
+  border-bottom: 1rpx solid #ececec;
+}
+
+.item-left {
+  width: 20%;
+  color: #2d2922;
+  font-size: 28rpx;
+  justify-content: flex-start;
+}
+
+.item-right {
+  width: 80%;
+}
+
+.fb-title {
+  margin-top: 20rpx;
+}
+
+.fb-content, .fb-title {
+  height: 200rpx;
+  align-items: flex-start;
+}
+
+.fb-content textarea {
+  height: 200rpx;
+  line-height: 46rpx;
+  font-size: 28rpx;
+  color: #2d2922;
+  width: 100%;
+}
+
+.u-mobile, .item-right input {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 28rpx;
+  color: #2d2922;
+}
+
+.fb-img {
+  height: 160rpx;
+}
+
+.fb-img image {
+  height: 136rpx;
+  width: 136rpx;
+  border-radius: 50%;
+}
+
+.img-ctn {
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.notice-text {
+  position: absolute;
+  right: 0rpx;
+  line-height: 40rpx;
+  top: 60rpx;
+  font-size: 28rpx;
+  color: #cbcbcb;
+}
+
+.mobile-notice {
+  top: 30rpx;
+}
+
+.chosen-img{
+  margin-right: 20rpx;
+}

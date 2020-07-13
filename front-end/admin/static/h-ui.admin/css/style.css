@@ -1,0 +1,129 @@
+@charset "utf-8";
+/* 你自己的样式 */
+
+hr {
+    margin: 50px 0;
+    background-color: rgba(220, 220, 220, 0.6);
+    height: 1px;
+    border: none;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.fifth-width {
+    width: 20% !important;
+}
+
+.w-200-f {
+    width: 200px !important;
+}
+
+.up-down-gap {
+    margin: 5px;
+}
+
+.submit-btn {
+    margin-top: 50px !important;
+}
+
+.right-gap {
+    margin-right: 30px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.table td {
+    text-align: center !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.lh-30 {
+    line-height: 30px;
+}
+
+.lh-25 {
+    line-height: 25px;
+}
+
+.status-padding {
+    padding: 4px 10px !important;
+}
+
+.status-success {
+    color: #fff;
+    background: #4054b2;
+}
+
+.status-reject {
+    color: #fff;
+    background: #BBBBBB;
+}
+
+.status-forbid {
+    color: #fff;
+    background: #fc4482;
+}
+
+input[type="search"] {
+    margin-left: 10px;
+    padding: 3px;
+}
+
+.Hui-iconfont {
+    font-size: 15px;
+}
+
+.upload-div input {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 80px;
+    height: 30px;
+}
+
+.upload-div img {
+    display: flex;
+    width: 200px;
+    height: 150px;
+    margin-top: 10px;
+}
+
+.loginWraper {
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.show-detail {
+    color: rgb(103, 152, 215);
+}
+
+.avatar {
+    border-radius: 50%;
+}
+
+.left-gap {
+    margin-left: 50px;
+}
+
+.lbs-key a {
+    color: red;
+    text-decoration: underline;
+}
+
+select {
+    height: 30px !important;
+    line-height: 30px !important;
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.CommunityUserApplyDao">
+    <resultMap id="communityUserApplyResultMap" type="CommunityUserApplyDO">
+        <result property="idx" column="idx"></result>
+        <result property="name" column="name"></result>
+        <result property="gender" column="gender"></result>
+        <result property="type" column="type"></result>
+        <result property="mobile" column="mobile"></result>
+        <result property="company" column="company"></result>
+        <result property="position" column="position"></result>
+        <result property="brief" column="brief"></result>
+        <result property="building" column="building"></result>
+        <result property="room" column="room"></result>
+        <result property="processedUserId" column="processed_user_id"></result>
+        <result property="status" column="status"></result>
+        <result property="appliedAt" column="applied_at"></result>
+        <result property="processedAt" column="processed_at"></result>
+
+        <association property="userDO" resultMap="com.maikoo.businessdirectory.dao.UserDao.userResultMap" columnPrefix="user_"></association>
+        <association property="communityGroupDO" resultMap="com.maikoo.businessdirectory.dao.CommunityGroupDao.communityGroupResultMap" columnPrefix="community_group_"></association>
+    </resultMap>
+
+    <select id="selectApplyRecordByIds" resultMap="communityUserApplyResultMap">
+        SELECT
+            gcua.idx AS idx,
+            gcua.group_id AS group_id,
+            gcua.user_id AS user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcg.group_name AS community_group_group_name,
+            gcg.group_avatar_url AS community_group_group_avatar_url,
+            gcua.company AS company,
+            gcua.applied_at AS applied_at ,
+            gcua.status AS status
+        FROM
+            grtu_community_user_apply gcua
+            JOIN u_user uu ON uu.user_id = gcua.user_id
+            JOIN gr_community_group gcg ON gcg.group_id=gcua.group_id
+        WHERE
+            gcua.idx IN
+            <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        ORDER BY gcua.status ASC
+    </select>
+
+    <select id="selectReviewRecordByIds" resultMap="communityUserApplyResultMap">
+        SELECT
+            gcua.idx AS idx,
+            gcua.name AS `name`,
+            gcua.group_id AS group_id,
+            gcua.user_id AS user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcg.group_name AS community_group_group_name,
+            gcua.company AS company,
+            gcua.applied_at AS applied_at ,
+            gcua.status AS status
+        FROM
+            grtu_community_user_apply gcua
+            JOIN u_user uu ON uu.user_id = gcua.user_id
+            JOIN gr_community_group gcg ON gcg.group_id=gcua.group_id
+        WHERE
+            gcua.group_id IN
+            <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        ORDER BY gcua.status ASC
+    </select>
+
+    <!-- 管理员审核 -->
+    <select id="selectReviewRecordByGroupUserId" resultMap="communityUserApplyResultMap">
+        SELECT
+            gcua.idx AS idx,
+            gcua.name AS `name`,
+            gcua.group_id AS group_id,
+            gcua.user_id AS user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcg.group_name AS community_group_group_name,
+            gcua.company AS company,
+            gcua.applied_at AS applied_at ,
+            gcua.status AS status
+        FROM
+            grtu_community_user_apply gcua
+            JOIN u_user uu ON uu.user_id = gcua.user_id
+            JOIN gr_community_group gcg ON gcg.group_id=gcua.group_id
+        WHERE
+            gcg.user_id = #{userId}
+             AND gcg.is_enable = 1
+        ORDER BY gcua.status ASC
+    </select>
+
+    <!-- 查询用户申请详情-->
+    <select id="selectByApplyId" resultMap="communityUserApplyResultMap">
+        SELECT
+            uu.user_id as user_user_id ,
+            uu.avatar_url as user_avatar_url,
+            gcua.company as company,
+            gcua.position as `position`,
+            gcua.type as `type`,
+            gcua.name as `name`,
+            gcua.gender as gender,
+            gcua.mobile as mobile,
+            gcua.brief as brief,
+            gcua.building as building,
+            gcua.room as room,
+            gcua.status as status,
+            gcua.applied_at as applied_at,
+            gcg.group_id as community_group_group_id,
+            gcg.group_name as community_group_group_name,
+            gcg.community_name as community_group_community_name,
+            gcg.user_id as community_group_user_user_id
+        FROM
+            grtu_community_user_apply gcua
+            join gr_community_group gcg on gcg.group_id=gcua.group_id
+            join u_user uu on uu.user_id =gcua.user_id
+        WHERE
+            gcua.idx = #{applyId}
+    </select>
+
+    <select id="isApplyUser" resultMap="communityUserApplyResultMap">
+        SELECT
+            idx
+        FROM
+            grtu_community_user_apply
+        WHERE
+            `status` = 1
+            AND group_id = #{groupId}
+            AND user_id =#{userId}
+    </select>
+
+    <select id="selectNotReviewByDateTime" resultMap="communityUserApplyResultMap">
+        SELECT
+            gcua.idx AS idx,
+            gcua.name AS `name`,
+            gcua.applied_at AS applied_at,
+            gcg.group_id AS community_group_group_id,
+            gcg.group_name AS community_group_group_name,
+            gcg.user_id AS community_group_user_user_id
+        FROM
+            grtu_community_user_apply gcua
+            JOIN gr_community_group gcg ON gcg.group_id = gcua.group_id
+        WHERE
+            gcua.status = 1
+            AND (gcua.applied_at &gt;= #{beginTimestamp} AND gcua.applied_at &lt; #{endTimestamp})
+    </select>
+</mapper>

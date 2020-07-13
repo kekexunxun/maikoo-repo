@@ -1,0 +1,83 @@
+<view class="container">
+  <view class='qyml-form'>
+    <!-- Group Name -->
+    <view class='qyml-form-item display-row'>
+      <view class='qyml-form-item-left display-row text-left-flex'>群名称</view>
+      <view class='qyml-form-item-right display-row'>
+        <input placeholder='请输入群名，15字以内' maxlength='15' value="{{groupName}}" bindinput='inputGName'></input>
+      </view>
+    </view>
+    <!-- Community Name -->
+    <view class='qyml-form-item display-row' wx:if="{{gtype == 3}}">
+      <view class='qyml-form-item-left display-row text-left-flex'>社区名称</view>
+      <view class='qyml-form-item-right display-row'>
+        <input placeholder='请输入社区名称' maxlength='15' value="{{communityName}}" bindinput='inputCoumName'></input>
+      </view>
+    </view>
+    <!-- School Name -->
+    <view class='qyml-form-item display-row' wx:if="{{gtype == 1 || gtype == 2}}">
+      <view class='qyml-form-item-left display-row text-left-flex'>学校名称</view>
+      <view class='qyml-form-item-right display-row'>
+        <input placeholder='请输入学校名称' maxlength='15' value="{{schoolName}}" bindinput='inputSchName'></input>
+      </view>
+    </view>
+    <!-- Class Name -->
+    <view class='qyml-form-item display-row' wx:if="{{gtype == 2}}">
+      <view class='qyml-form-item-left display-row text-left-flex'>班级名称</view>
+      <view class='qyml-form-item-right display-row'>
+        <input placeholder='请输入班级名称' maxlength='15' value="{{className}}" bindinput='inputClsName'></input>
+      </view>
+    </view>
+    <!-- Group Avatar -->
+    <view class='qyml-form-item display-row'>
+      <view class='qyml-form-item-left display-row form-for-img text-left-flex'>群头像</view>
+      <view class='qyml-form-item-right img-ctn form-for-img text-left-flex'>
+        <image class='form-addpic gap-right img-border' src="{{avatarSet}}" data-idx='1' bindtap='previewImg' wx:if="{{avatarSet}}"></image>
+        <image class='form-addpic gap-right img-border old-img' src="{{siteroot + avatarAlready}}" data-idx='2' bindtap='previewImg' wx:if="{{avatarAlready}}"></image>
+        <image class='form-addpic' src="{{avatarDefault}}" bindtap='changeGAvatar'></image>
+      </view>
+    </view>
+    <!-- Group Addr -->
+    <view class='qyml-form-item display-row'>
+      <view class='qyml-form-item-left display-row text-left-flex'>地区</view>
+      <view class='qyml-form-item-right display-row formControl'>
+        <input placeholder='请选择地区' value="{{addr}}" disabled='disabled' bindtap='chooseAddress'></input>
+        <image class='addr-img' src='/images/icon_arrowright.png'></image>
+      </view>
+    </view>
+    <!-- Group Addr Detail -->
+    <view class='qyml-form-item display-row'>
+      <view class='qyml-form-item-left display-row text-left-flex'>详细地址</view>
+      <view class='qyml-form-item-right display-row'>
+        <input placeholder='请输入详细地址（选填）' maxlength='20' value="{{addrDetail}}" bindinput='inputAddrDetail'></input>
+      </view>
+    </view>
+    <!-- Group Brief -->
+    <view class='qyml-form-item display-row'>
+      <view class='qyml-form-item-left display-row form-for-textarea brief-text'>群简介</view>
+      <view class='qyml-form-item-right display-row form-for-textarea'>
+        <view class='hidden-textarea-view' wx:if="{{!pickerHidden || !toastHidden}}">{{gBrief}}</view>
+        <textarea wx:else placeholder='请填写群简介（字数控制在60字内）' value="{{gBrief}}" maxlength='60' bindinput='inputGBrief'></textarea>
+      </view>
+    </view>
+  </view>
+  <!-- Confirm Btn -->
+  <view class='btn-container'>
+    <view class='default-btn default-bg'>
+      <form report-submit='true' bindsubmit='update'>
+        <button form-type='submit'>修改信息</button>
+      </form>
+    </view>
+    <view class='cancel-btn'>
+      <form report-submit='true' bindsubmit='cancel'>
+        <button form-type='submit'>取消</button>
+      </form>
+    </view>
+  </view>
+</view>
+
+<!-- Picker -->
+<city-picker id='city-picker' hidden="{{pickerHidden}}" title-text="选择地区" bind:confirm="confirmAddress" bind:cancel="cancelAddress"></city-picker>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" title="{{toastTitle}}" show-cancel="{{toastCancel}}"></c-modal>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.UserDao">
+    <resultMap id="userResultMap" type="UserDO">
+        <result property="userId" column="user_id" />
+        <result property="nickname" column="nickname" />
+        <result property="avatarUrl" column="avatar_url" />
+        <result property="mobile" column="mobile" />
+        <result property="isAuth" column="is_auth" />
+        <result property="openid" column="openid" />
+        <result property="unionId" column="union_id" />
+        <result property="sessionKey" column="session_key" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <update id="update">
+        UPDATE
+            u_user
+        <set>
+            <if test="openid != null">openid = #{openid},</if>
+            <if test="unionId != null">union_id = #{unionId},</if>
+            <if test="sessionKey != null">session_key = #{sessionKey},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatarUrl != null">avatar_url = #{avatarUrl},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="isAuth != null">is_auth = #{isAuth},</if>
+        </set>
+        WHERE
+            user_id = #{userId}
+    </update>
+</mapper>

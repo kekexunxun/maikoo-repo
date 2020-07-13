@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.SchoolUserDao">
+    <resultMap id="schoolUserResultMap" type="SchoolUserDO">
+        <result property="idx" column="idx" />
+        <result property="name" column="name" />
+        <result property="gender" column="gender" />
+        <result property="type" column="type" />
+        <result property="mobile" column="mobile" />
+        <result property="company" column="company" />
+        <result property="position" column="position" />
+        <result property="brief" column="brief" />
+        <result property="status" column="status" />
+        <result property="schoolName" column="school_name" />
+        <result property="graduatedAt" column="graduated_at" />
+        <result property="joinedAt" column="joined_at" />
+        <result property="quitedAt" column="quited_at" />
+
+        <association property="userDO" resultMap="com.maikoo.businessdirectory.dao.UserDao.userResultMap" columnPrefix="user_"></association>
+        <association property="schoolGroupDO" resultMap="com.maikoo.businessdirectory.dao.SchoolGroupDao.schoolGroupResultMap" columnPrefix="school_group_" />
+        <association property="processedRemoveSchoolUserDO" resultMap="schoolUserResultMap" columnPrefix="processed_remove_school_user_" />
+    </resultMap>
+
+    <select id="selectByGroupIdAndUserId" resultMap="schoolUserResultMap">
+         SELECT
+            u.user_id AS user_user_id,
+            u.avatar_url AS user_avatar_url,
+            su.idx AS idx,
+            su.name AS `name`,
+            su.gender AS gender,
+            su.position AS `position`,
+            su.company AS company,
+            su.mobile AS mobile,
+            su.brief AS brief,
+            su.type AS type,
+            su.school_name AS school_name,
+            su.graduated_at AS graduated_at,
+            sg.user_id AS school_group_user_user_id,
+            sg.group_name AS school_group_group_name
+        FROM
+            grtu_school_user su
+            JOIN gr_school_group sg ON su.group_id = sg.group_id
+            JOIN u_user u ON su.user_id = u.user_id
+        WHERE
+            su.status = 1
+            AND su.group_id = #{groupId}
+            AND su.user_id = #{userId}
+    </select>
+
+
+    <select id="selectByIds" resultMap="schoolUserResultMap">
+        SELECT
+            u.user_id AS user_user_id,
+            u.avatar_url AS user_avatar_url,
+            cg.user_id AS school_group_user_user_id,
+            cu.name AS name
+            FROM
+            grtu_school_user cu
+            JOIN gr_school_group cg ON cu.group_id = cg.group_id
+            JOIN u_user u ON cu.user_id = u.user_id
+            WHERE
+            cu.idx IN
+        <foreach item="id" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectInformationByIds" resultMap="schoolUserResultMap">
+        SELECT
+            u.user_id AS user_user_id,
+            u.avatar_url AS user_avatar_url,
+            cu.position AS `position`,
+            cu.company AS company,
+            cu.type as type,
+            cg.user_id AS school_group_user_user_id,
+            cu.name AS name
+            FROM
+            grtu_school_user cu
+            JOIN gr_school_group cg ON cu.group_id = cg.group_id
+            JOIN u_user u ON cu.user_id = u.user_id
+            WHERE
+            cu.idx IN
+        <foreach item="id" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectUserInformationListByGroupId" resultMap="schoolUserResultMap">
+        SELECT
+            uu.user_id AS user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcu.NAME AS NAME,
+            gcu.position AS position,
+            gcu.company AS company,
+            gcu.graduated_at AS graduated_at,
+            gcu.joined_at AS joined_at,
+            gcu.type AS type,
+            gcu.`status` AS STATUS,
+            gcg.user_id AS school_group_user_user_id
+        FROM
+            grtu_school_user gcu
+            LEFT JOIN u_user uu ON uu.user_id = gcu.user_id
+            LEFT JOIN gr_school_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.joined_at = ( SELECT max( joined_at ) FROM grtu_school_user gsu WHERE gcu.user_id = gsu.user_id AND gsu.group_id=#{groupId} )
+            AND gcu.group_id = #{groupId}
+        ORDER BY
+            gcu.user_id
+    </select>
+
+
+    <select id="selectUserListInfoExportExcel" resultMap="schoolUserResultMap">
+        SELECT
+            gcu.user_id AS user_user_id,
+            gcu.`name`,
+            gcu.gender,
+            gcu.mobile,
+            gcu.company,
+            gcu.position,
+            gcu.brief,
+            gcu.joined_at,
+            gcu.quited_at,
+            gcu.`status`,
+            gcu.type,
+            gcu.school_name,
+            gcu.graduated_at,
+            gcg.user_id AS school_group_user_user_id,
+            gcg.group_name AS school_group_group_name
+        FROM
+            grtu_school_user gcu
+        LEFT JOIN gr_school_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.joined_at = ( SELECT max( joined_at ) FROM grtu_school_user gsu WHERE gcu.user_id = gsu.user_id  AND gsu.group_id=#{groupId})
+            AND gcu.group_id = #{groupId}
+        ORDER BY
+            gcu.user_id;
+    </select>
+
+    <select id="userInfoAdmin" resultMap="schoolUserResultMap">
+        SELECT
+            gcu.idx,
+            uu.user_id AS user_user_id,
+            gcu.`name`,
+            gcu.gender,
+            gcg.user_id AS school_group_user_user_id,
+            uu.avatar_url AS user_avatar_url,
+            gcu.mobile,
+            gcu.company,
+            gcu.position,
+            gcu.brief,
+            gcu.type,
+            gcu.school_name,
+            gcu.graduated_at,
+            gcu.`status`,
+            gcu.joined_at,
+            gcu.quited_at
+        FROM
+            grtu_school_user gcu
+            LEFT JOIN u_user uu ON uu.user_id = gcu.user_id
+            LEFT JOIN gr_school_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.user_id = #{userId}
+            AND gcu.joined_at=(select MAX(joined_at) from grtu_school_user where group_id = #{groupId} AND user_id = #{userId})
+            AND gcu.group_id =#{groupId}
+    </select>
+    <select id="searchUserInfo" resultMap="schoolUserResultMap">
+        SELECT
+            gcu.user_id AS user_user_id,
+            name,
+            uu.avatar_url AS user_avatar_url,
+            gcu.position,
+            gcu.company,
+            gcg.user_id AS school_group_user_user_id
+
+        FROM
+            grtu_school_user  gcu
+            LEFT JOIN u_user uu ON uu.user_id=gcu.user_id
+            LEFT JOIN gr_school_group gcg ON gcg.group_id = gcu.group_id
+        WHERE
+            gcu.group_id = #{schoolGroupDO.groupId}
+            AND gcu.`status` = 1
+            AND CONCAT( gcu.mobile, gcu.NAME, gcu.position, gcu.company, gcu.brief ) LIKE  CONCAT('%',#{search},'%')
+    </select>
+
+
+</mapper>

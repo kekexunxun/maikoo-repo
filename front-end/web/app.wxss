@@ -1,0 +1,165 @@
+view, image, textarea, input, swiper {
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.display-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.formControl {
+  position: relative;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left-flex {
+  justify-content: flex-start !important;
+}
+
+.default-btn {
+  height: 80rpx;
+  margin: 20rpx 30rpx;
+}
+
+.default-btn button {
+  font-size: 30rpx;
+  color: #695a40;
+  background: none;
+  line-height: 80rpx;
+}
+
+.cancel-btn {
+  height: 80rpx;
+  margin: 0 30rpx;
+  border: 2rpx solid #eccd67;
+}
+
+.cancel-btn button {
+  font-size: 30rpx;
+  color: #eccd67;
+  background: none;
+  line-height: 80rpx;
+}
+
+button::after {
+  border: none;
+}
+
+.place-holder {
+  color: #909090;
+}
+
+.default-bg {
+  background: linear-gradient(270deg, rgba(255, 218, 130, 1) 0%, rgba(255, 243, 198, 1) 100%);
+}
+
+.tb-tag {
+  background: linear-gradient(270deg, rgba(255, 163, 130, 1) 0%, rgba(255, 243, 198, 1) 100%);
+}
+
+.xy-tag {
+  background: linear-gradient(270deg, rgba(162, 130, 255, 1) 0%, rgba(198, 238, 255, 1) 100%);
+}
+
+.sq-tag {
+  background: linear-gradient(270deg, rgba(130, 171, 255, 1) 0%, rgba(198, 255, 253, 1) 100%);
+}
+
+.img-ctn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20rpx 15rpx;
+}
+
+.gap-right {
+  margin-right: 20rpx;
+}
+
+.gap-top2 {
+  margin-top: 20rpx;
+}
+
+.btn-container {
+  position: absolute;
+  bottom: 30rpx;
+  width: 100%;
+}
+
+/* Form */
+
+.qyml-form {
+  margin: 0 30rpx;
+}
+
+.qyml-form-item {
+  width: 100%;
+  border-bottom: 1rpx solid #ececec;
+}
+
+.qyml-form-item-left {
+  width: 30%;
+  color: #2d2922;
+  font-size: 28rpx;
+  height: 90rpx;
+}
+
+.qyml-form-item-right {
+  width: 70%;
+  color: #2d2922;
+  font-size: 28rpx;
+  height: 90rpx;
+}
+
+.qyml-form input, .qyml-form textarea, .qyml-form picker {
+  font-size: 28rpx;
+  width: 100%;
+}
+
+.qyml-form input {
+  height: 90rpx;
+  line-height: 28rpx;
+}
+
+.qyml-form input::-webkit-input-placeholder {
+  padding-left: 0;
+}
+
+.qyml-form textarea {
+  padding: 10rpx 0;
+}
+
+.qyml-form textarea::placeholder {
+  padding: 0;
+  margin: 0;
+}
+
+.hidden-textarea-view {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10rpx 0;
+  flex-direction: column;
+  word-break: break-all;
+  font-size: 28rpx;
+  width: 100%;
+  height: 100%;
+}

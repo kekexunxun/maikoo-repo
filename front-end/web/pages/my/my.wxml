@@ -1,0 +1,40 @@
+<view class="container">
+  <!-- User Avatar -->
+  <view class='user-info display-col'>
+    <view class='avatar-bg'></view>
+    <view class='avatar'>
+      <image src="{{isAuth ? avatarUrl : '/images/icon_user.png'}}"></image>
+    </view>
+    <block wx:if="{{!isAuth}}">
+      <view class="default-btn display-row default-bg">
+        <form report-submit='true' bindsubmit='login'>
+          <button form-type='submit'>登录/注册</button>
+        </form>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="nickname display-row">{{nickname}}</view>
+    </block>
+  </view>
+  <!-- 列表 -->
+  <view class='my-form'>
+    <block wx:for="{{menu}}" wx:key="idx">
+      <!-- My Message -->
+      <view class='qyml-form-item display-row' bindtap="{{item.tap}}">
+        <view class='qyml-form-item-left display-row text-left-flex'>
+          <image class='my-form-img' src="{{item.icon}}"></image>
+          <view class='formControl'>
+            <view class='spot-text'>{{item.text}}</view>
+            <view class='spot' wx:if="{{item.spot}}"></view>
+          </view>
+        </view>
+        <view class='qyml-form-item-right display-row formControl'>
+          <image class='arrow-img' src='/images/icon_arrowright.png'></image>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- Toast Modal -->
+<c-modal id='toast-modal' bind:itemClick="toastConfirm" hidden="{{toastHidden}}" show-cancel="0" title="{{toastTitle}}"></c-modal>

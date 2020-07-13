@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "企业名录",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

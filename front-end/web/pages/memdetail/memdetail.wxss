@@ -1,0 +1,148 @@
+.container {
+  padding-bottom: 50rpx;
+}
+
+.user-detail-container {
+  margin: 20rpx 30rpx;
+  height: 340rpx;
+  background: #2d2922;
+  border-radius: 10px;
+}
+
+.user-detail {
+  margin: 20rpx;
+  height: 300rpx;
+  border-radius: 8rpx;
+  border: 4rpx solid;
+  border-image: linear-gradient(270deg, rgba(255, 218, 130, 1), rgba(255, 243, 198, 1)) 4 4;
+}
+
+.user-avatar {
+  width: 210rpx;
+}
+
+.user-avatar image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+}
+
+.u-gender {
+  position: absolute;
+  right: 22rpx;
+  bottom: 0;
+  height: 44rpx !important;
+  width: 44rpx !important;
+  border: 4rpx solid #2d2922;
+}
+
+.user-info {
+  width: 440rpx;
+}
+
+.user-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #eccd67;
+  line-height: 44rpx;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.gap-both-3 {
+  margin: 0 20rpx;
+}
+
+.user-comp {
+  font-size: 28rpx;
+  color: #b7ae9d;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 40rpx;
+}
+
+.action-area {
+  width: 15%;
+  align-items: flex-start;
+  height: 100%;
+  margin-top: 20rpx;
+}
+
+.action-area image {
+  height: 44rpx;
+  width: 44rpx;
+}
+
+/* user-more */
+
+.more-title {
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #2d2922;
+  justify-content: flex-start;
+  margin: 0 30rpx;
+}
+
+.title-line {
+  height: 24rpx;
+  width: 8rpx;
+  background: #2d2922;
+}
+
+.more-title text {
+  font-size: 30rpx;
+  padding-left: 22rpx;
+}
+
+.more-item {
+  margin: 0 60rpx;
+  line-height: 100rpx;
+  font-size: 28rpx;
+  border-bottom: 1rpx solid #ececec;
+}
+
+.more-left {
+  width: 25%;
+  color: #2d2922;
+}
+
+.more-middle {
+  width: 60%;
+  color: #989898;
+}
+
+.more-right {
+  width: 15%;
+  height: 100rpx;
+}
+
+.img-ctn {
+  padding: 0;
+}
+
+.more-right image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.brief-text {
+  line-height: 40rpx;
+  margin: 0 60rpx;
+  color: #989898;
+  font-size: 28rpx;
+}
+
+.brief-title {
+  margin: 30rpx;
+}
+
+.reject-btn {
+  background: #e8e8e8;
+}
+
+/* btn-container */
+
+.btn-container {
+  position: inherit;
+  margin-top: 50rpx;
+}

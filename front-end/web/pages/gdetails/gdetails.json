@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "群详情",
+  "usingComponents": {
+    "c-modal": "/component/c-modal/modal"
+  }
+}

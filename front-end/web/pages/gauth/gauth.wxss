@@ -1,0 +1,67 @@
+.container {
+  border-top: 1rpx solid #ececec;
+}
+
+.auth-list {
+  margin: 0 30rpx;
+}
+
+.auth-item {
+  width: 100%;
+  height: 160rpx;
+  border-bottom: 1rpx solid #ececec;
+}
+
+.user-img image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}
+
+.user-info {
+  width: 50%;
+  justify-content: flex-start;
+}
+
+.user-name {
+  font-size: 30rpx;
+  color: #2d2922;
+  font-weight: 500;
+}
+
+.user-grant{
+  font-size: 26rpx;
+  margin-left: 20rpx;
+}
+
+.user-admin {
+  color: #eccd67;
+}
+
+.user-nor{
+  color: #b6b6b6;
+}
+
+.user-setting {
+  width: 30%;
+  height: 160rpx;
+}
+
+.user-setting button {
+  font-size: 22rpx;
+  color: #2d2922;
+  padding: 0;
+  border-radius: 30rpx;
+  line-height: 50rpx;
+  width: 150rpx;
+  height: 50rpx;
+}
+
+.be-admin {
+  margin-bottom: 20rpx;
+}
+
+.del-mem {
+  border: 2rpx solid #e9e9e9;
+  background: rgba(1, 1, 1, 0);
+}

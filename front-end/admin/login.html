@@ -1,0 +1,77 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+  <link href="./static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+  <link href="./static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+  <link href="./static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="./lib/Hui-iconfont/1.0.9/iconfont.css" rel="stylesheet" type="text/css" />
+  <link rel="Bookmark" href="/favicon.ico">
+  <link rel="Shortcut Icon" href="./favicon.ico" />
+
+  <title>企业名录 - 后台登录</title>
+</head>
+
+<body onkeydown="KeyDown()">
+  <div class="loginWraper">
+    <div id="loginform" class="loginBox">
+      <form class="form form-horizontal" action="index.html" method="post">
+        <div class="row cl">
+          <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+          <div class="formControls col-xs-8">
+            <input id="account" name="account" type="text" maxlength="20" placeholder="账户" class="input-text size-L">
+          </div>
+        </div>
+        <div class="row cl">
+          <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+          <div class="formControls col-xs-8">
+            <input id="password" name="password" type="password" maxlength="20" placeholder="密码" class="input-text size-L">
+          </div>
+        </div>
+        <div class="row cl">
+          <div class="formControls col-xs-8 col-xs-offset-3">
+            <a id="login" class="btn btn-success radius size-L right-gap">&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;</a>
+            <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="./lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="./static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="./lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="./static/qyml/js/request.js"></script>
+<script type="text/javascript" src="./static/qyml/js/md5.min.js"></script>
+<script>
+  $('#login').click(function () {
+    let account = $.trim($('#account').val());
+    let password = $.trim($('#password').val());
+    if (!account || !password) {
+      layer.msg('账号或密码不能为空', { icon: 2, time: 1300 });
+    } else {
+      request('/admin/api/admin/login', { username: account, password: md5(password) }, 600).then(res => {
+        layer.msg('登陆成功', { icon: 1, time: 1300 });
+        sessionStorage.setItem('token', res.data.access_token);
+        setTimeout(function () {
+          location.href = './index.html';
+        }, 1300);
+      }).catch(error => {
+        layer.msg('账号或密码错误', { icon: 2, time: 1300 });
+      })
+    }
+  })
+  function KeyDown() {
+    if (event.keyCode == 13) {
+      $('#login').click();
+    }
+  }
+</script>
+
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.maikoo.businessdirectory.dao.CountryGroupDao">
+    <resultMap id="countryGroupResultMap" type="CountryGroupDO">
+        <result property="groupId" column="group_id"/>
+        <result property="groupName" column="group_name"/>
+        <result property="groupAvatarUrl" column="group_avatar_url"/>
+        <result property="groupAddrDetail" column="group_addr_detail"/>
+        <result property="groupAddrCode" column="group_addr_code"/>
+        <result property="groupBrief" column="group_brief"/>
+        <result property="posterUrl" column="poster_url"/>
+        <result property="qrCodeUrl" column="qr_code_url"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="dismissedAt" column="dismissed_at"/>
+        <result property="groupMemCount" column="group_mem_count"></result>
+
+        <association property="userDO" resultMap="com.maikoo.businessdirectory.dao.UserDao.userResultMap" columnPrefix="user_"></association>
+    </resultMap>
+
+    <select id="selectIdsByKeyAndUserId" resultType="java.lang.Long">
+        SELECT
+            cg.group_id
+        FROM
+            gr_country_group cg
+            JOIN grtu_country_user cu ON cg.group_id = cu.group_id
+        WHERE
+            cu.status = 1
+            AND cu.user_id = #{userId}
+            <if test="key != null">
+                AND cg.group_name LIKE CONCAT('%',#{key},'%')
+            </if>
+    </select>
+
+    <select id="selectByIds" resultMap="countryGroupResultMap">
+        SELECT
+            cg.group_id,
+            cg.group_name,
+            cg.group_avatar_url,
+            cg.group_addr_detail,
+            COUNT(cu.idx) AS group_mem_count
+        FROM
+            gr_country_group cg
+            JOIN grtu_country_user cu ON cg.group_id = cu.group_id
+        WHERE
+            cg.group_id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        GROUP BY cg.group_id
+    </select>
+
+    <select id="analysisGroupData" parameterType="com.maikoo.businessdirectory.model.TimeFrequentQuery" resultType="integer">
+        select count(*) from gr_country_group where created_at<![CDATA[>= ]]>#{startTime} and created_at<![CDATA[<= ]]> #{endTime}
+    </select>
+
+    <select id="analysisGroupUserData" parameterType="com.maikoo.businessdirectory.model.TimeFrequentQuery" resultType="integer">
+        select count(*) from grtu_country_user where joined_at<![CDATA[>= ]]>#{startTime} and joined_at<![CDATA[<= ]]> #{endTime}
+    </select>
+
+    <select id="selectAll" resultMap="countryGroupResultMap">
+        SELECT
+            cg.group_id,
+            cg.group_name,
+            cg.group_avatar_url,
+            cg.group_addr_code,
+            cg.group_addr_detail,
+            cg.group_brief,
+            cg.is_enable,
+            cg.created_at,
+            cg.dismissed_at,
+            COUNT(cu.idx) AS group_mem_count
+        FROM
+            gr_country_group cg
+            JOIN grtu_country_user cu ON cg.group_id = cu.group_id
+        GROUP BY cg.group_id
+    </select>
+</mapper>

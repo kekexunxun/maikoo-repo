@@ -1,0 +1,18 @@
+<view class="city-picker-container" catchtouchmove='_preventTouchMove' wx:if="{{!hidden}}">
+  <view class='picker-area animated fadeInUp'>
+    <view class='picker-title'>
+      <view class='cancel-text' bindtap='cancel'>{{showCancel ? cancelText : ''}}</view>
+      <view class='title-text'>{{titleText}}</view>
+      <view class='confirm-text' bindtap='confirm'>{{confirmText}}</view>
+    </view>
+    <picker-view class='picker-view' value="{{temp}}" indicator-class="picker-indicator" mask-class="picker-mask" bindchange="_pickerChange">
+      <!-- Column -->
+      <picker-view-column class="picker-view-column">
+        <view wx:for="{{columnArr}}" wx:key="">
+          {{item}}
+        </view>
+      </picker-view-column>
+    </picker-view>
+  </view>
+
+</view>

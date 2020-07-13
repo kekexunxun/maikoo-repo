@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    username: qyml
+    password: FXKjBKDMytt7Bnwc
+    url: jdbc:mysql://localhost:3306/qyml?useUnicode=true&characterEncoding=UTF-8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      pool-name: mkBusinessDirectoryPoolName
+      connectionInitSql: SET NAMES utf8mb4
+      connection-test-query: SELECT 1
+  resources:
+    static-locations: file:/www/wwwroot/minglu_program/assets
+  redis:
+    port: 6378
+    database: 5
+    password: redispass
+custom:
+  upload-location: /www/wwwroot/minglu_program/assets/
+  vertical-image-location: poster/vertical.png
+  common-poster-image-location: poster/commonPoster.png
+  country-poster-image-location: poster/countryPoster.png
+  base-url: https://minglu.maikoo.cn
