@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datapond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="__ROOT__/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <link href="__ROOT__/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+    	.add_border{
+    		border-bottom: 1px solid #eff2f7;
+    		height:15px;
+    	}
+    	.fileupload .thumbnail {
+		    overflow: hidden;
+		    display: inline-block;
+		    margin-bottom: 5px;
+		    vertical-align: middle;
+		    text-align: center;
+		}
+		.thumbnail {
+		    display: block;
+		    padding: 4px;
+		    margin-bottom: 20px;
+		    line-height: 1.42857143;
+		    background-color: #fff;
+		    border: 1px solid #ddd;
+		    border-radius: 4px;
+		    -webkit-transition: all .2s ease-in-out;
+		    transition: all .2s ease-in-out;
+		}
+		.fileupload-preview {
+		    width: 180px;
+		    height:150px;
+		    display: block;
+		    color: #666;
+		}
+		.fileupload-preview img{
+			width:100%;
+			height:100%;
+			margin-bottom:12px;
+		}
+		.fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
+		    display: none;
+		}
+    	.fileupload .btn {
+		    vertical-align: middle;
+		    line-height: 18px;
+		    margin-left: 0px;
+		}
+		.btn-file {
+		    overflow: hidden;
+		    position: relative;
+		    vertical-align: middle;
+		}
+    	.fa {
+		    display: inline-block;
+		    font-family: FontAwesome;
+		    font-style: normal;
+		    font-weight: normal;
+		    line-height: 1;
+		    -webkit-font-smoothing: antialiased;
+		    -moz-osx-font-smoothing: grayscale;
+		}
+		.btn-file>input{
+			position: absolute;
+		    top: 0;
+		    right: 0;
+		    margin: 0;
+		    opacity: 0;
+		    filter: alpha(opacity=0);
+		    transform: translate(-300px, 0) scale(4);
+		    font-size: 23px;
+		    direction: ltr;
+		    cursor: pointer;
+		}
+		.btn {
+		    display: inline-block;
+		    margin-bottom: 0;
+		    font-weight: 400;
+		    text-align: center;
+		    vertical-align: middle;
+		    cursor: pointer;
+		    background-image: none;
+		    border: 1px solid transparent;
+		    white-space: nowrap;
+		    padding: 6px 12px;
+		    font-size: 14px;
+		    line-height: 1.42857143;
+		    border-radius: 4px;
+		    -webkit-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		}
+		.clear-btn{
+			margin-top:3px;
+		}
+    </style>
+    <title>添加商家</title>
+</head>
+<body>
+  <!--   <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商家管理 <span class="c-gray en">&gt;</span> 添加商家 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
+    <div class="page-container add">
+        <form action="/index/merchant/uploadimage" method="post" class="form form-horizontal" id="form-merchant-add" enctype="multipart/form-data">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">商家名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="" autocomplete="off" maxlength="30" style="width: 300px" type="text" class="input-text" id="mch_name" name="mch_name"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">地址坐标：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="" autocomplete="off" style="width: 300px" type="text" class="input-text" maxlength="30" id="location" name="location"/>
+                     <span style="display:block;color:#db044c;">*格式为: 纬度,经度(例如:30.527540,114.346430)</span>
+                     <span style="display:block;color:#db044c;">*中国纬度范围:18.000000~53.500000 中国经度范围:39.350000~48.430000</span>
+                     <a target="_blank" href="http://lbs.qq.com/tool/getpoint/" style="display:block;text-decoration:none;color:#a0a3db;">点击获取地理坐标</a>
+                </div>
+            </div>
+            <div class="add_border"></div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">所在省市区：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div id="demo1" class="citys">
+                        <p>
+                            <select name="province" style="vertical-align:sub;height:30px;"></select>
+                            <select name="city" style="vertical-align:sub;height:30px;"></select>
+                            <select name="area" style="vertical-align:sub;height:30px;"></select>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">具体位置描述：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input value="" autocomplete="off" maxlength="30" style="width: 300px" type="text" class="input-text" id="address" name="address"/>
+                    <span style="color:gray;display:block;">*例如:长安路129号</span>
+                </div>
+            </div>
+            <div class="add_border"></div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"></label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span style="color:gray;">*商家LOGO图片只接收jpg、png格式,大小限制在2M以内.</span>
+                </div>
+            </div>
+            <div class="row cl">
+            	<label class="form-label col-xs-4 col-sm-3">商家LOGO：</label>
+            	<div class="formControls col-xs-8 col-sm-9">
+                <div class="fileupload fileupload-new" data-provides="fileupload" style="width: 24%;float: left;">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img id="mch_logo_img" src="" alt="" style="width:100%;height:100%;"/>
+                    </div>
+                    <div id="newimg_div" class="fileupload-preview fileupload-exists thumbnail" style="line-height: 20px;"></div>
+                    <div style="width:197px;">
+                        <span class="btn btn-default btn-file">
+	                       	<span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+	                       	<span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+	                       	<input onchange="validateImg(this,'商家LOGO图片',1048576*2,'newimg_div')" id="mch_logo" type="file" class="default" name="mch_logo" value="" />
+                        </span>
+                        <a href="#" class="btn btn-warning fileupload-exists clear-btn" data-dismiss="fileupload">
+                        	<i class="fa fa-trash"></i>
+                        	取消
+                        </a>
+                    </div>
+                </div>
+            	</div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"></label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span style="color:gray;">*商家资质图片只接收jpg、png格式,大小限制在2M以内.</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">商家申请证书资质：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                <div class="fileupload fileupload-new" data-provides="fileupload" style="width: 27%;float: left;">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img id="clear_one_img" src="" alt="" style="width:100%;height:100%;"/>
+                    </div>
+                    <div id="clear_one_div" class="fileupload-preview fileupload-exists thumbnail" style="line-height: 20px;"></div>
+                    <div style="width:197px;">
+                        <span class="btn btn-default btn-file">
+	                       	<span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+	                       	<span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+	                       	<input id="image_one" onchange="validateImg(this,'商家资质图片',1048576*2,'clear_one_div')" type="file" class="default" name="image_one" value="" />
+                        </span>
+                        <a href="#" class="btn btn-warning fileupload-exists clear-btn" data-dismiss="fileupload">
+                        	<i class="fa fa-trash"></i>
+                        	取消
+                        </a>
+                    </div>
+                </div>
+                <div class="fileupload fileupload-new" data-provides="fileupload" style="width: 34%;float: left;">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                        <img src="" id="clear_two_img" alt="" style="width:100%;height:100%;"/>
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" id="clear_two_div" style="line-height: 20px;"></div>
+                    <div style="width:197px;">
+                        <span class="btn btn-default btn-file">
+	                       	<span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+	                       	<span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+	                       	<input onchange="validateImg(this,'商家资质图片',1048576*2,'clear_two_div')" id="image_two" type="file" class="default" name="image_two" value="" />
+                        </span>
+                        <a href="#" class="btn btn-warning fileupload-exists clear-btn" data-dismiss="fileupload">
+                        	<i class="fa fa-trash"></i>
+                        	取消
+                        </a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="add_border"></div>
+            <div class="row cl">
+                <div class="col-xs-8 col-xs-offset-4 col-sm-9 col-sm-offset-3">
+                    <button style="margin-left: 20px;background-color:#5eb95e;color:#fff;" class="btn btn-default radius" type="submit">
+                    	&nbsp;&nbsp;提交&nbsp;&nbsp;
+                    </button>
+                </div>
+            </div>            
+        </form>    
+    </div>
+	<footer class="footer mt-20">   
+	    <div class="container">
+	    <p>Powered By 福建麦口信息科技有限公司</p>
+	    </div>
+	</footer>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/data_location-master/js/jquery.citys.js"></script>
+<script type="text/javascript">
+//图片大小验证
+//byte换算
+// 1042b = 1kb
+// 1048576b = 1mb
+// 1073741824b = 1gb
+// 1099511627776b = 1tb 
+function validateImg(obj,content,max,div){
+    var fileSize = $(obj)[0].files[0].size;
+    console.log(fileSize);
+    if( fileSize > max ){
+        $(obj).val('');
+        $('#'+div+' img').remove();
+        layer.alert(content+'文件大小超出最大限制!',{icon:2});
+    }
+}
+$('#demo1').citys(
+    {
+        dataUrl : '/index/merchant/locationlist',
+        dataType: 'json',
+        provinceField: 'province',
+        cityField : 'city',
+        areaField : 'area',
+        valueType : 'code',
+        nodata    : 'hidden',
+    }
+);
+//提交表单
+jQuery.validator.addMethod('isLocation',function(value,element){
+    var reg = /^\d{2,3}\.\d{6},\d{2,3}\.\d{6}$/;
+    return ( reg.test(value) );
+},"地理坐标不正确");
+$("#form-merchant-add").validate({
+    rules: {
+    	mch_name: {
+    		required: true,
+    		maxlength: 30,
+      	},
+      	location:{
+      		required: true,
+      		maxlength: 30,
+      		isLocation:true,
+      	},
+        address:{
+            required: true,
+            maxlength: 30,
+        },
+        province:{
+            required:true,
+        },
+        area:{
+            required:true,
+        }
+    },
+	onkeyup:false,
+	success:"valid",
+	submitHandler:function(form){
+		var mch_logo = $('#mch_logo').val();
+		var image_one = $('#image_one').val();
+		var image_two = $('#image_two').val();
+		if( mch_logo == '' ){
+			layer.alert('商家LOGO不能为空',{icon:2});
+			return;
+		}else{
+            var arr = mch_logo.split('\\');//注split可以用字符或字符串分割
+            var fileName = arr[arr.length - 1];//这就是要取得的名文件称
+            var index = fileName.lastIndexOf(".");
+            if (index < 0) {
+                layer.msg("商家logo图片格式不正确！", { icon: 6, time: 1300 });
+            } else {
+                var ext = fileName.substring(index + 1, mch_logo.length);
+                if( ext != 'jpg' && ext!='jpeg' && ext!='png' ){
+                    layer.msg("商家logo图片格式不正确！", { icon: 6, time: 1300 });
+                    return;
+                }
+            }
+        }
+		if( image_one == '' && image_two == '' ){
+			layer.alert('请至少上传一张商家资质证明图片',{icon:2});
+			return;
+		}else{
+			if( image_one ){
+				var arr = image_one.split('\\');//注split可以用字符或字符串分割
+            	var fileName = arr[arr.length - 1];//这就是要取得的名文件称
+            	var index = fileName.lastIndexOf(".");
+                if (index < 0) {
+                    layer.msg("商家资质证明图片格式不正确！", { icon: 6, time: 1300 });
+                } else {
+                    var ext = fileName.substring(index + 1, image_one.length);
+                    if( ext != 'jpg' && ext!='jpeg' && ext!='png' ){
+                        layer.msg("商家资质证明图片格式不正确！", { icon: 6, time: 1300 });
+                        return;
+                    }
+                }
+			}
+			if( image_two ){
+				var arr = image_two.split('\\');//注split可以用字符或字符串分割
+            	var fileName = arr[arr.length - 1];//这就是要取得的名文件称
+            	var index = fileName.lastIndexOf(".");
+                if (index < 0) {
+                    layer.msg("商家资质证明图片格式不正确！", { icon: 6, time: 1300 });
+                } else {
+                    var ext = fileName.substring(index + 1, image_two.length);
+                    if( ext != 'jpg' && ext!='jpeg' && ext!='png' ){
+                        layer.msg("商家资质证明图片格式不正确！", { icon: 6, time: 1300 });
+                        return;
+                    }
+                }
+			}
+		}
+		layer.confirm('确定添加吗?',function(){
+			$(form).ajaxSubmit({
+				type : 'POST',
+				url  : '/index/merchant/merchantadd/',
+				typeData : 'JSON',
+				success : function (result){
+					if( result.code < 400 ){
+						layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+							window.parent.location.href = window.parent.location.href;
+						});
+					}else{
+						layer.alert(result.msg,{icon:2});
+					}
+				},
+				error : function(){
+					layer.alert('请求失败!',{icon:2});
+				}
+			});
+		});
+	}
+});
+</script>

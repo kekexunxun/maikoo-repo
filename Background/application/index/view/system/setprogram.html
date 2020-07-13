@@ -1,0 +1,594 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/datapond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="__ROOT__/static/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css"/>
+    <link href="__ROOT__/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <link href="__ROOT__/static/lib/jqueryColorPicker/css/colorpicker.css" rel="stylesheet" type="text/css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="__ROOT__/public/static/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <style>
+        .colorSpan{
+            display:inline-block;
+            width:25px;
+            height:25px;
+            background-color:#{$data.mini_color | default = "FFFFFF"};
+            border:1px solid gray;
+        }
+        .fileupload .thumbnail {
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 5px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .thumbnail {
+            display: block;
+            padding: 4px;
+            margin-bottom: 20px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            -webkit-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+        .fileupload-preview {
+            width: 200px;
+            height: 150px;
+            display: block;
+            color: #666;
+        }
+        .fileupload-preview img{
+            width:100%;
+            height:100%;
+            margin-bottom: 12px;
+        }
+        .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
+            display: none;
+        }
+        .fileupload .btn {
+            vertical-align: middle;
+            line-height: 18px;
+            margin-left: 0px;
+        }
+        .btn-file {
+            overflow: hidden;
+            position: relative;
+            vertical-align: middle;
+        }
+        .fa {
+            display: inline-block;
+            font-family: FontAwesome;
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .btn-file>input{
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            transform: translate(-300px, 0) scale(4);
+            font-size: 23px;
+            direction: ltr;
+            cursor: pointer;
+        }
+        .btn {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            border-radius: 4px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+    <title>小程序设置</title>
+</head>
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 小程序设置 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <form action="/index/system/setprogram" method="post" class="form form-horizontal" id="form-setprogram-edit" enctype="multipart/form-data">
+            {notempty name="$data.idx"}
+                <input type="hidden" value="{$data.idx}" name="idx" />
+            {/notempty}
+            {notempty name="$data.layer_img"}
+                <input type="hidden" value="{$data.layer_img}" name="old_layer_img" id="old_layer_img"/>
+            {/notempty}
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">小程序名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.mini_name | default = ''}" style="width:200px;" type="text" class="input-text" id="mini_name" name="mini_name" maxlength="10"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">客服电话：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.service_phone | default = ''}" style="width:200px;" type="text" class="input-text" id="service_phone" name="service_phone" maxlength="14"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">门店配送距离：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.mch_distance | default = ''}" style="width:200px;" type="text" class="input-text" id="mch_distance" name="mch_distance" maxlength="11"/><span style="margin-left:5px">米</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">系统配送费设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.logi_fee | default = ''}" style="width:200px;" type="text" class="input-text" id="logi_fee" name="logi_fee" maxlength="11"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">满金额包邮费用：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.logi_free_fee | default = ''}" style="width:200px;" type="text" class="input-text" id="logi_free_fee" name="logi_free_fee" maxlength="13"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">成为会员的价格：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.member_fee | default = ''}" style="width:200px;" type="text" class="input-text" id="member_fee" name="member_fee" maxlength="13"/><span style="margin-left:5px">元</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">会员周期：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.member_period | default = ''}" style="width:200px;" type="text" class="input-text" id="member_period" name="member_period" maxlength="11" /><span style="margin-left:5px">天</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">小程序分享的文字：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <textarea id="share_text" name="share_text" cols="" rows="" class="textarea"  placeholder="30个字符以内" dragonfly="true" maxlength="30" style="width:350px;" onkeyup="textarealength(this,30)">{$data.share_text | default = ''}</textarea>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">顶部导航颜色设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="colorSpan" id="choiceColor"></span>
+                    <input type="text" style="width:80px;" maxlength="6" class="input-text" value="{$data.mini_color | default = ''}" placeholder="" id="mini_color" name="mini_color" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">腾讯地理位置接口开发秘钥：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                     <input value="{$data.tencent_lbs_key | default = ''}" style="width:463px;" type="text" class="input-text" id="tencent_lbs_key" placeholder="例如:5DSBZ-PVDCW-YZ6RL-O2X5P-BU3TO-NBBHU" name="tencent_lbs_key" maxlength="50"/>
+                     <a target="_blank" href="http://lbs.qq.com/qqmap_wx_jssdk/index.html" style="display:block;text-decoration:none;color:#a0a3db;">*如果没有,请点击这里到腾讯位置服务官网申请秘钥</a>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">首页弹出界面是否展示：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box" style="width:150px;">
+                        <select id="is_layer_show" class="select" onchange="is_show(this)" name="is_layer_show" size="1">
+                            <option {if condition="empty($data.is_layer_show) == false && $data.is_layer_show eq 0"}selected{/if} value="0">
+                                不展示
+                            </option>
+                            <option {if condition="empty($data.is_layer_show) == false && $data.is_layer_show eq 1"}selected{/if} value="1">
+                                展示
+                            </option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div id="is_show_div">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3"></label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span style="color:gray;">*上传图片只接收jpg、png格式,大小限制在2M以内.</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-3">首页弹出界面封面：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div class="fileupload fileupload-new add_margin" data-provides="fileupload" style="width:34%;float:left;">
+                        <div class="fileupload-new thumbnail" style="width:200px;height:150px;">
+                            <img id="img_img" src="{$data.layer_img | default = ''}" alt="" style="width:100%;height:100%;"/>
+                        </div>
+                        <div class="fileupload-preview fileupload-exists thumbnail" id="changeDiv"></div>
+                        <div style="width:197px;">
+                            <span class="btn btn-default btn-file">
+                                <span class="fileupload-new"><i class="fa fa-paper-clip"></i>选择图片</span>
+                                <span class="fileupload-exists"><i class="fa fa-undo"></i> 更换</span>
+                                <input onchange="validateImg(this,'首页弹出界面图片',1048576*2,'changeDiv')" type="file" class="default" id="layer_img" name="layer_img" value="" />
+                            </span>
+                            <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">
+                                <i class="fa fa-trash"></i>
+                                清除
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row cl" id="skip">
+                <label class="form-label col-xs-4 col-sm-3">首页弹出界面跳转：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box" id="select-span" style="width:150px;">
+                        <select id="layer_nav_type" class="select" onchange="navTypeChange(this)" name="layer_nav_type" size="1">
+                            <option {if condition="empty($data.layer_nav_type) == false && $data.layer_nav_type eq 0"}selected{/if} value="0">
+                                不跳转
+                            </option>
+                            <option {if condition="empty($data.layer_nav_type) == false && $data.layer_nav_type eq 1"}selected{/if} value="1">
+                                跳转到指定商品
+                            </option>
+                            <option {if condition="empty($data.layer_nav_type) == false && $data.layer_nav_type eq 2"}selected{/if} value="2">
+                                跳转到指定内容
+                            </option>
+                            <option {if condition="empty($data.layer_nav_type) == false && $data.layer_nav_type eq 3"}selected{/if} value="3">
+                                跳转到指定优惠券
+                            </option>
+                            <option {if condition="empty($data.layer_nav_type) == false && $data.layer_nav_type eq 4"}selected{/if} value="4">
+                                跳转到指定分类
+                            </option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-xs-offset-4 col-sm-9 col-sm-offset-3">
+                    <button class="btn btn-success radius" type="submit">
+                        &nbsp;&nbsp;保存&nbsp;&nbsp;
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer class="footer mt-20">   
+        <div class="container">
+          <p>Powered By 福建麦口信息科技有限公司</p>
+        </div>
+    </footer>
+</body>
+</html>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jqueryColorPicker/js/colorpicker.js"></script>
+<script type="text/javascript">
+//图片大小验证
+//byte换算
+// 1042b = 1kb
+// 1048576b = 1mb
+// 1073741824b = 1gb
+// 1099511627776b = 1tb 
+function validateImg(obj,content,max,div){
+    var fileSize = $(obj)[0].files[0].size;
+    console.log(fileSize);
+    if( fileSize > max ){
+        $(obj).val('');
+        $('#'+div+' img').remove();
+        layer.alert(content+'文件大小超出最大限制!',{icon:2});
+    }
+}
+var layer_nav_type = window.document.getElementById('layer_nav_type');
+var is_layer_show = window.document.getElementById('is_layer_show');
+/**
+ * 字数限制
+ */
+function textarealength(obj,number){
+    var value = $(obj).val();
+    if( value.length > number ){
+        value = value.substring(0,number);
+        $(obj).val(value);
+    }
+    $(obj).next().find('em').html(value.length);
+}
+/**
+ * 是否显示首页弹窗选择
+ */
+function is_show(obj){
+    var value = $(obj).val();
+    if( value == 0 ){
+        $('#is_show_div').css({'display':'none'});
+        $('#img_img').attr('src','');
+        $('#img_a').remove();
+        $('#layer_img').val('');
+        $('#old_layer_img').val('');
+    }else{
+        $('#is_show_div').css({'display':'block'});
+    }
+}
+/**
+ * 跳转选择
+ */
+function navTypeChange(obj,nav_id){
+    var value = $(obj).val();
+    if( $('#nav_type_div').length > 0 ){
+        $('#nav_type_div').remove();
+    }
+    var selectTitle = '';
+    var url = '';
+    if( value == 1 ){
+        selectTitle = '商品选择';
+        url = '/index/content/getselect/type/goods';
+    }else if( value == 2 ){
+        selectTitle = '文章选择';
+        url = '/index/content/getselect/type/article';
+    }else if( value == 3 ){
+        selectTitle = '';
+        url = '';
+    }else if( value == 4 ){
+        selectTitle = '分类选择';
+        url = '/index/goods/catagoryZtree';
+    }
+    if( !url ){
+        return;
+    }
+    $.ajax({
+        type    : "POST",
+        url     : url,
+        data    : "",
+        typeData: "JSON",
+        success : function(res){
+            var goods_str = 
+                '<div id="nav_type_div" class="row cl">'+
+                '<label class="form-label col-xs-4 col-sm-3">'+selectTitle+'：</label>'+
+                '<div class="formControls col-xs-8 col-sm-9">'+
+                '<span class="select-box" id="select-span" style="width:150px;">'+
+                '<select class="select" id="select_id" name="layer_nav_id" size="1">';
+            var option_str = '';
+            if( value == 1 ){
+                for(var i=0;i<res.length;i++){
+                    if( res[i].goods_id == nav_id ){
+                        option_str += '<option selected value="'+res[i].goods_id+'">'+res[i].goods_name+'</option>';
+                    }else{
+                        option_str += '<option value="'+res[i].goods_id+'">'+res[i].goods_name+'</option>';
+                    }
+                }
+            }else if(value == 2){
+                for(var i=0;i<res.length;i++){
+                    if( res[i].article_id == nav_id ){
+                        option_str += '<option selected value="'+res[i].article_id+'">'+res[i].article_title+'</option>';
+                    }else{
+                        option_str += '<option value="'+res[i].article_id+'">'+res[i].article_title+'</option>';
+                    }
+                }
+            }else if(value == 3){
+                for(var i=0;i<res.length;i++){
+                    if( res[i].coupon_id == nav_id ){
+                        option_str += '<option selected value="'+res[i].coupon_id+'">'+res[i].coupon_name+'</option>';
+                    }else{
+                        option_str += '<option value="'+res[i].coupon_id+'">'+res[i].coupon_name+'</option>';
+                    }
+                }
+            }else{
+                res = res.data;
+                for(var i=0;i<res.length;i++){
+                    if( res[i].id == nav_id ){
+                        option_str += '<option selected value="'+res[i].id+'">'+res[i].name+'</option>';
+                    }else{
+                        option_str += '<option value="'+res[i].id+'">'+res[i].name+'</option>';
+                    }
+                }
+            }
+            var new_str = goods_str + option_str + '</select></span></div></div>';
+            var newEl = $(new_str);
+            $('#skip').after(newEl);
+        },
+        error   : function(error){
+            selectError(obj);
+            layer.alert('请求失败!');
+        }
+    });
+}
+//跳转选择请求错误处理
+function selectError(obj)
+{
+    var span = $(obj).parent();
+    $(obj).remove();
+    var select = $('<select id="layer_nav_type" class="select" onchange="navTypeChange(this)" name="layer_nav_type" size="1"><option value="0">不跳转</option><option value="1">跳转到指定商品</option><option value="2">跳转到指定内容</option><option value="3">跳转到指定优惠券</option><option value="4">跳转到指定分类</option></select>');
+    span.append(select);
+}
+$(function(){
+    //颜色选择
+    $('#mini_color').on('change',function(){
+        var value = $(this).val();
+        var reg = /^[0-9A-Fa-f]{6}$/;
+        if( !reg.test(value) ){
+            $('#mini_color').val('');
+        }
+    });
+    $('#mini_color').ColorPicker({
+        onSubmit: function(hsb, hex, rgb, el) {
+            $(el).val(hex);
+            $('#choiceColor').css({'background':'#'+hex});
+            $(el).ColorPickerHide();
+        },
+        onBeforeShow: function () {
+            $(this).ColorPickerSetColor(this.value);
+        },
+    }).bind('keyup', function(){
+        $(this).ColorPickerSetColor(this.value);
+    });
+    //表单提交
+    jQuery.validator.addMethod('isFloat',function(value,element){
+        var temp = value.split('.');
+        if( temp[1] && temp[1].length > 2 ){
+            return false;
+        }else{
+            return true;
+        }
+    },"请精确到2位小数点");
+    $("#form-setprogram-edit").validate({
+        rules: {
+            mini_name : {
+                required : true,
+                maxlength : 10,
+            },
+            service_phone : {
+                required : true,
+                maxlength : 14,
+                digits : true,
+            },
+            mch_distance : {
+                required : true,
+                maxlength : 11,
+                digits : true,
+                range : [0,99999999999],
+            },
+            logi_fee : {
+                required : true,
+                maxlength : 11,
+                number : true,
+                range : [0,99999999999],
+                isFloat : true,
+            },
+            logi_free_fee : {
+                maxlength : 13,
+                required : true,
+                number : true,
+                range : [0,999999999],
+                isFloat : true,
+            },
+            layer_nav_type : {
+                required : true,
+                number : true,
+                range : [0,4],
+            },
+            share_text : {
+                required : true,
+                maxlength: 30,
+            },
+            member_fee : {
+                required : true,
+                maxlength: 11,
+                number : true,
+                range  : [0,999999999],
+                isFloat: true,
+            },
+            member_period : {
+                required : true,
+                maxlength : 11,
+                digits : true,
+                range  : [0,360],
+            },
+            tencent_lbs_key : {
+                required : true,
+                maxlength : 50,
+            },
+        },
+        onkeyup:false,
+        success:"valid",
+        submitHandler:function(form){
+            var logi_free_fee = $('#logi_free_fee').val();
+            if( logi_free_fee < 0.01 && logi_free_fee != 0 ){
+                $('#logi_free_fee').val('');
+                layer.alert('满金额包邮费用不得小0.01,可以为0',{icon:2});
+                return;
+            }
+            var member_fee = $('#member_fee').val();
+            if( member_fee < 0.01 && member_fee != 0 ){
+                $('#member_fee').val('');
+                layer.alert('成为会员的价格不得小0.01,可以为0',{icon:2});
+                return;
+            }
+            var value = $('#mini_color').val();
+            var reg = /^[0-9A-Fa-f]{6}$/;
+            if( !reg.test(value) && value != '' ){
+                layer.alert('顶部导航颜色格式不正确!',{icon:2});
+                $('#mini_color').val('');
+                return;
+            }
+            if( value == '' ){
+                $('#mini_color').val('ffffff');
+                $('#choiceColor').css({'background':'#ffffff'});
+            }
+            var is_show_val = $('#is_layer_show').val();
+            if( is_show_val == 1 ){
+                var img = $('#layer_img').val();
+                if( img == '' ){
+                    var old_img = $('#old_layer_img');
+                    if( old_img.length == 0  || old_img.val() == '' ){
+                        layer.alert('请选择首页弹出界面封面!',{icon:2});
+                        return;
+                    }
+                }else{
+                    var arr = img.split('\\');//注split可以用字符或字符串分割
+                    var fileName = arr[arr.length - 1];//这就是要取得的名文件称
+                    var index = fileName.lastIndexOf(".");
+                    if (index < 0) {
+                        layer.msg("图片格式不正确！", { icon: 6, time: 1300 });
+                        return;
+                    } else {
+                        var ext = fileName.substring(index + 1, img.length);
+                        if( ext != 'jpg' && ext!='jpeg' && ext!='png' && ext!='gif' ){
+                            layer.msg("图片格式不正确！", { icon: 6, time: 1300 });
+                            return;
+                        }
+                    }
+                }
+            }
+            var layer_nav_type_val = $('#layer_nav_type').val();
+            if( layer_nav_type_val > 0 ){
+                var select = $('#select_id').val();
+                if( !select ){
+                    location.href = location.href;
+                    return;
+                }
+            }
+            layer.confirm('确定保存吗?',function(){
+                $(form).ajaxSubmit({
+                    type : 'POST',
+                    url  : '/index/system/editProgram',
+                    typeData : 'JSON',
+                    success : function (result){
+                        if( result.code < 400 ){
+                            layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+                                window.location.href = window.location.href;
+                            });
+                        }else{
+                            layer.alert(result.msg);
+                        }
+                    },
+                    error : function(){
+                        layer.alert('请求失败!');
+                    }
+                });
+            });
+        }
+    });
+});
+is_show(is_layer_show);
+{notempty name="$data.layer_nav_id"}
+    navTypeChange(layer_nav_type,'{$data.layer_nav_id}');
+{/notempty}
+</script>

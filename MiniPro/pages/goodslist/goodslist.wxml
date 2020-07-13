@@ -1,0 +1,21 @@
+<import src="/template/goods.wxml" />
+<import src="/template/cart.wxml" />
+
+<view class="container" wx:if="{{goodsList.length > 0}}">
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+
+  <!-- 只有当这里是专栏的时候才会展示 -->
+  <view class='banner' wx:if="{{columnInfo}}">
+    <image src='{{columnInfo.column_img}}'></image>
+  </view>
+  <!-- 商品列表 -->
+  <block wx:for="{{goodsList}}" wx:key="goods_id">
+    <template is="goods" data="{{...item}}" />
+  </block>
+</view>
+<view class='nothing' wx:else>
+  <text>暂无相关数据</text>
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+</view>

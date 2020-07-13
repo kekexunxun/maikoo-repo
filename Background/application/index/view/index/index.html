@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="Bookmark" href="/favicon.ico">
+	<link rel="Shortcut Icon" href="/favicon.ico" />
+
+	<link rel="stylesheet" type="text/css" href="static/lib/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="static/lib/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="static/lib/h-ui.admin/css/style.css" />
+
+	<title>便利店后台</title>
+	<meta name="keywords" content="后台管理系统">
+	<meta name="description" content="网站后台系统">
+</head>
+
+<body>
+	<header class="navbar-wrapper">
+		<div class="navbar navbar-fixed-top">
+			<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="https://xnps.up.maikoo.cn/">便利店后台</a>
+				<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0.0</span>
+				<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
+
+				<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+					<ul class="cl">
+						<li>超级管理员</li>
+						<li class="dropDown dropDown_hover">
+							<span id="admin_id" style="display: none;">{$admin_id}</span>
+							<a href="#" class="dropDown_A">{$username}<i class="Hui-iconfont">&#xe6d5;</i></a>
+							<ul class="dropDown-menu menu radius box-shadow">
+								<li><a href="javascript:;" onClick="editPassword()">修改密码</a></li>
+								<li><a href="index/index/logout">退出</a></li>
+							</ul>
+						</li>
+						<li id="Hui-skin" class="dropDown right dropDown_hover"> <a href="javascript:;" class="dropDown_A" title="换肤"><i
+								 class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
+							<ul class="dropDown-menu menu radius box-shadow">
+								<li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
+								<li><a href="javascript:;" data-val="blue" title="蓝色">蓝色</a></li>
+								<li><a href="javascript:;" data-val="green" title="绿色">绿色</a></li>
+								<li><a href="javascript:;" data-val="red" title="红色">红色</a></li>
+								<li><a href="javascript:;" data-val="yellow" title="黄色">黄色</a></li>
+								<li><a href="javascript:;" data-val="orange" title="橙色">橙色</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header>
+	<aside class="Hui-aside">
+		<div class="menu_dropdown bk_2">
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 1"}
+			<dl id="menu-system">
+				<dt><i class="Hui-iconfont">&#xe61d;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 2"}
+						<li><a data-href="index/admin/adminlist" data-title="管理员管理" href="javascript:void(0)">管理员管理</a></li>
+						{/if}
+						{/volist}
+
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 2"}
+						<li><a data-href="index/system/setprogram" data-title="小程序设置" href="javascript:void(0)">小程序设置</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 3"}
+			<dl id="menu-merchant">
+				<dt><i class="Hui-iconfont">&#xe66a;</i> 商家管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 4"}
+						<li><a data-href="index/merchant/merchantlist" data-title="商家管理" href="javascript:void(0)">商家管理</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 5"}
+						<li><a data-href="index/merchant/admissionlist" data-title="商家入驻申请" href="javascript:void(0)">商家入驻申请</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 6"}
+			<dl id="menu-goods">
+				<dt><i class="Hui-iconfont">&#xe620;</i> 商品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 7"}
+						<li><a data-href="index/goods/goodslist" data-title="商品管理" href="javascript:void(0)">商品管理</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 8"}
+						<li><a data-href="index/goods/catagory" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>
+						{/if}
+						{/volist}
+
+						<!-- <li><a data-href="index/goods/stock" data-title="库存管理" href="javascript:void(0)">库存管理</a></li> -->
+
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 21"}
+						<li><a data-href="index/goods/columnlist" data-title="专栏管理" href="javascript:void(0)">专栏管理</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 33"}
+						<li><a data-href="index/goods/comment" data-title="评价管理" href="javascript:void(0)">评价管理</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 9"}
+			<dl id="menu-order">
+				<dt><i class="Hui-iconfont">&#xe627;</i> 订单管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 10"}
+						<li><a data-href="index/order/orderlist" data-title="订单管理" href="javascript:void(0)">订单管理</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 11"}
+			<dl id="menu-user">
+				<dt><i class="Hui-iconfont">&#xe62c;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 12"}
+						<li><a data-href="index/user/userlist" data-title="用户信息" href="javascript:void(0)">用户信息</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 13"}
+			<dl id="menu-content">
+				<dt><i class="Hui-iconfont">&#xe6c0;</i> 内容管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 14"}
+						<li><a data-href="index/content/bannerlist" data-title="banner" href="javascript:void(0)">banner</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 15"}
+						<li><a data-href="index/content/article" data-title="文章管理" href="javascript:void(0)">文章管理</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 16"}
+						<li><a data-href="index/content/adlist" data-title="广告栏" href="javascript:void(0)">广告栏</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 17"}
+						<li><a data-href="index/content/questionlist" data-title="问答管理" href="javascript:void(0)">问答管理</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 18"}
+						<li><a data-href="index/content/feedbacklist" data-title="用户反馈" href="javascript:void(0)">用户反馈</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 19"}
+						<li><a data-href="index/content/clauselist" data-title="用户协议" href="javascript:void(0)">用户协议</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 20"}
+						<li><a data-href="index/content/searchlist" data-title="搜索界面" href="javascript:void(0)">搜索界面</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 22"}
+			<dl id="menu-promotion">
+				<dt><i class="Hui-iconfont">&#xe6ca;</i> 营销管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 23"}
+						<li><a data-href="index/promotion/couponlist" data-title="优惠券管理" href="javascript:void(0)">优惠券管理</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+
+			{volist name="$menuList" id="vol"}
+			{if condition="$vol.menu_id == 24"}
+			<dl id="menu-tongji">
+				<dt><i class="Hui-iconfont">&#xe61a;</i> 系统统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 25"}
+						<li><a data-href="index/chart/userchart" data-title="用户统计" href="javascript:void(0)">用户统计</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 26"}
+						<li><a data-href="index/chart/goodschart" data-title="商品统计" href="javascript:void(0)">商品统计</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 27"}
+						<li><a data-href="index/chart/orderchart" data-title="订单统计" href="javascript:void(0)">订单统计</a></li>
+						{/if}
+						{/volist}
+						{volist name="$menuList" id="vol"}
+						{if condition="$vol.menu_id == 28"}
+						<li><a data-href="index/chart/incomechart" data-title="金额统计" href="javascript:void(0)">收入统计</a></li>
+						{/if}
+						{/volist}
+					</ul>
+				</dd>
+			</dl>
+			{/if}
+			{/volist}
+		</div>
+	</aside>
+	<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+	<section class="Hui-article-box">
+		<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+			<div class="Hui-tabNav-wp">
+				<ul id="min_title_list" class="acrossTab cl">
+					<li class="active">
+						<span title="我的桌面" data-href="index/index/welcome.html">我的桌面</span>
+						<em></em></li>
+				</ul>
+			</div>
+			<div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i
+					 class="Hui-iconfont">&#xe6d4;</i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i
+					 class="Hui-iconfont">&#xe6d7;</i></a></div>
+		</div>
+		<div id="iframe_box" class="Hui-article">
+			<div class="show_iframe">
+				<div style="display:none" class="loading"></div>
+				<iframe scrolling="yes" frameborder="0" src="index/index/welcome.html"></iframe>
+			</div>
+		</div>
+	</section>
+
+	<div class="contextMenu" id="Huiadminmenu">
+		<ul>
+			<li id="closethis">关闭当前 </li>
+			<li id="closeall">关闭全部 </li>
+		</ul>
+	</div>
+	<div id="modal-demotwo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content radius">
+				<div class="modal-header">
+					<h3 class="modal-title">修改管理员密码</h3>
+					<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+				</div>
+				<div class="modal-body">
+					<!-- <p>对话框内容…</p> -->
+					<form action="" method="post" class="form form-horizontal" id="form-addadmin-add">
+						<div class="row cl" style="margin-left: 60px;">
+							<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" value="" placeholder="密码"
+								 id="password" name="password">
+							</div>
+						</div>
+						<div class="row cl" style="margin-left: 60px;">
+							<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>新密码：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" placeholder="新密码" id="password1"
+								 name="password1">
+							</div>
+						</div>
+						<div class="row cl" style="margin-left: 60px;">
+							<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input style="width: 200px;" type="password" class="input-text valid" autocomplete="off" placeholder="确认新密码" id="password2"
+								 name="password2">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button id="confirm" class="btn btn-primary">确定</button>
+					<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--_footer 作为公共模版分离出去-->
+	<script type="text/javascript" src="static/lib/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="static/lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="static/lib/h-ui/js/H-ui.min.js"></script>
+	<script type="text/javascript" src="static/lib/h-ui.admin/js/H-ui.admin.js"></script>
+	<!--/_footer 作为公共模版分离出去-->
+
+	<!--请在下方写此页面业务相关的脚本-->
+	<script type="text/javascript" src="static/lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
+	<script src="md5.min.js"></script>
+	<script type="text/javascript">
+		function editPassword() {
+			// 修改管理员密码
+			$("#modal-demotwo").modal("show");
+		}
+		// 点击确定
+		$("#confirm").click(function () {
+			var admin_id = $("#admin_id").text();
+			var password = md5($('#password').val());
+			var password1 = md5($('#password1').val());
+			var password2 = md5($('#password2').val());
+			if ($('#password').val() == '' || $('#password1').val() == '' || $('#password2').val() == '') {
+				layer.msg('密码不能为空！', { icon: 2, time: 1000 });
+				return false;
+			} else if ($('#password1').val() != $('#password2').val()) {
+				layer.msg('两次输入的密码不一致！', { icon: 2, time: 1000 });
+				return false;
+			}
+			// 发送ajax
+			$.ajax({
+				type: 'POST',
+				url: 'index/index/passwordUpdate',
+				dataType: 'json',
+				data: { admin_id: admin_id, password: password, password1: password1 },
+				success: function (data) {
+					if (data.code == "0") {
+						layer.msg(data.msg, { icon: 1, time: 1000 });
+						setTimeout("location.replace(location.href);", 1000)
+					}
+					if (data.code == '400') {
+						layer.msg(data.msg, { icon: 2, time: 1000 });
+					}
+				},
+				error: function (data) {
+					layer.msg('网络错误，请稍后重试！', { icon: 2, time: 1000 });
+				},
+			});
+		})	
+	</script>
+</body>
+
+</html>

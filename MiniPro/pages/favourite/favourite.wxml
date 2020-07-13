@@ -1,0 +1,39 @@
+<import src="/template/goods.wxml" />
+<import src="/template/cart.wxml" />
+
+<view class="container" wx:if="{{goodsList.length > 0}}">
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+
+  <!-- 商品列表 -->
+  <block wx:for="{{goodsList}}" wx:key="goods_id">
+    <view class='goods goods-bottom-line' bindtap='navToGoods' data-goodsid='{{item.goods_id}}'>
+      <view class='goods-left'>
+        <image src='{{item.goods_img}}'></image>
+      </view>
+      <view class='goods-middle'>
+        <view class='goods-title text-overflow'>{{item.goods_name}}</view>
+        <view class='goods-keywords text-overflow'>{{item.keywords}}</view>
+        <view class='goods-spec text-overflow'>
+          <text>{{item.unit}}</text>
+        </view>
+        <view class='goods-price text-overflow'>￥{{item.shop_price}}
+          <text>￥{{item.market_price}}</text>
+        </view>
+      </view>
+      <view class='goods-right'>
+        <view class='goods-right-image' catchtap='addToCart' data-goodsid="{{item.goods_id}}" data-price='{{item.shop_price}}'>
+          <image src='/images/icon-plus.png'></image>
+        </view>
+        <view class='goods-right-image del-fav' catchtap='delFav' data-idx='{{index}}' data-goodsid="{{item.goods_id}}">
+          <image src='/images/icon-fav-true.png'></image>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+<view class='nothing' wx:else>
+  <text>暂无相关数据</text>
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+</view>

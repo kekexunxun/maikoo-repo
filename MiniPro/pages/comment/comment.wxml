@@ -1,0 +1,71 @@
+<view class="container">
+  <!-- 商品评价 -->
+  <block wx:for="{{commentList}}" wx:key="{{goods_id}}">
+    <view class='comment-item'>
+      <!-- 评价的title -->
+      <view class='comment-title'>
+        <view class='comment-title-img'>
+          <image src='{{item.goods_img}}'></image>
+        </view>
+        <view class='comment-title-com good'>
+          <image src="{{item.satisfy == 1 ? '/images/icon-good-select.png' : '/images/icon-good.png'}}" bindtap='changeSatisfy' data-idx='{{index}}' data-sat='1'></image>
+          <text>好评</text>
+        </view>
+        <view class='comment-title-com middle'>
+          <image src="{{item.satisfy == 2 ? '/images/icon-middle-select.png' : '/images/icon-middle.png'}}" bindtap='changeSatisfy' data-idx='{{index}}' data-sat='2'></image>
+          <text>中评</text>
+        </view>
+        <view class='comment-title-com bad'>
+          <image src="{{item.satisfy == 3 ? '/images/icon-bad-select.png' : '/images/icon-bad.png'}}" bindtap='changeSatisfy' data-idx='{{index}}' data-sat='3'></image>
+          <text>差评</text>
+        </view>
+      </view>
+      <!-- 评价的content -->
+      <view class='comment-content'>
+        <textarea maxlength='100' placeholder='宝贝满足你的期待吗？快来发表你对它的看法吧' bindblur='inputComment' data-idx='{{index}}' value='{{item.comment}}'></textarea>
+      </view>
+    </view>
+  </block>
+
+  <view class='line'></view>
+
+  <!-- 店铺评价 -->
+  <view class='shop-comment'>
+    <view class='shop-comment-line shop-title'>
+      <image src='/images/icon-shop.png'></image>
+      <text>店铺评分</text>
+    </view>
+    <view class='shop-comment-line shop-item'>
+      <text>描述相符</text>
+      <block wx:for="{{rate}}" wx:key="">
+        <image src='/images/icon-rate-star.png' bindtap='changeShopRate' data-stype='0' data-idx='{{index}}' wx:if="{{index + 1 > shopRate[0]}}"></image>
+        <image src='/images/icon-rate-star-select.png' bindtap='changeShopRate' data-stype='0' data-idx='{{index}}' wx:if="{{index + 1 <= shopRate[0]}}"></image>
+      </block>
+      <text class='rate-score'>{{rate[shopRate[0] - 1]}}</text>
+    </view>
+    <view class='shop-comment-line shop-item'>
+      <text>物流服务</text>
+      <block wx:for="{{rate}}" wx:key="">
+        <image src='/images/icon-rate-star.png' bindtap='changeShopRate' data-stype='1' data-idx='{{index}}' wx:if="{{index + 1 > shopRate[1]}}"></image>
+        <image src='/images/icon-rate-star-select.png' bindtap='changeShopRate' data-stype='1' data-idx='{{index}}' wx:if="{{index + 1 <= shopRate[1]}}"></image>
+      </block>
+      <text class='rate-score'>{{rate[shopRate[1] - 1]}}</text>
+    </view>
+    <view class='shop-comment-line shop-item'>
+      <text>服务态度</text>
+      <block wx:for="{{rate}}" wx:key="">
+        <image src='/images/icon-rate-star.png' bindtap='changeShopRate' data-stype='2' data-idx='{{index}}' wx:if="{{index + 1 > shopRate[2]}}"></image>
+        <image src='/images/icon-rate-star-select.png' bindtap='changeShopRate' data-stype='2' data-idx='{{index}}' wx:if="{{index + 1 <= shopRate[2]}}"></image>
+      </block>
+      <text class='rate-score'>{{rate[shopRate[2] - 1]}}</text>
+    </view>
+  </view>
+
+  <!-- 提交评价按钮 -->
+  <view class='bottom-btn'>
+    <form report-submit='true' bindsubmit='submitRate'>
+      <button form-type='submit' disabled='{{!isCanSubmit}}'>发布</button>
+    </form>
+  </view>
+
+</view>

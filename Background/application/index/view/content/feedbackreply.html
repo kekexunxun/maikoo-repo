@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+        <script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+        <script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <style>
+    </style>
+    <title>用户回馈回复</title>
+    </head>
+<body>
+<div class="page-container">
+    <form action="/" method="post" class="form form-horizontal" id="form-keedback-reply">
+    	<input type="hidden" name="idx" value="{$data.idx}" />
+    	<input type="hidden" name="status" value="{$data.status}" />
+        <div class="row cl">
+            <label class="form-label col-xs-8 col-sm-2">用户反馈：</label>
+            <div class="formControls col-xs-4 col-sm-9">
+                <textarea id="message" disabled="true" name="" cols="" rows="" class="textarea"  placeholder="140个字符以内" dragonfly="true" onkeyup="textarealength(this,140)">{$data.message}</textarea>
+                <p class="textarea-numberbar"><em class="textarea-length-one">0</em>/140</p>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-8 col-sm-2">回复：</label>
+            <div class="formControls col-xs-4 col-sm-9">
+                <textarea id="reply" name="reply" cols="" rows="" class="textarea"  placeholder="140个字符以内" dragonfly="true" onkeyup="textarealength(this,140)">{$data.reply}</textarea>
+                <p class="textarea-numberbar"><em class="textarea-length-two">0</em>/140</p>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-5 col-xs-offset-7 col-sm-6 col-sm-offset-5">
+                <button class="btn btn-success radius" type="submit">
+                    &nbsp;&nbsp;提交&nbsp;&nbsp;
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<footer class="footer mt-20">   
+    <div class="container">
+        <p>Powered By 福建麦口信息科技有限公司</p>
+    </div>
+</footer>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript">
+/*字数限制*/
+function textarealength(obj,number){
+    var value = $(obj).val();
+    if( value.length > number ){
+        value = value.substring(0,number);
+        $(obj).val(value);
+    }
+    $(obj).next().find('em').html(value.length);
+}
+$(function(){
+	$('#message').next().find('em').html( $('#message').val().length );
+	$('#reply').next().find('em').html( $('#reply').val().length );
+	/*表单提交*/
+    $("#form-keedback-reply").validate({
+        rules: {
+            reply : {
+                required : true,
+                minlength : 5,
+                maxlength : 140,
+            }
+        },
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+            $(form).ajaxSubmit({
+                type : 'POST',
+                url  : '/index/content/feedbackreply',
+                typeData : 'JSON',
+                success : function (result){
+                    if( result.code < 400 ){
+                        layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+                            window.parent.location.href = window.parent.location.href;
+                        });
+                    }else{
+                        layer.alert(result.msg);
+                    }
+                },
+                error : function(){
+                    layer.alert('请求失败!');
+                }
+            });
+        }
+    });
+});
+</script>>

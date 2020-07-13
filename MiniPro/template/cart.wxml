@@ -1,0 +1,9 @@
+<template name="cart">
+  <view class='cart-container' wx:if="{{isShow}}" bindtap='navToCart'>
+    <view class='cart-left-icon'>
+      <image src='/images/icon-cart-layer.png'></image>
+    </view>
+    <view class='cart-line' wx:if="{{money != '0.00'}}"></view>
+    <view class='cart-right-price' wx:if="{{money != '0.00'}}">￥{{money}}</view>
+  </view>
+</template>

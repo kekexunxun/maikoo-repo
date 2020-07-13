@@ -1,0 +1,67 @@
+<!-- 引入需要使用的模板 -->
+<import src="/template/goods.wxml"/>
+<import src="/template/cart.wxml" />
+<view class="page">
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+  <view class="page__bd">
+    <view class="weui-search-bar">
+      <view class="weui-search-bar__form">
+        <view class="weui-search-bar__box">
+          <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+          <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+          <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+            <icon type="clear" size="14"></icon>
+          </view>
+        </view>
+        <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+          <icon class="weui-icon-search" type="search" size="14"></icon>
+          <view class="weui-search-bar__text">搜索</view>
+        </label>
+      </view>
+      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput" wx:if="{{inputVal.length == 0}}">关闭</view>
+      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="search" wx:else>搜索</view>
+    </view>
+  </view>
+</view>
+<!--  展示实时搜索结果  -->
+<block wx:if="{{showSearchResult}}">
+  <view class='container' wx:if="{{searchResult.length > 0}}">
+    <!--  当有搜索结果时展示搜索结果  -->
+    <block wx:for="{{searchResult}}" wx:key="goods_id">
+      <template is="goods" data="{{...item}}"/>
+    </block>
+  </view>
+  <view class='container' wx:else>
+    <view class='nothing-info'>未找到与{{inputVal}}相关的商品</view>
+  </view>
+</block>
+
+<!--  不展示搜索结果时 展示用户搜索历史和系统提供的搜索列表  -->
+<block wx:else>
+  <view class='search-list-container'>
+    <view class='search-history' wx:if="{{searchHistroy.length > 0}}">
+      <view class='search-history-title'>
+        <view class='search-history-title-left'>搜索历史</view>
+        <view class='search-history-title-right' bindtap='delUserHistory'>
+          <image src='/images/icon-delete.png'></image>
+        </view>
+      </view>
+      <view class='search-history-list'>
+        <block wx:for="{{searchHistroy}}" wx:key="">
+          <view class='search-history-item' data-idx='{{index}}' bindtap='searchHistroy'>{{item.value}}</view>
+        </block>
+      </view>
+    </view>
+    <view class='search-history'>
+      <view class='search-history-title'>
+        <view class='search-history-title-left'>热门搜索</view>
+      </view>
+      <view class='search-history-list'>
+        <block wx:for="{{searchList}}" wx:key="">
+          <view class='search-history-item' data-idx='{{index}}' bindtap='searchKeyword'>{{item.value}}</view>
+        </block>
+      </view>
+    </view>
+  </view>
+</block>

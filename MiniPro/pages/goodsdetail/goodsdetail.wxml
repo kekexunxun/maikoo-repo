@@ -1,0 +1,57 @@
+<import src="/template/cart.wxml" />
+
+<view class="container">
+
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+
+  <view class='goods-detail-container' style="height: {{detailHeight}}px">
+    <!-- banner -->
+    <view class='banner'>
+      <image src='{{goodsInfo.goods_img}}'></image>
+    </view>
+    <!-- GoodsInfo -->
+    <view class='goods-info'>
+      <view class='goods-name'>{{goodsInfo.goods_name}}</view>
+      <view class='goods-keyword'>{{goodsInfo.keywords}}</view>
+      <view class='goods-price-detail'>
+        <view class='shop-price'>￥<text>{{goodsInfo.shop_price}}</text></view>
+        <view class='market-price'>/￥{{goodsInfo.market_price}}</view>
+      </view>
+    </view>
+    <view class='goods-spec-detail'>
+      <view class='goods-spec-item'>
+        <image src='/images/icon-unit.png'></image>
+        <text>{{goodsInfo.unit}}</text>
+      </view>
+      <view class='goods-spec-item'>
+        <image src='/images/icon-stock.png'></image>
+        <text>剩余{{goodsInfo.stock}}件</text>
+      </view>
+      <view class='goods-spec-item'>
+        <image src='/images/icon-logi.png'></image>
+        <text>{{logiFreeFee}}</text>
+      </view>
+      <!-- </view> -->
+    </view>
+  </view>
+
+  <view class='goods-spec'>
+    <view class='goods-spec-title'>商品详情</view>
+    <block wx:for="{{goodsInfo.goods_desc}}" wx:key="">
+      <image src='{{item}}' bindtap='showImagePreview' data-img="{{item}}" mode='widthFix'></image>
+    </block>
+  </view>
+
+  <!-- bottom-btn -->
+  <view class='bottom-btn'>
+    <view class='bottom-left' bindtap='addToFav'>
+      <image src="{{goodsInfo.isFav ? '/images/icon-fav-true.png' : '/images/icon-fav.png'}}"></image>
+    </view>
+    <view class='bottom-right'>
+      <form report-submit='true' bindtap='addToCart'>
+        <button form-type='submit'>加入购物车</button>
+      </form>
+    </view>
+  </view>
+</view>

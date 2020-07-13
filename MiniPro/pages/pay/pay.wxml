@@ -1,0 +1,136 @@
+<view class='container'>
+
+  <!-- 地址选择 -->
+  <view class='address'>
+    <block wx:if="{{!address}}">
+      <button class='address-btn' open-type="openSetting" bindopensetting="checkUserAuthSetting" wx:if="{{!addressAuth}}">选择地址</button>
+      <view class='address-btn' bindtap='chooseAddress' wx:if="{{addressAuth}}">选择地址</view>
+    </block>
+    <block wx:else>
+      <view class='address-content' bindtap='chooseAddress'>
+        <view class='address-info'>
+          <view>{{address}} {{addressDetail}}</view>
+          <view class='address-info-image'>
+            <image src='/images/arrow-right.png'></image>
+          </view>
+        </view>
+        <view class='address-info'>
+          {{userName}} {{telNumber}}
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 送达时间选项 -->
+  <view class='order-item item-margin-bottom'>
+    <view class='order-item-left'>送达时间</view>
+    <view class='order-item-middle'>
+      <view>
+        <picker mode="multiSelector" bindchange="bindLogiTimeSelect" bindcolumnchange="bindLogiTimeChange" value="{{multiIndex}}" range="{{multiArray}}">
+          <view class="picker text-align-right">
+            {{multiArray[0][multiIndex[0]]}} {{multiArray[1][multiIndex[1]]}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class='order-item-right'>
+      <image src='/images/icon-arrow-right-slim.png'></image>
+    </view>
+  </view>
+
+  <!-- 优惠券 -->
+  <view class='order-item item-margin-bottom' bindtap='navToCoupon'>
+    <view class='order-item-left'>优惠卡券</view>
+    <view class='order-item-middle price-color'>
+      ￥{{couponFee}}
+    </view>
+    <view class='order-item-right'>
+      <image src='/images/icon-arrow-right-slim.png'></image>
+    </view>
+  </view>
+
+  <!-- 留言备注 -->
+  <view class='order-item item-margin-bottom'>
+    <view class='order-item-left'>买家留言</view>
+    <view class='order-item-middle'>
+      <input class='input' bindblur='inputMessage' placeholder='请输入留言信息' maxlength='100'></input>
+    </view>
+    <view class='order-item-right'>
+    </view>
+  </view>
+
+  <!-- 商品信息 -->
+  <view class="order-item {{isShowGoodsDetail ? 'item-border-bottom' : 'item-margin-bottom'}}" bindtap='showGoodsDetail'>
+    <view class='order-item-left'>商品数量</view>
+    <view class='order-item-middle'>
+      <view class='text-align-right'>{{totalNum}}件</view>
+    </view>
+    <view class='order-item-right'>
+      <image src="{{isShowGoodsDetail ? '/images/icon-arrow-down-slim.png' : '/images/icon-arrow-right-slim.png'}}"></image>
+    </view>
+  </view>
+  <view class='goods-list item-margin-bottom' wx:if="{{isShowGoodsDetail}}">
+    <block wx:for="{{goodsInfo}}" wx:key="goodsid">
+      <view class='goods-item'>
+        <view class='goods-item-left'>
+          <image src='{{item.goods_img}}'></image>
+        </view>
+        <view class='goods-item-middle text-overflow'>{{item.goods_name}}</view>
+        <view class='goods-item-right'>
+          <text class='price-color'>￥{{item.shop_price}}</text>
+          <text>x{{item.quantity}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 选择配送店铺 -->
+  <!-- <view class='order-item item-margin-bottom' bindtap='navToCoupon'>
+    <view class='order-item-left'>配送店铺</view>
+    <view class='order-item-middle price-color'>
+      <view>
+        <picker mode="selector" bindchange="bindLogiTimeSelect" value="{{index}}" range="{{multiArray}}">
+          <view class="picker text-align-right">
+            {{multiArray[0][multiIndex[0]]}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class='order-item-right'>
+      <image src='/images/icon-arrow-right-slim.png'></image>
+    </view>
+  </view> -->
+
+  <!-- 商品总价 -->
+  <view class="order-item item-border-bottom">
+    <view class='order-item-left'>商品总价</view>
+    <view class='order-item-middle overwrite-middle'>
+      <text>￥{{goodsFee}}</text>
+    </view>
+    <!-- <view class='order-item-right'>
+    </view> -->
+  </view>
+
+
+  <!-- 配送费 -->
+  <view class='order-item item-border-bottom'>
+    <view class='order-item-left'>当前运费</view>
+    <view class='order-item-middle overwrite-middle'>
+      <text>￥{{logiFee}}</text>
+    </view>
+  </view>
+
+  <!-- 订单总价 -->
+  <view class='order-item'>
+    <view class='order-item-left'>订单总价</view>
+    <view class='order-item-middle overwrite-middle'>
+      <text>￥{{totalFee}}</text>
+    </view>
+  </view>
+
+  <view class='detail-bottom'>
+    <form report-submit="true" bindsubmit='makeOrder'>
+      <button form-type="submit" disabled='{{!isCanSubmitOrder}}'>提交订单</button>
+    </form>
+  </view>
+</view>

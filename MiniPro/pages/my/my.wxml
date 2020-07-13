@@ -1,0 +1,69 @@
+<import src="/template/cart.wxml" />
+
+<view class="container">
+
+  <!-- 悬浮的cart -->
+  <template is="cart" data="{{...cartData}}" />
+  
+  <view class="userinfo" style="background-image: url('https://art.up.maikoo.cn/static/img/my-bg.png')">
+    <block wx:if="{{userInfo.nickName}}">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+    <block wx:else>
+      <view class='logout'>
+        <image src='/images/icon-user.png'></image>
+      <form bindsubmit='navToAuth'>
+        <button form-type='submit'>登陆/注册</button>
+      </form>
+      </view>
+    </block>
+  </view>
+  <view class="menu-list">
+    <!-- 我的订单列表 -->
+    <view class='order'>
+      <view class='order-item' bindtap='navToOrder' data-state='1'>
+        <image src='/images/icon-order-nopay.png'></image>
+        <text>待付款</text>
+      </view>
+      <view class='order-item' bindtap='navToOrder' data-state='2'>
+        <image src='/images/icon-order-logi.png'></image>
+        <text>待收货</text>
+      </view>
+      <view class='order-item' bindtap='navToOrder' data-state='3'>
+        <image src='/images/icon-order-remark.png'></image>
+        <text>待评价</text>
+      </view>
+      <view class='order-item' bindtap='navToOrder' data-state='0'>
+        <image src='/images/icon-order-all.png'></image>
+        <text>全部订单</text>
+      </view>
+    </view>
+    <!-- 常规选项 -->
+    <view class='common-menu'>
+      <block wx:for="{{menuList}}" wx:key="">
+        <form report-submit='true' bindsubmit='{{item.tap}}' hidden='{{index == 1 && !addressAuth}}'>
+          <button form-type='submit' class="{{item.isCut ? 'menu-btn-split' : 'menu-btn-top'}} {{index == 0 ? 'no-top' : ''}}" open-type='{{item.opentype}}' hidden="{{item.text == '退出登录' && !userInfo.nickName}}">
+            <view class='menu-btn-left'>
+              <image src='{{item.icon}}'></image>
+            </view>
+            <view class='menu-btn-middle'>{{item.text}}</view>
+            <view class='menu-btn-left'>
+              <image src='/images/icon-arrow-right.png' wx:if="{{item.text != '退出登录'}}"></image>
+            </view>
+          </button>
+        </form>
+        <!-- 当用户取消地址授权 该功能为打开用户设置 -->
+        <button class="{{item.isCut ? 'menu-btn-split' : 'menu-btn-top'}} {{index == 0 ? 'no-top' : ''}}" open-type='openSetting' wx:if="{{index == 1 && !addressAuth}}" bindopensetting="openSetting">
+          <view class='menu-btn-left'>
+            <image src='{{item.icon}}'></image>
+          </view>
+          <view class='menu-btn-middle'>{{item.text}}</view>
+          <view class='menu-btn-left'>
+            <image src='/images/icon-arrow-right.png'></image>
+          </view>
+        </button>
+      </block>
+    </view>
+  </view>
+</view>

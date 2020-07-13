@@ -1,0 +1,23 @@
+
+<template name="section">
+  <view class='section'>
+    <view class='sec-banner'>
+      <image src='{{column_img}}'></image>
+    </view>
+    <view class='sec-content'>
+      <block wx:for="{{goods}}" wx:key="goods_id">
+        <template is="goods" data="{{...item}}" />
+      </block>
+    </view>
+    <view class='sec-all'>
+      <view class='sec-all-content' bindtap='navToColumn'>
+        <view>
+          <text>查看全部</text>
+        </view>
+        <view class='image-view'>
+          <image src='/images/icon-arrow-right-666.png'></image>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

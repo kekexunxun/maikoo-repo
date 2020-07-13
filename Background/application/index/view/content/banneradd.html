@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <link href="__ROOT__/static/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+    <title>小程序Banner</title>
+</head>
+<body>
+<!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> Banner管理 <span class="c-gray en">&gt;</span> 添加Banner <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
+<div class="page-container">
+    <form class="form form-horizontal" id="form-article-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">banner排序：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select name="banner_sort" id="banner_sort" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否跳转：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_nav_type" id="banner_nav_type"style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="0">不跳转</option>
+                    <option value="1">跳转指定商品</option>
+                    <option value="2">跳转到文章</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl goods" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-2">选择指定商品：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="select_goods" id="select_goods" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    {if condition="$goodsData == ''"}
+
+                    {else /}
+                    {volist name="$goodsData" id="vol"}
+                        <option value="{$vol.goods_id}">{$vol.goods_name}</option> 
+                    {/volist}
+                    {/if}
+                </select>                    
+            </div>
+        </div>
+        <div class="row cl article" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-2">选择指定文章：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="select_article" id="select_article" style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    {if condition="$articleData == ''"}
+
+                    {else /}
+                    {volist name="$articleData" id="vol"}
+                        <option value="{$vol.article_id}">{$vol.article_title}</option> 
+                    {/volist}
+                    {/if}
+                </select>                    
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">是否马上启用：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <select  name="banner_active" id="banner_active"style="font-size: 14px; height: 31px;line-height: 1.42857;padding: 4px;">
+                    <option value="1">立刻启用</option>
+                    <option value="0">不启用</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>注意：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <label><p>请按照指定尺寸（1080×470）上传小程序Banner，并将大小保证在200KB以内，否则可能会导致小程序内图片显示异常</p></label>
+   
+                <span class="btn-upload">
+                    <a href="javascript:void();" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 上传图片</a>
+                    <!-- <input type="file" name="ecxel" class="input-file" id="excel" accept=".xlsx" /> -->
+                    <input style="margin-top: 20px;" type="file" name="pic" class="input-file" id="pic" accept="image/gif,image/jpeg,image/x-png"/>
+                </span>                
+                <p id="banner_src" style="margin-top: 20px;"></p>
+            </div>
+        </div>
+        <p id="picsrc" style="display: none;"></p>
+<!--         <div class="row cl uploadpic" style="display: none;">
+            <label class="form-label col-xs-4 col-sm-2">详情图片上传：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <div class="uploader-list-container"> 
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker-2"></div>
+                            <p>或将照片拖到这里，最多可选15张</p>  
+                        </div>
+                    </div>
+                    <div class="statusBar" style="display:none;">
+                        <div class="progress"> <span class="text">0%</span> <span class="percentage"></span> </div>
+                        <div class="info"></div>
+                        <div class="btns">
+                            <div id="filePicker2"></div>
+                            <div class="uploadBtn">开始上传</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    -->     
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <a onClick="form_save_submit();" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存</a>
+                <button style="margin-left: 20px;" onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>  
+    </form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/webuploader/0.1.5/webuploader.min.js"></script>
+<!-- <script type="text/javascript" src="__ROOT__/static/js/banneradd.js"></script> -->
+<script type="text/javascript">
+// 选择框事件
+$("#banner_nav_type").change(function() {
+    if($(this).val() == 0){
+        $(".goods").hide();
+        $(".article").hide();
+    }
+    if($(this).val() == 1){
+        $(".goods").show();
+        $(".article").hide();
+    }
+    if($(this).val() == 2){
+        $(".goods").hide();
+        $(".article").show();
+    }        
+});
+// 表单提交
+function form_save_submit() {
+    var nav_type = $("#banner_nav_type option:selected").val();
+    var banner_sort = $("#banner_sort option:selected").val();
+    var select_goods = $("#select_goods option:selected").val();
+    var banner_active = $("#banner_active option:selected").val();
+    var article_id = $("#select_article option:selected").val();
+    // loading层 0.1透明度的白色背景
+    var index = layer.load(1,{shade: [0.9,'#fff']});
+    layer.confirm('确认要提交吗？',function(){
+        // 发送ajax    
+        $.ajax({
+            type: 'POST',
+            url: 'addBanner',
+            dataType: 'json',
+            data: {nav_type:nav_type,banner_sort:banner_sort,select_goods:select_goods,banner_active:banner_active,article_id,article_id},
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.close(index);
+                    layer.msg(data.msg, { icon: 1, time: 1000 });
+                    setTimeout("location.replace(location.href)", 1000);
+                }
+                if (data.code == 400) {
+                    layer.msg(data.msg, { icon: 2, time: 1000 });
+                }
+            },
+            error: function () {
+                layer.msg('错误，请稍后重试！', { icon: 2, time: 1000 });
+            },
+            complete: function(){
+                layer.close(index);
+            }
+        });
+    });
+        layer.close(index);
+}
+// 上传单张图片
+$('#pic').change(function(event) {
+    var formData = new FormData();
+    formData.append("file", $(this).get(0).files[0]);
+    $.ajax({
+        url:'addPic',
+        type:'POST',
+        data:formData,
+        cache: false,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+        success:function(res){
+            if(res.code== 0){
+                layer.msg(res.msg, { icon: 1, time: 1000 });
+                // 回显图片路径
+                 $("#banner_src").html('<img src="/static/'+res.data+'" alt="图片" width="150px;" height="100px;">');
+            }
+            if(res.code == 400){
+                layer.msg(res.msg,{icon:2,time:1000});
+            }              
+        },
+        error:function(res) {
+            layer.msg('出错！请刷新！',{icon:2,time:1000});
+        },
+    });
+});   
+</script>
+</body>
+</html>

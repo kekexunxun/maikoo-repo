@@ -1,0 +1,329 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	<meta charset="utf-8"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    	<script type="text/javascript" src="__ROOT__/public/static/lib/html5shiv.js"></script>
+    	<script type="text/javascript" src="__ROOT__/public/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="__ROOT__/static/lib/h-ui.admin/css/style.css" />
+    <style>
+	    #merchantlist td{
+	        text-align: center;
+	    }
+	    .Hui-iconfont{
+	        font-size: 15px;
+	    }
+        .merchantlist-div{
+            padding:5px;
+        }
+        .merchantlist-span{
+            display:block;
+        }
+        .span_one{
+            color:purple;
+        }
+        .span_two{
+            color:gray;
+        }
+    </style>
+    <title>商家管理</title>
+	</head>
+<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商家管理 <span class="c-gray en">&gt;</span> 商家管理 </nav>
+	<div class="page-container">
+	    <div class="cl pd-5 bg-1 bk-gray mt-20">
+            <span class="l">
+                <a href="javascript:;" onclick="merchant_add()" class="btn btn-primary radius">
+                    <i class="Hui-iconfont">&#xe600;</i>
+                    添加商家
+                </a>
+            </span>
+	        <span class="r">共有数据：<strong id="num"></strong> 条</span> 
+	    </div>
+	    <div class="mt-20">
+	        <table id="merchantlist" class="table table-border table-bordered table-hover table-bg table-sort">
+	            <thead>
+		            <tr class="text-c">
+		                <th width="10">ID</th>
+		                <th width="40">商家名称</th>
+                        <th width="40">商家LOGO</th>
+                        <th width="80">商家地址</th>
+		                <th width="50">商家入驻时间</th>
+						<th width="40">商家服务状态</th>
+						<th width="40">操作</th>
+		            </tr>
+	            </thead>
+	        </table>
+	    </div>
+	</div>
+    <div id="modal-demotwo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content radius">
+                <div class="modal-header" style="padding:5px;">
+                    <h3 class="modal-title">
+                        <span id="h3-span-name"></span>
+                    </h3>
+                    <span style="color:gray;">修改商家营业状态</span>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body" style="padding:10px;">
+                    <!-- <p>对话框内容…</p> -->
+                <form action="" method="post" class="form form-horizontal" id="form-merchant-change">
+                    <input type="hidden" name="idx" value="" id="idx" />
+                    <input type="hidden" name="mch_id" value="" id="mch_id" />
+                    <div class="row cl merchantlist-div">
+                        <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>服务状态：</label>
+                        <div class="formControls col-xs-6 col-sm-6">
+                            <span class="select-box" id="select-span" style="width:150px;">
+                                <select class="select" onchange="selectChangeStatus()" name="status" size="1">
+                                    <option value="0">未营业</option>
+                                    <option value="1">正常营业</option>
+                                    <option value="2">暂停营业</option>
+                                </select>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row cl active merchantlist-div" id="pause_reason_div">
+                        <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>操作原因：</label>
+                        <div class="formControls col-xs-6 col-sm-6">
+                            <input style="width: 200px;" type="text" class="input-text valid" autocomplete="off" onkeyup="wordLimit(this)" id="pause_reason" value="" placeholder="操作原因" name="pause_reason"/>
+                        </div>
+                    </div>
+                </form>   
+                </div>
+                <div class="modal-footer">
+                    <button id="change" class="btn btn-primary" onclick="sendMerchantStatus()">确定</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<footer class="footer mt-20">
+		<div class="container">
+			<p>Powered By 福建麦口信息科技有限公司</p>
+		</div>
+	</footer>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__ROOT__/static/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ROOT__/static/lib/datatables/1.10.16/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="__ROOT__/static/lib/laypage/laypage.js"></script>
+</body>
+</html>
+<script>
+/*商家删除*/
+function mercahnt_delete(obj,idx)
+{
+    layer.confirm('确认要删除吗？',function(index){
+        var data = {'idx':idx};
+        $.ajax({
+            type : 'POST',
+            url  : '/index/merchant/merchantDelete',
+            data : data,
+            typeData : 'JSON',
+            success : function (result){
+                if( result.code < 400 ){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                }else{
+                    layer.alert(result.msg);
+                }
+            },
+            error : function(){
+                layer.alert('请求失败!');
+            }
+        });
+    });
+}
+/*字数限制*/
+function wordLimit(obj){
+    var value = $(obj).val();
+    if( value.length > 30 ){
+        value = value.substring(0,30);
+        $(obj).val(value);
+    }
+}
+/*更改商家服务状态*/
+function merchantServerChange(obj,idx,mch_id)
+{   
+    $('#pause_reason').val('');
+    $('.select').remove();
+    var select = $('<select class="select" onchange="selectChangeStatus()" name="status" size="1"><option value="0">未营业</option><option value="1">正常营业</option><option value="2">暂停营业</option></select>');
+    $('#select-span').append(select);
+    var merchantName = $(obj).parent().parent().find('td:nth-child(2)').html();
+    $('#h3-span-name').html('商家名称：'+merchantName);
+    $('#idx').val(idx);
+    $('#mch_id').val(mch_id);
+    $("#modal-demotwo").modal("show");
+}
+/*商家服务状态选择show或hidden操作原因*/
+function selectChangeStatus(){
+    var value = $(".select").val();
+    if( value == 0 || value == 2 ){
+        $('#pause_reason_div').css({'display':'block'});
+        $('#pause_reason').val('');
+    }else{
+        $('#pause_reason_div').css({'display':'none'});
+        $('#pause_reason').val('');
+    }
+}
+/*发送ajax改变商家营业状态*/
+function sendMerchantStatus(){
+    layer.confirm('确定修改商家营业状态?',function(){
+        $('#form-merchant-change').ajaxSubmit({
+            type : 'POST',
+            url  : '/index/merchant/merchantChange',
+            typeData : 'JSON',
+            success : function (result){
+                if( result.code < 400 ){
+                    layer.alert(result.msg,{icon:1,closeBtn:0},function(){
+                        window.location.href = window.location.href;
+                    });
+                }else{
+                    layer.alert(result.msg);
+                }
+            },
+            error : function(){
+                layer.alert('请求失败!');
+            }
+        });
+    });
+}
+$(document).ready(function() {
+    var table = $('#merchantlist').DataTable( {
+        language: {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "从当前数据中检索： ",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            },
+        },
+        "ajax": {
+            "type": "POST",
+            "url": "{:url('merchant/merchantdetail')}",
+            //默认为data,这里定义为空，则只需要传不带属性的数据
+            "data": "",
+            //这是从服务器接受的数据（名称、格式）
+            "dataSrc": "",
+            "success": function(res){
+                //绑定table数据
+                $('#merchantlist').dataTable().fnAddData(res);                
+                // 数据条数
+                $("#num").html(res.length);      
+            }
+        },
+        "columns": [
+            { "data": "idx" },
+            { "data": "mch_name" },
+            { "data":"mch_logo",
+              "render":function (data,type,row,callback){
+                    return '<img src="'+data+'" width="90" height="90"/>';
+              }
+            },
+            { "data": "place_name" },
+            { "data":"created_at" },
+            { "data":"status",
+              "className":"is_status",
+                "render":function (data,type,row,callback) {
+                    pause_at = '';
+                    pause_reason = '';
+                    switch (data) {
+                        case 0:
+                            if( row.pause_at ){
+                                pause_at = '<span class="merchantlist-span span_one">停业时间:'+row.pause_at+'</span>';
+                            }
+                            if( row.pause_reason ){
+                                pause_reason = '<span class="merchantlist-span span_two">停业原因:'+row.pause_reason+'</span>';
+                            }
+                            return '<span class="label label-defaunt radius" title="点击修改商家营业状态" style="cursor:pointer;" onclick="merchantServerChange(this,'+row.idx+','+row.mch_id+')">未营业</span>'+pause_at+pause_reason;
+                        		break;
+                        case 1: return '<span class="label label-success radius" title="点击修改商家营业状态" style="cursor:pointer;" onclick="merchantServerChange(this,'+row.idx+','+row.mch_id+')">正常营业</span>';
+                       			break;
+                        case 2: 
+                            return '<span class="label label-warning radius" title="点击修改商家营业状态" style="cursor:pointer;" onclick="merchantServerChange(this,'+row.idx+','+row.mch_id+')">暂停营业</span>'+
+                            '<span class="merchantlist-span span_one">暂停时间:'+row.pause_at+'</span>'+
+                            '<span class="merchantlist-span span_two">暂停原因:'+row.pause_reason+'</span>';
+                                break;
+                    }
+                }
+            },
+            { "data":"idx",
+            	"render" : function ( data,type,row,callback ){
+            		return '<a title="编辑商家资料" href="javascript:;" onclick="merchant_edit('+data+')" class="ml-5" style="text-decoration:none;"><i class="Hui-iconfont">&#xe60c;</i></a>'+
+                        '<a title="库存管理" href="javascript:;" onclick="merchant_stock('+row.mch_id+',\''+row.mch_name+'\')" class="ml-5" style="text-decoration:none;"><i class="Hui-iconfont">&#xe66a;</i></a>'+
+                        '<a title="商家删除" href="javascript:;" onclick="mercahnt_delete(this,'+data+')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>'+
+                        '<a class="ml-5" style="text-decoration:none" title="商家地理位置" href="/index/merchant/location/xy/'+row.location+'" target="_blank"><i class="Hui-iconfont">&#xe671;</i></a>'
+                        ;
+            	}
+            },
+        ],
+        "order": [[0, 'asc']]
+    } );
+} );
+/*查看库存*/
+function merchant_stock(mch_id,mch_name){
+    var index = layer.open({
+        type: 2,
+        title: '库存管理',
+        content: '/index/merchant/stock/mch_id/'+mch_id+'/mch_name/'+mch_name,
+        end: function(){
+            location.replace(location.href);
+        }
+    });
+    layer.full(index); 
+}
+/*编辑商家资料*/
+function merchant_edit(idx){
+    var index = layer.open({
+        type: 2,
+        title: '编辑商家资料',
+        content: '/index/merchant/merchantedit/idx/'+idx,
+        end: function(){
+            location.replace(location.href);
+        }
+    });
+    layer.full(index);    
+}
+/*添加商家*/
+function merchant_add(){
+    var index = layer.open({
+        type: 2,
+        title: '添加商家',
+        content: '/index/merchant/addmerchant',
+        end: function(){
+            location.replace(location.href);
+        }
+    });
+    layer.full(index);
+}
+</script>
