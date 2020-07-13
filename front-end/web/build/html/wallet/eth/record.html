@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - ETH交易记录</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview white-bg" id="J_List">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">ETH交易记录</span>
+            </div>
+        </header>
+        <!-- Content -->
+
+        <!-- TAB -->
+        <div id="J_Tab" class="m-tab">
+            <ul class="tab-nav">
+                <li class="tab-nav-item" id="buyin"><a href="javascript:;">买入</a></li>
+                <li class="tab-nav-item" id="sell"><a href="javascript:;">卖出</a></li>
+                <li class="tab-nav-item" id="extract"><a href="javascript:;">提币</a></li>
+            </ul>
+            <div class="tab-panel">
+                <!-- 买入记录 -->
+                <div class="tab-panel-item" id="buyin-item">
+                    <!-- TAB Title -->
+                    <div class="cjkg-table-title">
+                        <div class="cjkg-table-third-item">数量</div>
+                        <div class="cjkg-table-third-item">状态</div>
+                        <div class="cjkg-table-third-item">详情</div>
+                    </div>
+                    <!-- TAB Content -->
+                    <div id="buyin-table"></div>
+                </div>
+                <div class="tab-panel-item" id="sell-item">
+                    <!-- TAB Title -->
+                    <div class="cjkg-table-title">
+                        <div class="cjkg-table-third-item">数量</div>
+                        <div class="cjkg-table-third-item">状态</div>
+                        <div class="cjkg-table-third-item">详情</div>
+                    </div>
+                    <!-- TAB Content -->
+                    <div id="sell-table"></div>
+                </div>
+                <div class="tab-panel-item" id="extract-item">
+                    <!-- TAB Title -->
+                    <div class="cjkg-table-title">
+                        <div class="cjkg-table-third-item">数量</div>
+                        <div class="cjkg-table-third-item">状态</div>
+                        <div class="cjkg-table-third-item">详情</div>
+                    </div>
+                    <!-- TAB Content -->
+                    <div id="extract-table"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<script>
+    $(function () {
+        // 获取tradeType
+        var url = location.search; //获取url中"?"符后的字串
+        param = url.split('=')[1];
+        var tradeType = 0;
+
+        // TAB
+        var $tab = $('#J_Tab');
+        $tab.tab({
+            nav: '.tab-nav-item',
+            panel: '.tab-panel-item',
+            activeClass: 'tab-active'
+        });
+        // 在切换的那一刻触发请求事件
+        $tab.find('.tab-nav-item').on('open.ydui.tab', function (e) {
+            switch (e.index) {
+                case 0:
+                    isBuyin = true;
+                    isSell = false;
+                    isExtract = false;
+                    tradeType = 0;
+                    pageNum = buyPage;
+                    url = "/api/eth/buy";
+                    if (!hasBuyList) {
+                        requestList();
+                    }
+                    break;
+                case 1:
+                    isBuyin = false;
+                    isSell = true;
+                    isExtract = false;
+                    tradeType = 1;
+                    pageNum = sellPage;
+                    url = "/api/eth/sell";
+                    if (!hasSellList) {
+                        requestList();
+                    }
+                    break;
+                case 2:
+                    isBuyin = false;
+                    isSell = false;
+                    isExtract = true;
+                    tradeType = 2;
+                    pageNum = extractPage;
+                    url = "/api/eth/withdrawal";
+                    if (!hasExtractList) {
+                        requestList();
+                    }
+                    break;
+            }
+        });
+
+        // 1 变量定义
+        var isBuyin = false, isSell = false, isExtract = false;
+        var hasBuyList = false, hasSellList = false, hasExtractList = false;
+        var buyPage = 1, sellPage = 1, extractPage = 1;
+        var url = "", pageNum = "";
+        // 2 根据param 判断是哪种方式 并切换对应的TAB
+        if (param == "EXTRACT") {
+            isExtract = true;
+            url = "/api/eth/withdrawal";
+            pageNum = extractPage;
+            tradeType = 2;
+            $('#buyin').removeClass('tab-active');
+            $('#sell').removeClass('tab-active');
+            $('#extract').addClass('tab-active');
+            $('#buyin-item').removeClass('tab-active');
+            $('#sell-item').removeClass('tab-active');
+            $('#extract-item').addClass('tab-active');
+        } else if (param == "SELL") {
+            isSell = true;
+            url = "/api/eth/sell";
+            pageNum = sellPage;
+            tradeType = 1;
+            $('#buyin').removeClass('tab-active');
+            $('#extract').removeClass('tab-active');
+            $('#sell').addClass('tab-active');
+            $('#buyin-item').removeClass('tab-active');
+            $('#extract-item').removeClass('tab-active');
+            $('#sell-item').addClass('tab-active');
+        } else if (param == "BUYIN") {
+            isBuyin = true;
+            url = "/api/eth/buy";
+            pageNum = buyPage;
+            tradeType = 0;
+            $('#sell').removeClass('tab-active');
+            $('#extract').removeClass('tab-active');
+            $('#buyin').addClass('tab-active');
+            $('#sell-item').removeClass('tab-active');
+            $('#extract-item').removeClass('tab-active');
+            $('#buyin-item').addClass('tab-active');
+        } else {
+            YDUI.dialog.toast('参数错误', 'error', 1300);
+            pageBack(0);
+        }
+
+        // InfinityScroll
+        $('#J_List').infiniteScroll({
+            pageSize: 10,
+            initLoad: true,
+            loadingHtml: '加载中',
+            doneTxt: '没有更多啦',
+            loadListFn: function () {
+                var def = $.Deferred();
+
+                request(url, { pageNum: pageNum }, 400).then(res => {
+                    let html = "";
+                    if (res.data && res.data.length > 0) {
+                        for (let i = 0; i < res.data.length; i++) {
+                            html += '<div class="cjkg-table-line">' +
+                                '<div class="cjkg-table-third-item">' + res.data[i].eth_num + '</div>' +
+                                '<div class="cjkg-table-third-item">' + res.data[i].status + '</div>' +
+                                '<div onclick="navToETHRecordDetail(this)" data-type="' + tradeType + '" data-sn="' + res.data[i].list_sn + '" class="cjkg-table-third-item base-color">查看</div>' +
+                                '</div>'
+                        }
+                    } else {
+                        YDUI.dialog.toast('没有更多啦', 'error', 1300);
+                    }
+                    // 页码自增
+                    if (isBuyin) {
+                        buyPage++;
+                        $('#buyin-table').append(html);
+                        hasBuyList = true;
+                    } else if (isSell) {
+                        sellPage++;
+                        $('#sell-table').append(html);
+                        hasSellList = true;
+                    } else {
+                        extractPage++;
+                        $('#extract-table').append(html);
+                        hasExtractList = true;
+                    }
+                    // 数据返回
+                    def.resolve(res.data);
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+
+                return def.promise();
+            }
+        });
+
+        // 在Tab切换时 若当前Tab未做任何数据请求，则调用此方法进行数据请求
+        function requestList() {
+            request(url, { pageNum: pageNum }, 400).then(res => {
+                if (res.data && res.data.length == 0) {
+                    YDUI.dialog.toast('没有更多啦', 'error', 1300);
+                    return;
+                }
+                let html = "";
+                for (let i = 0; i < res.data.length; i++) {
+                    html += '<div class="cjkg-table-line">' +
+                        '<div class="cjkg-table-third-item">' + res.data[i].eth_num + '</div>' +
+                        '<div class="cjkg-table-third-item">' + res.data[i].status + '</div>' +
+                        '<div onclick="navToETHRecordDetail(this)" data-type="' + tradeType + '" data-sn="' + res.data[i].list_sn + '" class="cjkg-table-third-item base-color">查看</div>' +
+                        '</div>'
+                }
+                if (isBuyin) {
+                    buyPage++;
+                    $('#buyin-table').append(html);
+                    hasBuyList = hasBuyList ? false : true;
+                } else if (isSell) {
+                    sellPage++;
+                    $('#sell-table').append(html);
+                    hasSellList = hasSellList ? false : true;
+                } else {
+                    extractPage++;
+                    $('#extract-table').append(html);
+                    hasExtractList = hasExtractList ? false : true;
+                }
+            }).catch(error => {
+                console.log(error);
+                YDUI.dialog.toast(res.msg, 'error', 1300);
+            })
+        }
+    })
+</script>
+
+</html>

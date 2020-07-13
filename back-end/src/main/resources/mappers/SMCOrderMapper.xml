@@ -1,0 +1,101 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.SMCOrderDao">
+    <resultMap id="smcOrderResultMap" type="SMCOrderDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <result property="buyingPrice" column="buying_price"/>
+        <result property="fee" column="fee"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        cos.quantity,
+        cos.price,
+        cos.buying_price,
+        cos.fee,
+        cos.type
+    </sql>
+
+    <select id="selectPageIds" resultType="java.lang.Long">
+        SELECT
+            cos.id
+        FROM
+            c_order co
+            JOIN c_order_smc cos ON co.id = cos.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            cos.type = #{type}
+            <if test="customerUserId != 0">
+                AND co.c_user_id = #{customerUserId}
+            </if>
+    </select>
+
+    <select id="selectOne" resultMap="smcOrderResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_smc cos ON co.id = cos.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            co.order_sn = #{orderSN}
+    </select>
+
+    <select id="selectByIds" resultMap="smcOrderResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            cos.quantity,
+            cos.price,
+            cos.buying_price,
+            cos.type
+        FROM
+            c_order co
+            JOIN c_order_smc cos ON co.id = cos.c_order_id
+        WHERE
+            cos.id IN
+            <foreach item="id" index="index" collection="pageIds"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectWithCustomerByIds" resultMap="smcOrderResultMap">
+        SELECT
+          cu.name AS c_user_name,
+          cu.phone AS c_user_phone,
+          <include refid="information"/>
+        FROM
+          c_order co
+          JOIN c_order_smc cos ON co.id = cos.c_order_id
+          JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            cos.id IN
+            <foreach item="id" index="index" collection="pageIds"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectByType" resultMap="smcOrderResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_smc cos ON co.id = cos.c_order_id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            cos.type = #{type}
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.SettingDao">
+    <resultMap id="settingResultMap" type="SettingDO">
+        <result property="smcPrice" column="smc_price"/>
+        <result property="ethPrice" column="eth_price"/>
+        <result property="withdrawalFee" column="withdrawal_fee"/>
+        <result property="smcFee" column="smc_fee"/>
+    </resultMap>
+
+    <update id="update">
+        UPDATE
+            comm_setting
+        <set>
+            <if test="smcPrice != null">smc_price=#{smcPrice},</if>
+            <if test="ethPrice != null">eth_price=#{ethPrice},</if>
+            <if test="withdrawalFee != null">withdrawal_fee=#{withdrawalFee},</if>
+            <if test="smcFee != null">smc_fee=#{smcFee}</if>
+        </set>
+    </update>
+</mapper>

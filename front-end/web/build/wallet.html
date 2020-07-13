@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 我的钱包</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="./favicon.ico">
+    <link rel="Shortcut Icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./css/ydui.css" />
+    <link rel="stylesheet" href="./css/cjkg.css" />
+    <script src="./js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <div class="navbar-center"><span class="navbar-title">我的钱包</span></div>
+        </header>
+        <!-- Content -->
+        <div class="g-scrollview scroll-after">
+            <!-- Banner -->
+            <div class="wallet-banner">
+                <img class="wallet-banner-bg" src="./img/wallet/bg_wallet.png" alt="超级矿工">
+                <img class="wallet-banner-logo" src="./img/login/logo.png" alt="超级矿工">
+                <img class="wallet-banner-icon" src="./img/wallet/icon_coin.png" alt="SMC资产">
+                <span class="wallet-banner-span" id="my-smc-total">SMC资产：0</span>
+                <span id="navToSMCExtract" class="wallet-banner-btn btn btn-primary">立即提现</span>
+            </div>
+            <!-- Cell -->
+            <div class="m-cell wallet-cell no-border-cell">
+                <a id="navToMyAddress" class="cell-item" href="javascript:;">
+                    <div class="cell-left">
+                        <span class="cell-icon"><img src="./img/wallet/icon_wallet.png" /></span>钱包地址
+                        <div class="wallet-cell-address"><img src="./img/wallet/w_address.png" alt="钱包地址"> <span id="my-wallet-address"></span></div>
+                    </div>
+                    <div class="cell-right cell-arrow"></div>
+                </a>
+                <a id="navToSMCTrade" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/wallet/icon_ctc.png" /></span>SMC交易</div>
+                    <div class="cell-right cell-arrow"></div>
+                </a>
+                <a id="navToMachine" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/wallet/icon_buy.png" /></span>矿机购买</div>
+                    <div class="cell-right cell-arrow"></div>
+                </a>
+                <a id="navToETH" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/wallet/icon_assets.png" /></span>虚拟资产</div>
+                    <div class="cell-right cell-arrow">交易</div>
+                </a>
+                <a id="navToSMCLock" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/wallet/icon_lock.png" /></span>锁仓</div>
+                    <div class="cell-right cell-arrow">锁仓机制</div>
+                </a>
+            </div>
+        </div>
+        <!-- footer -->
+        <footer class="m-tabbar">
+            <a id="index" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_home_nor.png" />
+                </div>
+                <span class="tabbar-txt">首页</span>
+            </a>
+            <a id="pool" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_pool_nor.png" />
+                </div>
+                <span class="tabbar-txt">矿池</span>
+            </a>
+            <a href="#" class="tabbar-item tabbar-active">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_wallet_active.png" />
+                </div>
+                <span class="tabbar-txt">钱包</span>
+            </a>
+            <a id="my" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_me_nor.png" />
+                </div>
+                <span class="tabbar-txt">我的</span>
+            </a>
+        </footer>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="./js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="./js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="./js/request.js"></script>
+<script>
+    $(function () {
+        // 1 获取钱包地址
+        var walletAddress = YDUI.util.sessionStorage.get('wAddress') || "";
+        if (!walletAddress) {
+            request('/api/customer/wallet', {}, 400).then(res => {
+                // 将钱包地址存入本地
+                if (res.data.wallet_address) {
+                    YDUI.util.sessionStorage.set('wAddress', res.data.wallet_address);
+                    walletAddress = res.data.wallet_address;
+                    if (walletAddress.length > 30) {
+                        walletAddress = walletAddress.slice(0, 30) + "...";
+                    }
+                    $('#my-wallet-address').text(walletAddress);
+                }
+            }).catch(error => {
+                console.log(error);
+                YDUI.dialog.toast(error.toString(), 'error', 1300);
+            })
+        } else {
+            if (walletAddress && walletAddress.length > 30) {
+                walletAddress = walletAddress.slice(0, 30) + "...";
+                $('#my-wallet-address').text(walletAddress);
+            }
+        }
+
+        // 2 获取 SMC 总资产
+        request('/api/customer/balance', { assetType: 'SMC', assetStatus: 'TOTAL' }, 400).then(res => {
+            // 设置资产
+            $('#my-smc-total').text('SMC资产：' + res.data.smc.total);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+</script>
+
+</html>

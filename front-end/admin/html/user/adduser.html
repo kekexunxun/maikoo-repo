@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>新增会员</title>
+</head>
+
+<body>
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-user-add">
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">会员姓名：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text fifth-width" value="" maxlength="12" placeholder="请输入会员姓名" id="username" name="username">
+                </div>
+            </div>
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">手机号码：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="tel" class="input-text fifth-width" value="" maxlength="11" placeholder="请输入会员手机号码" id="usermobile" name="usermobile">
+                </div>
+            </div>
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">登录账号：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text fifth-width" value="" maxlength="12" placeholder="请输入会员登录账号" id="useraccount" name="useraccount">
+                </div>
+            </div>
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">登录密码：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="password" class="input-text fifth-width" value="" maxlength="12" placeholder="请输入会员登录密码" id="userpass" name="userpass">
+                </div>
+            </div>
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">交易密码：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="password" class="input-text fifth-width" value="" maxlength="12" placeholder="请输入会员交易密码" id="usertpass" name="usertpass">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <a onclick="saveUser()" class="btn btn-primary radius mr-20" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</a>
+                    <button onclick="layer_close()" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/validate.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/request.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../static/cjkg/js/md5.min.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script>
+    // 新增会员
+    function saveUser() {
+        var flag = $("#form-user-add").valid();
+        if (!flag) {
+            layer.msg('信息不完整，请检查后重试', { icon: 2, time: 1300 });
+            return;
+        } else {
+            layer.confirm('确定要保存并提交吗？', { title: '系统提示' }, function () {
+                request('/api/admin/customer/add', {
+                    userName: $.trim($('#username').val()),
+                    userMobile: $.trim($('#usermobile').val()),
+                    loginAccount: $.trim($('#useraccount').val()),
+                    loginPassword: md5($.trim($('#userpass').val())),
+                    transPassword: md5($.trim($('#usertpass').val()))
+                }).then(res => {
+                    layer.msg('添加成功', { icon: 1, time: 1300 });
+                    index = parent.layer.getFrameIndex(window.name);
+                    setTimeout('parent.layer.close(index);', 1300);
+                }).catch(error => {
+                    console.log(error);
+                    layer.msg(error.toString(), { icon: 2, time: 1300 });
+                })
+            });
+        }
+    }
+</script>
+
+</html>

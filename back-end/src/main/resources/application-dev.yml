@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3306/mk_smc?useUnicode=true&characterEncoding=UTF-8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      pool-name: mkSMCPoolName
+      connection-test-query: SELECT 1
+  resources:
+    static-locations: file:/Users/lianyu/www/assets
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+custom:
+  upload-location: /Users/lianyu/www/assets/
+  base-url: http://localhost:15000

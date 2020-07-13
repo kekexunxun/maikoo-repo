@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 我的</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="./favicon.ico">
+    <link rel="Shortcut Icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./css/ydui.css" />
+    <link rel="stylesheet" href="./css/cjkg.css" />
+    <script src="./js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview my-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <div class="navbar-center"><span class="navbar-title">我的</span></div>
+        </header>
+        <!-- Content -->
+        <div id="my-view" class="g-scrollview scroll-after">
+            <!-- UserInfo -->
+            <div class="user-info">
+                <div class="user-img">
+                    <img src="./img/my/user.png" alt="用户头像">
+                </div>
+                <div class="user-desc">
+                    <span id="user-account">旷工账号：</span>
+                    <span id="trade-count" class="user-desc-trade">交易：<strong id="user-trade">0</strong></span>
+                </div>
+            </div>
+            <!-- FunList -->
+            <div class="m-cell no-border-cell">
+                <a id="navToAuth" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_name.png" /></span>实名认证</div>
+                    <div class="cell-right cell-arrow" id="authFlag">已认证</div>
+                </a>
+                <a id="navToChangePass" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_lock.png" /></span>登陆密码</div>
+                    <div class="cell-right cell-arrow" id="loginPassFlag">已修改</div>
+                </a>
+                <a id="navToChangeTPass" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_lock_b.png" /></span>交易密码</div>
+                    <div class="cell-right cell-arrow" id="transPassFlag">已修改</div>
+                </a>
+            </div>
+            <div class="m-cell no-border-cell">
+                <a id="navToAliAccount" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_alipay.png" /></span>支付宝</div>
+                    <div class="cell-right cell-arrow" id="alipayBindFlag">已绑定</div>
+                </a>
+                <a id="navToBankcard" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_card.png" /></span>银行卡</div>
+                    <div class="cell-right cell-arrow" id="bankBindFlag">已绑定</div>
+                </a>
+                <a id="navToNotice" class="cell-item" href="javascript:;">
+                    <div class="cell-left"><span class="cell-icon"><img src="./img/my/icon_message.png" /></span>新闻公告</div>
+                    <div class="cell-right cell-arrow"></div>
+                </a>
+            </div>
+        </div>
+        <!-- footer -->
+        <footer class="m-tabbar">
+            <a id="index" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_home_nor.png" />
+                </div>
+                <span class="tabbar-txt">首页</span>
+            </a>
+            <a id="pool" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_pool_nor.png" />
+                </div>
+                <span class="tabbar-txt">矿池</span>
+            </a>
+            <a id="wallet" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_wallet_nor.png" />
+                </div>
+                <span class="tabbar-txt">钱包</span>
+            </a>
+            <a href="#" class="tabbar-item tabbar-active">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_me_active.png" />
+                </div>
+                <span class="tabbar-txt">我的</span>
+            </a>
+        </footer>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="./js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="./js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="./js/request.js"></script>
+<script>
+    $(function () {
+        // 我的界面数据请求
+        YDUI.dialog.loading.open('Loading');
+        request('/api/customer/flag', {}, 400, false).then(res => {
+            $('#authFlag').text(res.data.is_auth ? "已认证" : "未认证");
+            $('#loginPassFlag').text(res.data.is_set_pass ? "已修改" : "已修改");
+            $('#transPassFlag').text(res.data.is_set_trans_pwd ? "已修改" : "已修改");
+            $('#alipayBindFlag').text(res.data.is_bind_alipay ? "已绑定" : "未绑定");
+            $('#bankBindFlag').text(res.data.is_bind_card ? "已绑定" : "未绑定");
+            return request('/api/order/count', {}, 400, false);
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        }).then(res => {
+            $('#user-trade').text(res.data.trans_count);
+            YDUI.dialog.loading.close();
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+
+        // 旷工账号设置
+        $('#user-account').text('旷工账号：' + YDUI.util.sessionStorage.get('userAccount'));
+    })
+</script>
+
+</html>

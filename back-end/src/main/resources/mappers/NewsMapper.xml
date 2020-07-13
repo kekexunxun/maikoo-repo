@@ -1,0 +1,32 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.NewsDao">
+    <resultMap id="newsDOResultMap" type="NewsDO">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="imgUri" column="image_uri"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="isShowed" column="is_showed"/>
+    </resultMap>
+
+    <select id="selectByIds" resultMap="newsDOResultMap">
+        SELECT
+            id,
+            image_uri,
+            title,
+            content,
+            created_at
+        FROM
+            comm_news
+        WHERE
+            is_showed = 1
+            AND id IN
+                <foreach item="id" index="index" collection="ids"
+                         open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+    </select>
+</mapper>

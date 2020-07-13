@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  servlet:
+    multipart:
+      max-file-size: 4MB
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.maikoo.superminercions.model
+server:
+  port: 15000
+custom:
+  page-number: 1
+  per-page: 10
+  image-location: image/
+  message-app-id: 1400165864
+  message-app-Key: 543e775d30b668ad5271d2e9252ab637
+  message-template-id: 242222
+  message-sign: 挖矿趣娱

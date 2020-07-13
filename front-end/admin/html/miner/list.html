@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/skin/default/skin.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>矿机产品列表</title>
+</head>
+
+<body class="pos-r">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 矿机管理 <span class="c-gray en">&gt;</span> 矿机产品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="cl pd-5 bg-1 bk-gray mt-20 lh-30">
+        <span class="l">
+            <a class="btn btn-primary radius ml-20" onclick="addMiner()" href="javascript:;">
+                <i class="Hui-iconfont">&#xe600;</i> 添加矿机
+            </a>
+        </span>
+        <span class="r mr-20">共有数据：<strong id="total" class="mr-10"></strong>条</span>
+    </div>
+    <div class="page-container">
+        <div class="mt-20">
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                    <tr class="text-c">
+                        <th width="100">ID</th>
+                        <th width="80">矿机型号</th>
+                        <th width="100">矿机名称</th>
+                        <th width="100">挖矿算力（SMC/天）</th>
+                        <th width="100">价格（元）</th>
+                        <th width="100">创建时间</th>
+                        <th width="80">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <!-- Info Change Modal -->
+    <div id="modal-info-change" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="merchantlist-h3">矿机信息修改</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" class="form form-horizontal" id="form-miner-info-change">
+                        <div class="row cl">
+                            <label class="form-label col-xs-6 col-sm-3">挖矿算力：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="number" class="input-text w-200-f" value="" placeholder="请输入挖矿算力" id="minercf" name="minercf">
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-6 col-sm-3">矿机价格：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="number" class="input-text w-200-f" value="" placeholder="请输入矿机价格" id="minerprice" name="minerprice">
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-12 col-sm-12 text-center" style="color: red;">矿机算力修改将会影响所有相同型号的矿机</label>
+                            <label class="form-label col-xs-12 col-sm-12 text-center" style="color: red;">用户已拥有的矿机算力修改将在第二天生效</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="sendReply" class="btn btn-primary" onclick="updateChange()">确定</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Info Change Modal End -->
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/request.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/datatables/1.10.19/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/datatables.chinese.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+    $('.table-sort').dataTable({
+        "ajax": function (data, callback, settings) {
+            if (!token) {
+                layer.alert('请先登录', { icon: 7, title: '系统提示' }, function (index) {
+                    sessionStorage.clear();
+                    top.location.href = webroot + "/login.html";
+                });
+            } else {
+                request('/api/admin/miner/list', {}, 400).then(res => {
+                    let data = { "data": [] };
+                    for (let i = 0; i < res.data.length; i++) {
+                        data.data.push(res.data[i]);
+                    }
+                    $('#total').text(res.data.length);
+                    callback(data);
+                }).catch(error => {
+                    console.log(error);
+                    layer.msg(error.toString(), { icon: 2, time: 1300 });
+                })
+            }
+        },
+        "processing": true,
+        "deferRender": true,
+        "columns": [
+            { "data": "miner_id" },
+            { "data": "miner_model" },
+            { "data": "miner_name" },
+            {
+                "className": 'td-cf',
+                "data": "miner_counting_force"
+            },
+            {
+                "className": 'td-price',
+                "data": "miner_price"
+            },
+            { "data": "created_at" },
+            {
+                "className": 'td-manage',
+                "data": "miner_id",
+                "render": function (data, type, row, meta) {
+                    return '<span class="cursor-pointer" onclick="change(this, ' + row.miner_id + ')"><i class="Hui-iconfont">&#xe60c;</i></span>';
+                }
+            },
+        ],
+        "aaSorting": [[0, "asc"]], //默认第几个排序
+        "bStateSave": true, //状态保存
+        "bFilter": true,
+        "aoColumnDefs": [
+            { "orderable": false, "aTargets": [] } // 制定列不参与排序
+        ]
+    });
+
+    // 新增一台矿机
+    function addMiner() {
+        var index = layer.open({
+            type: 2,
+            title: '添加矿机',
+            content: './addminer.html',
+            end: function () {
+                location.replace(location.href);
+            }
+        });
+        layer.full(index);
+    }
+
+    var minerSn = "";
+
+    // 对当前矿机进行信息修改
+    function change(obj, sn) {
+        $("#modal-info-change").modal("show");
+        // 将原信息展示在修改界面
+        $('#minercf').val($(obj).parent('td').parent('tr').children('.td-cf').text());
+        $('#minerprice').val($(obj).parent('td').parent('tr').children('.td-price').text());
+        minerSn = sn;
+    }
+
+    // 更新用户矿机请求
+    function updateChange() {
+        var flag = $("#form-miner-info-change").valid();
+        if (!flag) {
+            layer.msg('信息不完整，请检查后重试', { icon: 2, time: 1300 });
+            return;
+        } else {
+            request("/api/admin/miner/update", {
+                minerSn: minerSn,
+                minerCountForce: $.trim($('#minercf').val()),
+                minerPrice: $.trim($('#minerprice').val())
+            }, 400).then(res => {
+                layer.msg('更新成功', { icon: 1, time: 1300 });
+                $("#modal-info-change").modal("hide");
+                setTimeout('location.replace(location.href);', 1300);
+            }).catch(error => {
+                console.log(error)
+                layer.msg(error.toString(), { icon: 2, time: 1300 });
+            })
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    username: cjkg
+    password: wiXFEbrS4F4ykwbT
+    url: jdbc:mysql://localhost:3306/cjkg?useUnicode=true&characterEncoding=UTF-8
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      pool-name: mkSMCPoolName
+      connection-test-query: SELECT 1
+  resources:
+    static-locations: file:/www/wwwroot/cjkg.up.maikoo.cn.program/assets
+custom:
+  upload-location: /www/wwwroot/cjkg.up.maikoo.cn.program/assets/
+  base-url: http://cjkg.up.maikoo.cn

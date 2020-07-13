@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="./favicon.ico">
+    <link rel="Shortcut Icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./css/ydui.css" />
+    <link rel="stylesheet" href="./css/cjkg.css" />
+    <script src="./js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview white-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <div class="navbar-center"><span class="navbar-title">超级矿工</span></div>
+        </header>
+        <!-- Content -->
+        <div id="index-view" class="g-scrollview scroll-after">
+            <!-- slider -->
+            <div class="m-slider" id="index-slider">
+                <!-- 参数在这里 留一条默认的banner -->
+                <div id="index-slider-wrapper" class="slider-wrapper">
+                </div>
+                <div class="slider-pagination"></div>
+            </div>
+            <!-- slider END -->
+            <!-- notice -->
+            <div class="cjkg-notice">
+                <a id="navToNoticeDetail" href="javascript:;">
+                    <img src="./img/index/icon_message.png">
+                    <span class="tabbar-txt" id="index-notice">今日公告</span>
+                </a>
+            </div>
+            <!-- notice End -->
+            <!-- coin-charts -->
+            <div class="coin-price">
+                <span class="coin-price-text">当前价格</span>
+                <span class="coin-price-num" id="index-coin-price">0.00 <label>CNY</label></span>
+            </div>
+            <div id="charts-container" class="chart-style" style="height: 4.8rem; max-width: 6.9rem;"></div>
+            <!-- coin-charts END -->
+            <!-- news -->
+            <div id="navToNotice" class="m-cell index-cell">
+                <div class="cell-item">
+                    <div class="cell-left">最新资讯</div>
+                    <div class="cell-right cell-arrow">查看更多</div>
+                </div>
+            </div>
+            <!-- news END -->
+        </div>
+        <!-- footer -->
+        <footer class="m-tabbar">
+            <a href="#" class="tabbar-item tabbar-active">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_home_active.png" />
+                </div>
+                <span class="tabbar-txt">首页</span>
+            </a>
+            <a id="pool" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_pool_nor.png" />
+                </div>
+                <span class="tabbar-txt">矿池</span>
+            </a>
+            <a id="wallet" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_wallet_nor.png" />
+                </div>
+                <span class="tabbar-txt">钱包</span>
+            </a>
+            <a id="my" href="#" class="tabbar-item">
+                <div class="tabbar-icon">
+                    <img src="./img/footer/tab_me_nor.png" />
+                </div>
+                <span class="tabbar-txt">我的</span>
+            </a>
+        </footer>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="./js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="./js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="./js/request.js"></script>
+<!-- charts -->
+<script src="./js/echarts/echarts.common.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // 首页数据请求
+        if (accessToken) {
+            request('/api/customer/flag', {}, 200).then(res => {
+                if (!res.data.is_auth) {
+                    YDUI.dialog.alert('请先完成实名认证后方可进行后续操作', function () {
+                        location.href = './html/my/auth.html?firstload=1';
+                    });
+                } else if (!res.data.is_bind_alipay && !res.data.is_bind_card) {
+                    YDUI.dialog.confirm('系统提示', '您还未绑定交易方式！', [
+                        {
+                            txt: '绑定支付宝',
+                            color: true,
+                            callback: function () {
+                                navToBindAlipay();
+                            }
+                        },
+                        {
+                            txt: '绑定银行卡',
+                            color: true,
+                            callback: function () {
+                                navToBindBank();
+                            }
+                        }
+                    ]);
+                } else {
+                    return request('/api/home', {}, 200, false);
+                }
+            }).catch(error => {
+                console.log(error);
+                YDUI.dialog.toast(error.toString(), 'error', 1300);
+            }).then(res => {
+                // 初始化表格
+                initCharts(res.data.charts_data);
+                // 初始化banner
+                initBanner(res.data.banner);
+                // 初始化价格
+                $('#index-coin-price').html(res.data.today_smc_price + '&nbsp;<label>CNY</label>');
+                // 初始化公告信息
+                $('#index-notice').text(res.data.notice.text);
+                $('#navToNoticeDetail').data('navid', res.data.notice.id);
+            }).catch(error => {
+                console.log(error);
+                // YDUI.dialog.toast(error.msg || '网络错误', 'error', 1300);
+            })
+        }
+        // 初始化banner
+        function initBanner(banner) {
+            $('#index-slider-wrapper').html('');
+            let bannerHtml = "";
+            for (let i = 0; i < banner.length; i++) {
+                bannerHtml += '<div onclick="navToNoticeDetail(this)" class="slider-item" data-navid="' + banner[i].nav_id + '" data-navtype="' + banner[i].nav_type + '">' +
+                    '<a href="javascript:;">' +
+                    '<img src="http://cjkg.up.maikoo.cn' + banner[i].img + '">' +
+                    '</a></div>';
+            }
+            $('#index-slider-wrapper').html(bannerHtml);
+            $('#index-slider').slider({
+                speed: 1000,
+                autoplay: 4000,
+                lazyLoad: true
+            });
+        }
+
+        // 近十天的日期 包括今天
+        function formatDay() {
+            let date = new Date();
+            let dayArr = [];
+            for (let i = 0; i < 10; i++) {
+                let today = new Date(date - 86400 * 1000 * i);
+                let day = today.getDate();
+                if (day < 10) {
+                    day = '0' + day;
+                }
+                dayArr.unshift(day);
+            }
+            return dayArr;
+        }
+
+        // 初始化表格
+        function initCharts(data) {
+            var dom = document.getElementById("charts-container");
+            var myChart = echarts.init(dom);
+            option = null;
+            option = {
+                title: {
+                    text: '行情趋势折线图',
+                    x: 'left',
+                    textStyle: {
+                        color: "#fff"
+                    },
+                    top: "3%",
+                    left: "3%"
+                },
+                xAxis: {
+                    type: 'category',
+                    data: formatDay(),
+                    boundaryGap: true,
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: true,
+                    splitLine: {
+                        lineStyle: {
+                            color: "#ecd58d1a"
+                        }
+                    }
+                },
+                series: [{
+                    data: data,
+                    type: 'line',
+                    itemStyle: {
+                        color: '#F05454'
+                    },
+                    lineStyle: {
+                        color: '#F05454'
+                    }
+                }],
+                backgroundColor: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 1,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#2c2c2c' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: '#14130f' // 100% 处的颜色
+                        }],
+                        globalCoord: false // 缺省为 false
+                    }
+                },
+                grid: {
+                    left: '15%',
+                    bottom: '10%',
+                },
+                textStyle: {
+                    color: '#ECD58D'
+                }
+            };
+            ;
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+        }
+    })
+</script>
+
+</html>

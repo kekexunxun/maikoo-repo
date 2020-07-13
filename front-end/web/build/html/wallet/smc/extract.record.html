@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - SMC提现记录</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview white-bg" id="J_List">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">SMC提现记录</span>
+            </div>
+        </header>
+        <!-- Content -->
+        <div class="cjkg-table-title">
+            <div class="cjkg-table-quarter-item">数量</div>
+            <div class="cjkg-table-quarter-item">价格</div>
+            <div class="cjkg-table-quarter-item">状态</div>
+            <div class="cjkg-table-quarter-item">详情</div>
+        </div>
+        <div id="exchange-table"></div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<script>
+    $(function () {
+        // InfinityScroll
+        var pageNum = 1;
+        $('#J_List').infiniteScroll({
+            pageSize: 10,
+            initLoad: true,
+            loadingHtml: '加载中...',
+            doneTxt: '没有更多啦',
+            loadListFn: function () {
+                var def = $.Deferred();
+
+                request('/api/withdrawal', { pageNum: pageNum }, 400).then(res => {
+                    let html = "";
+                    if (res.data && res.data.length > 0) {
+                        for (let i = 0; i < res.data.length; i++) {
+                            html += '<div class="cjkg-table-line">' +
+                                '<div class="cjkg-table-quarter-item">' + res.data[i].smc_num + '</div>' +
+                                '<div class="cjkg-table-quarter-item">' + res.data[i].smc_price + '</div>' +
+                                '<div class="cjkg-table-quarter-item">' + res.data[i].status + '</div>' +
+                                '<div onclick="navToSMCRecordDetail(this)" data-type="2" data-sn="' + res.data[i].list_sn + '" class="cjkg-table-quarter-item base-color">查看</div>' +
+                                '</div>'
+                        }
+                        $('#exchange-table').append(html);
+                    } else {
+                        YDUI.dialog.toast('没有更多啦', 'error', 1300);
+                    }
+                    pageNum++;
+                    // 数据返回
+                    def.resolve(res.data);
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+
+                return def.promise();
+            }
+        });
+    })
+</script>
+
+</html>

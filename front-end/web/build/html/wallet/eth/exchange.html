@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - ETH兑换SMC</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">ETH兑换SMC</span>
+            </div>
+            <a id="navToETHExchangeRecord" href="#" class="navbar-item">
+                <img class="icon-history" src="../../../img/wallet/icon_history.png" alt="交易记录">
+            </a>
+        </header>
+
+        <!-- buyin-form -->
+        <div class="buyin-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">SMC当前价格</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-cur-price" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">ETH当前价格</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="eth-cur-price" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">ETH兑换数额</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="eth-exchange-num" pattern="[0-9]*" type="number" class="cell-input" placeholder="请输入需要兑换的ETH数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">兑换SMC数量</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-num" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">交易密码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="trans-pass" type="password" class="cell-input" maxlength="12" placeholder="请输入交易密码" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <!-- buyin-form END -->
+
+        <!-- buyin-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="exchangeBtn" type="button" class="btn-block btn-primary">申请买入</button>
+        </div>
+        <!-- buyin-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入md5JS -->
+<script src="../../../js/md5.min.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        var smcPrice = "", ethPrice = "", userEthNum = "", ethNum = "";
+        // 获取当前的SMC价格
+        YDUI.dialog.loading.open('Loading');
+        request('/api/exchange/rate', {}, 400, false).then(res => {
+            smcPrice = res.data.smc2rmb;
+            ethPrice = res.data.eth2rmb;
+            $('#smc-cur-price').text(res.data.smc2rmb);
+            $('#eth-cur-price').text(res.data.eth2rmb);
+            return request('/api/customer/balance', { assetType: "ETH", assetStatus: "AVAILABLE" }, 100, false);
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(res.msg, 'error', 1300);
+        }).then(res => {
+            userEthNum = res.data.eth.available;
+            YDUI.dialog.loading.close();
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error, 'error', 1300);
+        })
+
+        // 输入需要兑换的SMC数量时，要及时更新总交易金额以及计算实际金额
+        $('#eth-exchange-num').bind('input propertychange', function () {
+            let ethNum = this.value;
+            if (ethNum > 10000000) {
+                ethNum = 10000000;
+                this.value = 10000000;
+            }
+            // 计算可以兑换的ETH数量 精确到三位小数
+            smcNum = (ethPrice * ethNum / smcPrice).toFixed(3);
+            // 赋值到界面
+            $('#smc-num').text(smcNum);
+        });
+
+        // 申请买入按钮点击
+        $('#exchangeBtn').click(function () {
+            var ethNum = parseFloat($.trim($('#eth-exchange-num').val()));
+            var transPass = $.trim($('#trans-pass').val());
+            if (isNaN(ethNum)) {
+                YDUI.dialog.toast('SMC数量不能为空', 'error', 1300);
+            } else if (ethNum > userEthNum) {
+                YDUI.dialog.toast('余额不足，您的ETH余额为' + userEthNum, 'error', 1300);
+            } else if (ethNum < 0.3) {
+                YDUI.dialog.toast('ETH兑换数量0.3个起', 'error', 1300);
+            } else if (transPass == "" || transPass.length < 6) {
+                YDUI.dialog.toast('交易密码格式错误', 'error', 1300);
+            } else {
+                YDUI.dialog.confirm('系统提示', '是否申请买入？', function () {
+                    request('/api/eth/smc/exchange', { ethNum: ethNum, transPass: md5(transPass) }, 400).then(res => {
+                        YDUI.dialog.toast('申请成功', 'success', 1300);
+                        pageBack();
+                    }).catch(error => {
+                        console.log(error);
+                        YDUI.dialog.toast(error.toString(), 'error', 1300);
+                    })
+                });
+            }
+        })
+    })
+</script>
+
+</html>

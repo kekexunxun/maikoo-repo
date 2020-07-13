@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 绑定银行卡账号</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">绑定银行卡账号</span>
+            </div>
+        </header>
+        <!-- bankcard-form -->
+        <div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">开户银行</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="bankName" type="text" class="cell-input" maxlength="20" placeholder="请输入开户银行" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">开户支行</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="bankBranch" type="text" class="cell-input" maxlength="20" placeholder="请输入开户支行" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">银行卡号</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="bankCard" type="tel" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 19) value = value.slice(0, 19)" placeholder="请输入银行卡号" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">验证码</div>
+                <div class="cjkg-form-cell-right verifycode-right">
+                    <input id="verifycode" type="text" class="cell-input" maxlength="4" placeholder="请输入验证码" autocomplete="off" />
+                </div>
+                <div class="verify-canvas">
+                    <canvas id="verify-canvas" width="100" height="43"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- bankcard-form END -->
+        <!-- bankcard-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="bankBtn" type="button" class="btn-block btn-primary">确定修改</button>
+        </div>
+        <!-- bankcard-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<!-- 引入VerifyJS -->
+<script src="../../js/verifycode.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 图形验证码相关
+        var vCode = [];
+        drawVerifyCode(vCode);
+        // 验证码点击事件
+        $("#verify-canvas").on('click', function () {
+            drawVerifyCode(vCode);
+        })
+
+        var oriBankName = "", oriBankBranch = "", oriBankCard = "";
+
+        // 获取用户银行卡信息
+        request('/api/customer/bank/information', {}, 300).then(res => {
+            if (res.data) {
+                oriBankName = res.data.bank_name;
+                oriBankBranch = res.data.bank_branch;
+                oriBankCard = res.data.bank_card;
+                $('#bankName').val(oriBankName);
+                $('#bankBranch').val(oriBankBranch);
+                $('#bankCard').val(oriBankCard);
+            }
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.msg, 'error', 1300);
+        })
+
+        // 确认修改按钮点击事件
+        $('#bankBtn').click(function () {
+            // 表单校验
+            let bankName = $.trim($('#bankName').val());
+            let bankBranch = $.trim($('#bankBranch').val());
+            let bankCard = $.trim($('#bankCard').val());
+            let verify_vCode = $.trim($('#verifycode').val());
+            if (bankName == "") {
+                YDUI.dialog.toast('开户银行不能为空', 'error', 1300);
+            } else if (bankBranch == "") {
+                YDUI.dialog.toast('开户支行不能为空', 'error', 1300);
+            } else if (bankCard == "") {
+                YDUI.dialog.toast('银行卡号不能为空', 'error', 1300);
+            } else if (bankCard.length > 19 || bankCard.length < 16) {
+                YDUI.dialog.toast('银行卡号长度应在16-19之间', 'error', 1300);
+            } else if (oriBankCard && (oriBankCard == bankCard && oriBankBranch == bankBranch && oriBankName == bankName)) {
+                YDUI.dialog.toast('银行卡信息未做修改', 'error', 1300);
+            } else {
+                // 验证码验证
+                verify_vCode = verify_vCode.toLowerCase();
+                vCode_conv = vCode.join("");
+                if (verify_vCode != vCode_conv) {
+                    YDUI.dialog.toast('验证码错误', 'error', 1300);
+                    drawVerifyCode(vCode);
+                    return false;
+                }
+                // 银行卡绑定请求
+                request('/api/customer/bank', { bankName: bankName, bankBranch, bankCard: bankCard }, 300).then(res => {
+                    YDUI.dialog.toast('银行卡绑定成功', 'success', 1300);
+                    pageBack();
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast('网络错误', 'error', 1300);
+                    drawVerifyCode(vCode);
+                })
+            }
+        })
+    })
+</script>
+
+</html>

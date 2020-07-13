@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 虚拟币</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview white-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">虚拟币</span>
+            </div>
+        </header>
+        <!-- Content -->
+        <div id="eth-view" class="g-scrollview scroll-after">
+            <!-- Banner -->
+            <div class="eth-banner">
+                <img class="eth-banner-bg" src="../../../img/wallet/bg_wallet.png" alt="超级矿工">
+                <span class="eth-title font-bold">ETH资产</span>
+                <span class="eth-num base-color">0.000</span>
+            </div>
+            <!-- Price -->
+            <div class="eth-price">
+                <div class="eth-price-left">
+                    <img src="../../../img/wallet/icon_eth.png" alt="ETH">
+                </div>
+                <div class="eth-price-right">
+                    <div class="eth-price-line">
+                        <span>ETH</span>
+                        <span class="grey-color" id="eth-cur-price">价格：0.00</span>
+                    </div>
+                    <div class="eth-price-line">
+                        <span>SMC</span>
+                        <span class="grey-color" id="smc-cur-price">价格：0.00</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Action -->
+            <div class="eth-action">
+                <a id="navToETHBuyIn" href="javascript:;" class="btn btn-primary">SMC兑换ETH</a>
+                <a id="navToETHSell" href="javascript:;" class="btn btn-primary">ETH卖出</a>
+                <a id="navToETHExtract" href="javascript:;" class="btn btn-primary">ETH提币</a>
+            </div>
+            <!-- ETH TRANS Btn -->
+            <div class="m-button w-address-btn">
+                <button id="navToETHExchange" type="button" class="btn-block btn-primary">ETH兑换SMC</button>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<script>
+    $(function () {
+        // 用户ETH资产请求
+        YDUI.dialog.loading.open('Loading');
+        request('/api/customer/balance', { assetType: "ETH", assetStatus: "TOTAL" }, 400, false).then(res => {
+            $('.eth-num').text(res.data.eth.total)
+            return request('/api/exchange/rate', {}, 200, false);
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        }).then(res => {
+            $('#eth-cur-price').text('价格：' + res.data.eth2rmb);
+            $('#smc-cur-price').text('价格：' + res.data.smc2rmb);
+            YDUI.dialog.loading.close();
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+</script>
+
+</html>

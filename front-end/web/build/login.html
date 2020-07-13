@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 登陆</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="./favicon.ico">
+    <link rel="Shortcut Icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./css/ydui.css" />
+    <link rel="stylesheet" href="./css/cjkg.css" />
+    <script src="./js/ydui.flexible.js"></script>
+</head>
+
+<body class="login-bg">
+    <div class="g-view scroll-after">
+        <!-- logo -->
+        <div class="logo">
+            <img src="./img/login/logo.png" alt="超级矿工">
+        </div>
+        <!-- logo END -->
+        <!-- login-cell -->
+        <div class="m-cell login-cell">
+            <div class="cell-item">
+                <div class="cell-left">
+                    <img src="./img/login/icon_phone.png" alt="用户名">
+                    <span>用户名</span>
+                </div>
+                <div class="cell-right">
+                    <input id="username" type="text" maxlength="11" class="cell-input" placeholder="请输入手机号" autocomplete="off" /></div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">
+                    <img src="./img/login/icon_password.png" alt="密码">
+                    <span>密&nbsp;&nbsp;&nbsp;&nbsp;码</span>
+                </div>
+                <div class="cell-right">
+                    <input id="password" type="password" class="cell-input" placeholder="请输入密码" autocomplete="off" /></div>
+            </div>
+            <div class="cell-item">
+                <div class="cell-left">
+                    <img src="./img/login/icon_verify.png" alt="验证码">
+                    <span>验证码</span>
+                </div>
+                <div class="cell-right login-cell-right">
+                    <input id="verifycode" type="text" maxlength="4" class="cell-input" placeholder="请输入验证码" autocomplete="off" />
+                </div>
+                <div class="verify-canvas">
+                    <canvas id="verify-canvas" width="100" height="43"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- login-cell END -->
+        <!-- login-btn -->
+        <div class="m-button">
+            <button id="loginBtn" type="button" class="btn-block btn-primary">登录</button>
+        </div>
+        <!-- login-btn END -->
+        <!-- pass-forget -->
+        <div id="forget-pwd" class="pass-forget">
+            <span>忘记密码？</span>
+        </div>
+        <!-- pass-forget END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="./js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="./js/ydui.js"></script>
+<!-- 引入RequestJS -->
+<script src="./js/request.js"></script>
+<!-- 引入MD5JS -->
+<script src="./js/md5.min.js"></script>
+<!-- 引入VerifyJS -->
+<script src="./js/verifycode.js"></script>
+<!-- 自身script -->
+<script>
+    // 初始化验证码
+    var vCode = [];
+    drawVerifyCode(vCode);
+    // 验证码点击事件
+    $("#verify-canvas").on('click', function () {
+        drawVerifyCode(vCode);
+    })
+    // 登陆按钮点击事件
+    $('#loginBtn').click(function () {
+        // 检测用户名密码是否输入
+        let username = $.trim($('#username').val());
+        let password = $.trim($('#password').val());
+        let verify_vCode = $.trim($('#verifycode').val());
+        if (username == "") {
+            YDUI.dialog.toast('用户名不能为空', 'error', 1300);
+            return false;
+        } else if (password == "") {
+            YDUI.dialog.toast('密码不能为空', 'error', 1300);
+            return false;
+        } else if (verify_vCode == "") {
+            YDUI.dialog.toast('验证码不能为空', 'error', 1300);
+            return false;
+        } else {
+            // 验证码验证
+            verify_vCode = verify_vCode.toLowerCase();
+            vCode_conv = vCode.join("");
+            if (verify_vCode != vCode_conv) {
+                YDUI.dialog.toast('验证码错误', 'error', 1300);
+                drawVerifyCode(vCode);
+                return false;
+            }
+        }
+        // 登陆请求
+        YDUI.dialog.loading.open('Loading');
+        request('/api/login', { username: username, password: md5(password) }, 300, false).then(res => {
+            // 储存token到SessionStorage
+            YDUI.dialog.toast('登陆成功', 'success', 1300);
+            YDUI.util.sessionStorage.set('token', res.data.access_token);
+            // 存储登录账号到本地
+            YDUI.util.sessionStorage.set('userAccount', username);
+            setTimeout(() => {
+                location.href = './index.html';
+            }, 200)
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+
+    // 登陆界面忘记密码点击
+    $('#forget-pwd').click(function () {
+        location.href = "./fpass.html";
+    })
+</script>
+
+</html>

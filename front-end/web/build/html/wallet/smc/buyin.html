@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - SMC买入</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">我要买入</span>
+            </div>
+        </header>
+
+        <!-- buyin-form -->
+        <div class="buyin-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">当前价格</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="current-price" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">买入价格</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="user-price" type="number" pattern="[0-9]*" class="cell-input" step="0.000001" placeholder="请输入买入价格" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">买入数量</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="smc-num" type="number" pattern="[0-9]*" class="cell-input" oninput="parseFloat(value).toFixed(6)" placeholder="请输入买入数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">手机号码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="user-mobile" type="tel" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 11) value = value.slice(0, 11)" placeholder="请输入手机号码" autocomplete="off" />
+                </div>
+                <div class="cjkg-form-verify">
+                    <button type="button" class="verify-btn" id="J_GetCode">获取验证码</button>
+                    <input type="hidden" id="isSendCode" value="0">
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">短信验证码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="verify-code" type="number" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 4) value = value.slice(0, 4)" placeholder="请输入短信验证码" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">交易密码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="trans-pass" type="password" class="cell-input" maxlength="12" placeholder="请输入交易密码" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <!-- buyin-form END -->
+
+        <!-- buyin-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="buyInBtn" type="button" class="btn-block btn-primary">申请买入</button>
+        </div>
+        <!-- buyin-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入md5JS -->
+<script src="../../../js/md5.min.js"></script>
+<!-- 引入verifyCodeJS -->
+<script src="../../../js/verifycode.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 获取当前的SMC价格
+        request('/api/exchange/rate', {}, 300).then(res => {
+            $('#current-price').text(res.data.smc2rmb);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+
+        // 申请买入按钮点击
+        $('#buyInBtn').click(function () {
+            var currentPrice = $.trim($('#current-price').val());
+            var userPrice = parseFloat($.trim($('#user-price').val()));
+            var smcNum = parseFloat($.trim($('#smc-num').val()));
+            var transPass = $.trim($('#trans-pass').val());
+            var userMobile = $.trim($('#user-mobile').val());
+            let mobileReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            var mobileVerifyCode = $.trim($('#verify-code').val());
+            var isSendCode = $('#isSendCode').val();
+
+            if (isNaN(userPrice) || userPrice < currentPrice) {
+                YDUI.dialog.toast('购买价格不能低于现价', 'error', 1300);
+            } else if (isNaN(smcNum) || smcNum < 1) {
+                YDUI.dialog.toast('SMC购买数量1个起', 'error', 1300);
+            } else if (isSendCode == 0) {
+                YDUI.dialog.toast('请先验证手机号', 'error', 1300);
+            } else if (!mobileReg.test(userMobile)) {
+                YDUI.dialog.toast('手机号码格式错误', 'error', 1300);
+            } else if (mobileVerifyCode == "" || mobileVerifyCode.length != 4) {
+                YDUI.dialog.toast('短信验证码格式错误', 'error', 1300);
+            } else if (transPass == "" || transPass.length < 6) {
+                YDUI.dialog.toast('交易密码格式错误', 'error', 1300);
+            } else {
+                request('/api/captcha/check', { mobile: userMobile, verifyCode: mobileVerifyCode }, 400).then(res => {
+                    YDUI.dialog.confirm('系统提示', '是否申请购买？', function () {
+                        request('/api/smc/trading/buy', { buyInPrice: userPrice, smcNum: smcNum, transPass: md5(transPass) }, 400).then(res => {
+                            YDUI.dialog.toast('申请成功', 'success', 1300);
+                            pageBack();
+                        }).catch(error => {
+                            console.log(error);
+                            YDUI.dialog.toast(error.toString(), 'error', 1300);
+                        })
+                    });
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            }
+        })
+    })
+</script>
+
+</html>

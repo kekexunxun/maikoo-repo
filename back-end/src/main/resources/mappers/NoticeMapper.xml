@@ -1,0 +1,11 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.NoticeDao">
+    <resultMap id="noticeDOResultMap" type="NoticeDO">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="newsId" column="comm_news_id"/>
+    </resultMap>
+</mapper>

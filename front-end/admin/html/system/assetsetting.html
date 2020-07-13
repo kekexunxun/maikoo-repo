@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>SMC、ETH设置</title>
+</head>
+
+<body>
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span>
+        SMC、ETH设置 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="page-container">
+        <form action="" method="post" class="form form-horizontal" id="form-system-assetsetting">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">今日SMC折合RMB价格：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text text-center fifth-width" value="" placeholder="精确到小数点后6位" id="smc2rmb" name="smc2rmb">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">ETH折合RMB价格：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text text-center fifth-width" value="" placeholder="精确到小数点后6位" id="eth2rmb" name="eth2rmb">
+                </div>
+            </div>
+            <hr>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">提现旷工费设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text text-center fifth-width" value="" placeholder="0 - 100" id="smc2rmb_rate" name="smc2rmb_rate">
+                    %
+                </div>
+            </div>
+            <hr>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">我要卖出手续费设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text text-center fifth-width" value="" placeholder="0 - 100" id="smc_extract_rate" name="smc_extract_rate">
+                    %
+                </div>
+            </div>
+            <hr>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">锁仓设置：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 730" id="lp_date_1" name="lp_date_1">
+                    天，
+                    奖励<input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 100" id="lp_rate_1" name="lp_rate_1">
+                    %<br>
+                    <input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 730" id="lp_date_2" name="lp_date_2">
+                    天，
+                    奖励<input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 100" id="lp_rate_2" name="lp_rate_2">
+                    %<br>
+                    <input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 730" id="lp_date_3" name="lp_date_3">
+                    天，
+                    奖励<input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 100" id="lp_rate_3" name="lp_rate_3">
+                    %<br>
+                    <input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 730" id="lp_date_4" name="lp_date_4">
+                    天，
+                    奖励<input type="number" class="input-text text-center fifth-width up-down-gap" value="" placeholder="0 - 100" id="lp_rate_4" name="lp_rate_4">
+                    %<br>
+                </div>
+            </div>
+            <div class="row cl submit-btn">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <a onclick="saveSetting()" class="btn btn-primary radius" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</a>
+                    <button class="btn btn-default radius" type="reset">&nbsp;&nbsp;重置&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/validate.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/request.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="../../lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<script type="text/javascript">
+    // 获取相关数据
+    request('/api/admin/setting/information', {}, 400).then(res => {
+        $('#smc2rmb').val(res.data.smc2rmb);
+        $('#eth2rmb').val(res.data.eth2rmb);
+        $('#smc2rmb_rate').val(res.data.smc2rmb_rate);
+        $('#smc_extract_rate').val(res.data.smc_extract_rate);
+        for (let i = 1; i <= res.data.lp_list.length; i++) {
+            $('#lp_date_' + i).val(res.data.lp_list[i - 1].lp_date);
+            $('#lp_rate_' + i).val(res.data.lp_list[i - 1].lp_rate);
+        }
+    }).catch(error => {
+        console.log(error);
+        layer.msg(error.toString(), { icon: 2, time: 1300 });
+    })
+
+    // 修改设置
+    function saveSetting() {
+        var flag = $("#form-system-assetsetting").valid();
+        if (!flag) {
+            layer.msg('信息不完整，请检查后重试', { icon: 2, time: 1300 });
+            return;
+        }
+        layer.confirm('您确定要提交并保存吗？', function () {
+            // 构造锁仓列表
+            let lpList = [];
+            for (let i = 1; i <= 4; i++) {
+                lpList.push({
+                    lpId: i,
+                    lpDate: $('#lp_date_' + i).val(),
+                    lpRate: $('#lp_rate_' + i).val()
+                })
+            }
+            let assetSetting = {
+                smc2rmb: $.trim($('#smc2rmb').val()),
+                eth2rmb: $.trim($('#eth2rmb').val()),
+                smc2rmbRate: $.trim($('#smc2rmb_rate').val()),
+                smcExtractRate: $.trim($('#smc_extract_rate').val()),
+                lpList: lpList,
+                accessToken: sessionStorage.getItem('token')
+            }
+            assetSetting = JSON.stringify(assetSetting);
+            request('/api/admin/setting/update', { assetSetting: assetSetting }, 400).then(res => {
+                layer.msg('更新成功', { icon: 1, time: 1300 });
+                refreshPage();
+            }).catch(error => {
+                console.log(error);
+                layer.msg(error.toString(), { icon: 2, time: 1300 });
+            })
+        })
+    }
+</script>
+
+</html>

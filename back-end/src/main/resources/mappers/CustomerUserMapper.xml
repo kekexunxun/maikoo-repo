@@ -1,0 +1,52 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.CustomerDao">
+    <resultMap id="customerResultMap" type="CustomerDO">
+        <result property="id" column="id"/>
+        <result property="userSN" column="user_sn"/>
+        <result property="username" column="username"/>
+        <result property="isUpdatedPassword" column="is_updated_password"/>
+        <result property="isUpdatedTransactionPassword" column="is_updated_trading_password"/>
+        <result property="profilePhoto" column="profile_photo"/>
+        <result property="account" column="account"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="frontIdCardUri" column="front_id_card_uri"/>
+        <result property="backIdCardUri" column="back_id_card_uri"/>
+        <result property="isUpdatedAuthentication" column="is_updated_authentication"/>
+        <result property="wallet" column="wallet"/>
+        <result property="balance" column="balance"/>
+        <result property="availableBalance" column="available_balance"/>
+        <result property="smcBalance" column="smc_balance"/>
+        <result property="availableSMCBalance" column="available_smc_balance"/>
+        <result property="ethBalance" column="eth_balance"/>
+        <result property="availableETHBalance" column="available_eth_balance"/>
+        <result property="ali" column="ali"/>
+        <result property="isBindAli" column="is_bind_ali"/>
+        <result property="wechat" column="wechat"/>
+        <result property="bank" column="bank"/>
+        <result property="bankBranch" column="bank_branch"/>
+        <result property="bankCardNumber" column="bank_card_number"/>
+        <result property="isBindBank" column="is_bind_bank"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <update id="updateBalance">
+        UPDATE
+            c_user
+        <set>
+            <if test="balance != null">balance=#{balance},</if>
+            <if test="availableBalance != null">available_balance=#{availableBalance},</if>
+            <if test="smcBalance != null">smc_balance=#{smcBalance},</if>
+            <if test="availableSMCBalance != null">available_smc_balance=#{availableSMCBalance},</if>
+            <if test="ethBalance != null">eth_balance=#{ethBalance},</if>
+            <if test="availableETHBalance != null">available_eth_balance=#{availableETHBalance}</if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+</mapper>

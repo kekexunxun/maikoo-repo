@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.ETHWithdrawalDao">
+    <resultMap id="ethWithdrawalResultMap" type="ETHWithdrawalDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="walletAddress" column="wallet_address"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        coew.wallet_address,
+        coew.quantity
+    </sql>
+    <select id="selectOne" resultMap="ethWithdrawalResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth_withdrawal coew ON co.id = coew.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            co.order_sn = #{orderSN}
+    </select>
+
+    <select id="selectByIds" resultMap="ethWithdrawalResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            coew.quantity
+        FROM
+            c_order co
+            JOIN c_order_eth_withdrawal coew ON co.id = coew.c_order_id
+        WHERE
+            coew.id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectAllWithCustomer" resultMap="ethWithdrawalResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth_withdrawal coew ON co.id = coew.c_order_id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL AND cu.deleted_at IS NULL
+    </select>
+</mapper>

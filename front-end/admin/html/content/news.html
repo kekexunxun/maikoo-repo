@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/skin/default/skin.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>新闻公告管理</title>
+</head>
+
+<body class="pos-r">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 内容管理 <span class="c-gray en">&gt;</span> 新闻公告管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="cl pd-5 bg-1 bk-gray mt-20 lh-30">
+        <span class="l">
+            <a class="btn btn-primary radius ml-20" onclick="addNews()" href="javascript:;">
+                <i class="Hui-iconfont">&#xe600;</i> 添加新闻公告
+            </a>
+        </span>
+        <span class="r mr-20">共有数据：<strong id="total" class="mr-10"></strong>条</span>
+    </div>
+    <div class="page-container">
+        <div class="mt-20">
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                    <tr class="text-c">
+                        <th width="60">新闻公告ID</th>
+                        <th width="80">新闻公告标题</th>
+                        <th width="100">新闻公告内容</th>
+                        <th width="100">新闻公告图片</th>
+                        <th width="100">状态</th>
+                        <th width="100">首页公告</th>
+                        <th width="80">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/request.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="../../lib/datatables/1.10.19/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/datatables.chinese.js"></script>
+<script type="text/javascript">
+    var indexNoticeId = "";
+    $('.table-sort').dataTable({
+        "ajax": function (data, callback, settings) {
+            var loading = layer.load(1, {
+                shade: [0.6, '#f2f2f2']
+            });
+            // 1 先请求首页notice
+            request('/api/admin/notice/information', {}, 400, false).then(res => {
+                indexNoticeId = res.data.id;
+                return request('/api/admin/news/list', {}, 400, false);
+            }).catch(error => {
+                layer.close(loading);
+                console.log(error);
+                layer.msg(error.toString(), { icon: 2, time: 1300 });
+            }).then(res => {
+                layer.close(loading);
+                let data = { "data": [] };
+                for (let i = 0; i < res.data.length; i++) {
+                    data.data.push(res.data[i]);
+                }
+                $('#total').text(res.data.length);
+                callback(data);
+            }).catch(error => {
+                layer.close(loading);
+                console.log(error);
+                layer.msg(error.toString(), { icon: 2, time: 1300 });
+            })
+        },
+        "processing": true,
+        "deferRender": true,
+        "columns": [
+            { "data": "news_id" },
+            { "data": "news_title" },
+            { "data": "news_content" },
+            {
+                "data": "news_id",
+                "render": function (data, type, row, meta) {
+                    return row.news_img ? '<img src="http://cjkg.up.maikoo.cn' + row.news_img + '" width="150" height="100">' : '';
+                }
+            },
+            {
+                "className": 'td-status',
+                "data": "status",
+                "render": function (data, type, row, meta) {
+                    switch (data) {
+                        case '已展示':
+                            return '<span class="label label-defaunt radius cursor-pointer status-success status-padding" onclick="deactivate(this, ' + row.news_id + ')">已展示</span>';
+                        case '未展示':
+                            return '<span class="label label-defaunt radius cursor-pointer status-forbid status-padding" onclick="activate(this, ' + row.news_id + ')">不展示</span>';
+                        default:
+                            return '<span class="label label-danger radius">异常</span>';
+                    }
+                }
+            },
+            {
+                "className": 'td-index',
+                "data": "status",
+                "render": function (data, type, row, meta) {
+                    switch (data) {
+                        case '已展示':
+                            if (row.news_id == indexNoticeId) {
+                                return '<span class="label label-defaunt radius cursor-pointer status-success status-padding">首页站内信</span>';
+                            } else {
+                                return '<span class="label label-defaunt radius cursor-pointer status-success status-padding" onclick="setIndexNotice(this, ' + row.news_id + ')">设置</span>';
+                            }
+                        case '未展示':
+                            return '<span class="label label-defaunt radius cursor-pointer status-forbid status-padding">无法设置</span>';
+                        default:
+                            return '<span class="label label-danger radius">异常</span>';
+                    }
+                }
+            },
+            {
+                "className": 'td-manage',
+                "data": "news_id",
+                "render": function (data, type, row, meta) {
+                    return '<span class="cursor-pointer" onclick="delNews(this, ' + data + ')"><i class="Hui-iconfont">&#xe609;</i></span>';
+                }
+            },
+        ],
+        "aaSorting": [[0, "asc"]], //默认第几个排序
+        "bStateSave": true, //状态保存
+        "bFilter": true,
+        "aoColumnDefs": [
+            { "orderable": false, "aTargets": [] } // 制定列不参与排序
+        ]
+    });
+
+    // 展示当前新闻公告
+    function activate(obj, nid) {
+        layer.confirm('确定要展示当前文章吗?', { icon: 7, title: '系统提示' }, function (index) {
+            request('/api/admin/news/update', { newsId: nid, status: 1 }, 400).then(res => {
+                layer.msg('状态修改成功', { icon: 1, time: 1300 });
+                $(obj).parent('td').html('<span class="label label-defaunt radius cursor-pointer status-success status-padding" onclick ="deactivate(this, ' + nid + ')">已展示</span>')
+            }).catch(error => {
+                console.log(error);
+                layer.msg(error.toString(), { icon: 1, time: 1300 });
+            })
+        });
+    }
+
+    // 不展示当前新闻公告
+    function deactivate(obj, nid) {
+        // 如果当前文章为首页站内信 则无法删除 无法变更展示状态
+        if (nid == indexNoticeId) {
+            layer.msg('该新闻公告为首页站内信，无法应用变更', { icon: 2, time: 2000 });
+            return;
+        }
+        layer.confirm('确定要不展示当前文章吗?', { icon: 7, title: '系统提示' }, function (index) {
+            request('/api/admin/news/update', { newsId: nid, status: 0 }, 400).then(res => {
+                layer.msg('状态修改成功', { icon: 1, time: 1300 });
+                $(obj).parent('td').html('<span class="label label-defaunt radius cursor-pointer status-forbid status-padding" onclick="activate(this, ' + nid + ')">不展示</span>')
+            }).catch(error => {
+                console.log(error);
+                layer.msg(error.toString(), { icon: 1, time: 1300 });
+            })
+        });
+    }
+
+    // 删除新闻公告
+    function delNews(obj, nid) {
+        // 如果当前文章为首页站内信 则无法删除 无法变更展示状态
+        if (nid == indexNoticeId) {
+            layer.msg('该新闻公告为首页站内信，无法应用变更', { icon: 2, time: 2000 });
+            return;
+        }
+        layer.confirm('确定要删除当前新闻公告吗?', { icon: 7, title: '系统提示' }, function (index) {
+            request('/api/admin/news/delete', { newsId: nid }, 400).then(res => {
+                layer.msg('删除成功', { icon: 1, time: 1300 });
+                $(obj).parents('tr').remove();
+            }).catch(error => {
+                console.log(error);
+                layer.msg(error.toString(), { icon: 1, time: 1300 });
+            })
+        });
+    }
+
+    // 设置首页公告
+    function setIndexNotice(obj, nid) {
+        layer.confirm('是否要将当前文章设置为首页公告?', { icon: 7, title: '系统提示' }, function (index) {
+            layer.prompt({ title: '请输入首页展示的文字', formType: 2, maxlength: 30 }, function (text, index) {
+                request('/api/admin/notice/add', { navId: nid, text: text }, 400).then(res => {
+                    layer.msg('更新成功', { icon: 1, time: 1300 });
+                    setTimeout(() => {
+                        location.replace(location.href);
+                    }, 1300)
+                }).catch(error => {
+                    console.log(error);
+                    layer.msg(error.toString(), { icon: 1, time: 1300 });
+                })
+            });
+
+        });
+    }
+
+    // 新增一篇新闻公告
+    function addNews() {
+        var index = layer.open({
+            type: 2,
+            title: '添加新闻公告',
+            content: './addnews.html',
+            end: function () {
+                location.replace(location.href);
+            }
+        });
+        layer.full(index);
+    }
+</script>
+
+</html>

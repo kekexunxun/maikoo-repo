@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 矿机列表</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview grey-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">矿机列表</span>
+            </div>
+        </header>
+        <!-- Content -->
+        <div id="machine-view" class="g-scrollview scroll-after">
+            <!-- List -->
+            <div class="machine-list" id="machine-list">
+
+            </div>
+        </div>
+
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<script>
+    $(function () {
+        // 发起请求
+        request('/api/product', {}, 400).then(res => {
+            if (res.data && res.data.length == 0) {
+                YDUI.dialog.toast('暂无数据', 'error', 1300);
+                return;
+            }
+            // 初始化列表
+            initList(res.data);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+        // 初始化我的矿机列表
+        function initList(list) {
+            let ListHtml = "";
+            for (let i = 0; i < list.length; i++) {
+                ListHtml += '<div class="machine-item white-bg">' +
+                    '<div class="machine-item-left">' +
+                    '<img src="../../../img/miner/miner.png" alt="矿机">' +
+                    '</div>' +
+                    '<div class="machine-item-middle">' +
+                    '<span class="font-bold">名称：' + list[i].miner_name + '</span>' +
+                    '<span>型号：' + list[i].miner_model + '</span>' +
+                    '</div>' +
+                    '<div class="machine-item-right">' +
+                    '<span class="price-color">￥' + list[i].miner_price + '</span>' +
+                    '<a href="javascript:;" onclick="navToMachineDetail(this)" class="btn btn-primary" data-sn="' + list[i].miner_sn + '">立即购买</a>' +
+                    '</div>' +
+                    '</div>'
+            }
+            $('#machine-list').html(ListHtml);
+        }
+    })
+</script>
+
+</html>

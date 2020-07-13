@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 公告详情</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">公告</span>
+            </div>
+        </header>
+        <!-- Content -->
+        <div id="news-detail-view" class="g-scrollview scroll-after white-bg">
+            <div class="detail-content">
+                <div class="news-item-title">
+                    <span class="news-title" id="news-title"></span>
+                    <span class="news-title-flag">官方公告</span>
+                </div>
+                <div class="news-item-time" id="news-date"></div>
+                <div class="news-img" id="news-img" hidden="hidden">
+                    <img src="" alt="">
+                </div>
+                <div class="news-detail-content" id="news-content"></div>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<script>
+    $(function () {
+        // 获取请求携带的id
+        var url = location.search; //获取url中"?"符后的字串
+        param = url.split('=')[1];
+
+        request('/api/news/information', { newsId: param }, 400).then(res => {
+            if (res.data) {
+                $('#news-title').text(res.data.news_title);
+                $('#news-date').text(res.data.news_date);
+                $('#news-content').html(res.data.news_content);
+                if (res.data.news_img) {
+                    $('#news-img').children('img').attr('src', siteroot + res.data.news_img);
+                    $('#news-img').show();
+                }
+            }
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+</script>
+
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - SMC提现</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">提现</span>
+            </div>
+            <a id="navToSMCExtractRecord" href="#" class="navbar-item" data-etype="extract">
+                <img class="icon-history" src="../../../img/wallet/icon_history.png" alt="交易记录">
+            </a>
+        </header>
+
+        <!-- extract-form -->
+        <div class="extract-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">交易数量</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="smc-extract-num" type="number" pattern="[0-9]*" oninput="if (value.length > 13) value = value.slice(0, 13)" class="cell-input" placeholder="请输入交易数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">钱包余额</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-available" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">实际扣除</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-handling" class="cell-input"></span>
+                </div>
+                <div class="cjkg-form-verify">
+                    <div class="verify-btn" id="smc2rmb-rate">旷工费：0%</div>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">实际提取金额</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-actual" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">提现到</div>
+                <div class="cjkg-form-cell-right flex-row">
+                    <div id="chooseBank" class="flex-row item-center" data-flag="0">
+                        <img class="bigger-icon right-gap1" src="../../../img/wallet/btn_uncheck.png" alt="提现">
+                        <span>银行卡</span>
+                    </div>
+                    <div id="chooseAlipay" class="flex-row item-center" data-flag="0">
+                        <img class="bigger-icon right-gap1" src="../../../img/wallet/btn_uncheck.png" alt="提现">
+                        <span>支付宝</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">手机号码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="user-mobile" type="tel" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 11) value = value.slice(0, 11)" placeholder="请输入手机号码" autocomplete="off" />
+                </div>
+                <div class="cjkg-form-verify">
+                    <button type="button" class="verify-btn" id="J_GetCode">获取验证码</button>
+                    <input type="hidden" id="isSendCode" value="0">
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">短信验证码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="verify-code" type="tel" pattern="[0-9]*" class="cell-input" min="0" oninput="if (value.length > 4) value = value.slice(0, 4)" placeholder="请输入短信验证码" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <!-- extract-form END -->
+
+        <!-- extract-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="extractBtn" type="button" class="btn-block btn-primary">申请提币</button>
+        </div>
+        <div class="explain-text">
+            <div>21:00后提现24小时内到账</div>
+            <div>9:00-21:00后提现2小时内到账</div>
+        </div>
+        <!-- extract-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入md5JS -->
+<script src="../../../js/md5.min.js"></script>
+<!-- 引入verifyCodeJS -->
+<script src="../../../js/verifycode.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 点击选择银行卡
+        $('#chooseBank').click(function () {
+            if (!is_bind_card) {
+                YDUI.dialog.toast('未绑定银行卡', 'error', 1300);
+                return;
+            }
+            $('#chooseBank').data('flag', 1);
+            $('#chooseAlipay').data('flag', 0);
+            $('#chooseAlipay').children('img').attr('src', "../../../img/wallet/btn_uncheck.png");
+            $('#chooseBank').children('img').attr('src', "../../../img/wallet/btn_checked.png");
+        })
+
+        // 点击选择支付宝
+        $('#chooseAlipay').click(function () {
+            if (!is_bind_alipay) {
+                YDUI.dialog.toast('未绑定银行卡', 'error', 1300);
+                return;
+            }
+            $('#chooseBank').data('flag', 0);
+            $('#chooseAlipay').data('flag', 1);
+            $('#chooseAlipay').children('img').attr('src', "../../../img/wallet/btn_checked.png");
+            $('#chooseBank').children('img').attr('src', "../../../img/wallet/btn_uncheck.png");
+        })
+
+        var extractRate = "", userSMCNum = "", smcCurPrice = "", is_bind_alipay = false, is_bind_card = false;
+        YDUI.dialog.loading.open('Loading');
+        // 判断用户是否有绑定的交易方式
+        request('/api/customer/flag', {}, 200, false).then(res => {
+            is_bind_alipay = res.data.is_bind_alipay;
+            is_bind_card = res.data.is_bind_card;
+            // 请求用户SMC余额
+            return request('/api/customer/balance', { assetType: 'SMC', assetStatus: 'AVAILABLE' }, 100, false).then(res => {
+                userSMCNum = res.data.smc.available;
+                $('#smc-available').text(userSMCNum);
+                return request('/api/smc/trading/fee', { rateType: 'EXTRACT' }, 100, false);
+            }).catch(error => {
+                YDUI.dialog.loading.close();
+                console.log(error);
+                YDUI.dialog.toast(error.toString(), 'error', 1300);
+            }).then(res => {
+                extractRate = res.data.smc_extract_rate;
+                $('#smc2rmb-rate').text('旷工费：' + extractRate + '%');
+                return request('/api/exchange/rate', {}, 100, false);
+            }).catch(error => {
+                YDUI.dialog.loading.close();
+                console.log(error);
+                YDUI.dialog.toast(error.toString(), 'error', 1300);
+            }).then(res => {
+                smcCurPrice = res.data.smc2rmb;
+                YDUI.dialog.loading.close();
+            }).catch(error => {
+                YDUI.dialog.loading.close();
+                console.log(error);
+                YDUI.dialog.toast(error.toString(), 'error', 1300);
+            })
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+
+        // 输入SMC卖出数量时，要及时更新总交易金额以及计算实际金额
+        $('#smc-extract-num').bind('input propertychange', function () {
+            let smcExtractNum = this.value;
+            if (smcExtractNum > 10000000) {
+                smcExtractNum = 10000000;
+                this.value = 10000000;
+            }
+            // 计算金额
+            let handlingFee = (smcExtractNum * smcCurPrice * extractRate * 0.01).toFixed(6);
+            let actualFee = (smcExtractNum * smcCurPrice * (100 - extractRate) * 0.01).toFixed(6);
+            // 赋值到界面
+            $('#smc-handling').text(handlingFee);
+            $('#smc-actual').text(actualFee);
+        });
+
+        // 申请买入按钮点击
+        $('#extractBtn').click(function () {
+            var smcExtractNum = parseFloat($.trim($('#smc-extract-num').val()));
+            var isSendCode = $('#isSendCode').val();
+            var userMobile = $.trim($('#user-mobile').val());
+            let mobileReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            var mobileVerifyCode = $.trim($('#verify-code').val());
+            var isChooseAlipay = $('#chooseAlipay').data('flag');
+            var isChooseBank = $('#chooseBank').data('flag');
+            if (isNaN(smcExtractNum) || smcExtractNum < 1) {
+                YDUI.dialog.toast('SMC提现数量1个起', 'error', 1300);
+            } else if (smcExtractNum > userSMCNum) {
+                YDUI.dialog.toast('SMC余额不足', 'error', 1300);
+            } else if (!isChooseBank && !isChooseAlipay) {
+                YDUI.dialog.toast('请选择提现方式', 'error', 1300);
+            } else if (isSendCode == "0") {
+                YDUI.dialog.toast('请先验证手机号', 'error', 1300);
+            } else if (!mobileReg.test(userMobile)) {
+                YDUI.dialog.toast('手机号码格式错误', 'error', 1300);
+            } else if (mobileVerifyCode == "" || mobileVerifyCode.length != 4) {
+                YDUI.dialog.toast('验证码格式错误', 'error', 1300);
+            } else {
+                request('/api/captcha/check', { mobile: userMobile, verifyCode: mobileVerifyCode }, 400, false).then(res => {
+                    YDUI.dialog.confirm('系统提示', '是否确定申请提现？', function () {
+                        request('/api/withdrawal/apply', { smcNum: smcExtractNum, extractTo: isChooseAlipay ? 1 : 2 }, 400).then(res => {
+                            YDUI.dialog.toast('申请成功', 'success', 1300);
+                            pageBack();
+                        }).catch(error => {
+                            console.log(error);
+                            YDUI.dialog.toast(error.toString(), 'error', 1300);
+                        })
+                    });
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            }
+        })
+    })
+</script>
+
+</html>

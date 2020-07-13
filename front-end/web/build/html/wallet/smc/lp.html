@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 修改登录密码</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">锁仓</span>
+            </div>
+            <a id="navToSMCLpRecord" href="#" class="navbar-item" data-etype="extract">
+                <img class="icon-history" src="../../../img/wallet/icon_history.png" alt="交易记录">
+            </a>
+        </header>
+
+        <!-- lp-form -->
+        <div class="lp-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">当前数量</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-num" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">锁仓数量</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="smc-lp-num" type="number" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 10) value = value.slice(0, 10)" placeholder="请输入锁仓数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">锁仓期限</div>
+                <div class="cjkg-form-cell-right row-spare-view" id="lp-list">
+                </div>
+            </div>
+            <div class="lp-award"></div>
+        </div>
+        <!-- lp-form END -->
+
+        <!-- lp-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="lp-btn" type="button" class="btn-block btn-primary">锁仓</button>
+        </div>
+        <!-- lp-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入script -->
+<script>
+    // 获取锁仓列表
+    YDUI.dialog.loading.open('Loading');
+    request('/api/smc/lock/cycle', {}, 400, false).then(res => {
+        if (res.data.length == 0) {
+            YDUI.dialog.toast('暂未设置锁仓记录', 'error', 1300);
+            pageBack();
+            return;
+        }
+        let rateHtml = "";
+        for (let i = 0; i < res.data.length; i++) {
+            rateHtml += '<a href="javascript:;" class="btn btn-primary btn-radio" onclick="chooseLp(this)" data-rate="' + res.data[i].lp_rate + '" data-id="' + res.data[i].lp_id + '">' + res.data[i].lp_date + '天</a>';
+        }
+        $('#lp-list').html(rateHtml);
+        return request('/api/customer/balance', { assetType: "SMC", assetStatus: "AVAILABLE" }, 100, false)
+    }).catch(error => {
+        YDUI.dialog.loading.close();
+        console.log(error);
+        YDUI.dialog.toast(error.toString(), 'error', 1300);
+    }).then(res => {
+        $('#smc-num').text(res.data.smc.available);
+        YDUI.dialog.loading.close();
+    }).catch(error => {
+        YDUI.dialog.loading.close();
+        console.log(error);
+        YDUI.dialog.toast(error.toString(), 'error', 1300);
+    })
+
+    // 锁仓期限选择事件
+    function chooseLp(obj) {
+        if ($(obj).hasClass('btn-active')) {
+            $(obj).parent('div').children('a').removeClass('btn-active');
+        } else {
+            $(obj).parent('div').children('a').removeClass('btn-active');
+            $(obj).addClass('btn-active');
+        }
+        setUpLpAward();
+    }
+
+    // 输入SMC锁仓数量时，实时计算锁仓收益
+    $('#smc-lp-num').bind('input propertychange', function () {
+        let smcNum = this.value;
+        if (smcNum > 10000000) {
+            smcNum = 10000000;
+            this.value = 10000000;
+        }
+        setUpLpAward();
+    });
+
+    // 锁仓收益计算
+    function setUpLpAward() {
+        // 1 是否满足显示奖励文字的条件
+        let smcNum = $('#smc-lp-num').val();
+        let rate = $('.btn-active').data('rate');
+        if (!smcNum || !rate) {
+            $('.lp-award').text();
+        } else {
+            let award = (smcNum * rate * 0.01).toFixed(6);
+            $('.lp-award').text('锁仓可得：' + award + ' SMC');
+        }
+    }
+
+    // 锁仓按钮
+    $('#lp-btn').click(function () {
+        var smcNum = parseFloat($.trim($('#smc-lp-num').val()));
+        var lpId = $('.btn-active').data('id');
+        if (isNaN(smcNum) || smcNum < 100) {
+            YDUI.dialog.toast('锁仓数量100个起', 'error', 1300);
+        } else if (!lpId) {
+            YDUI.dialog.toast('请选择锁仓期限', 'error', 1300);
+        } else {
+            YDUI.dialog.confirm('系统提示', '是否确定锁仓？', function () {
+                request('/api/smc/lock/apply', { smcNum: smcNum, lpId: lpId }, 400).then(res => {
+                    YDUI.dialog.toast('申请成功', 'success', 1300);
+                    pageBack();
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            });
+        }
+    })
+</script>
+
+</html>

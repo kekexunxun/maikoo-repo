@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/Hui-iconfont/1.0.9/iconfont.css" />
+    <link rel="stylesheet" type="text/css" ˜ href="../../static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="../../static/h-ui.admin/css/style.css" />
+
+    <title>新增轮播图</title>
+</head>
+
+<body>
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-news-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">是否跳转：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div class="radio-box">
+                        <input name="jump" type="radio" id="j-y">
+                        <label for="j-y">是</label>
+                    </div>
+                    <div class="radio-box">
+                        <input name="jump" type="radio" id="j-n" checked>
+                        <label for="j-n">否</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row cl" id="news-cont">
+                <label class="form-label col-xs-4 col-sm-2">文章列表：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <select name="news-list" class="select" style="width: 300px; height: 31px;" id="news-list">
+                    </select>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">图片：</label>
+                <div class="formControls col-xs-8 col-sm-9 upload-div">
+                    <input type="file" id="banner-img" accept="image/jpeg, image/x-png" />
+                    <label class="btn btn-success radius">图片上传</label>
+                    <img id="banner-img-pre" src="" alt="" hidden="hidden">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">状态：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <div class="radio-box">
+                        <input name="status" type="radio" id="s-show" checked>
+                        <label for="s-show">展示</label>
+                    </div>
+                    <div class="radio-box">
+                        <input name="status" type="radio" id="s-hide">
+                        <label for="s-hide">不展示</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <a onclick="saveBanner()" class="btn btn-primary radius mr-20" href="javascript:;"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</a>
+                    <button onclick="layer_close()" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+</body>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../../lib/jquery/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="../../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="../../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../../static/h-ui.admin/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="../../static/cjkg/js/request.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+    // 获取文章列表
+    var newsList = "";
+    request('/api/admin/news/list', {}).then(res => {
+        if (res.data && res.data.length > 0) {
+            newsList = res.data;
+            let optionHtml = "";
+            for (let i = 0; i < newsList.length; i++) {
+                optionHtml += '<option value="' + newsList[i].news_id + '">' + newsList[i].news_title + '</option>';
+            }
+            $('#news-list').append(optionHtml);
+        } else {
+            // 没有数据 能跳转文章的radio就不能够点击
+            $('#j-y').attr('disabled', 'disabled');
+            $('#j-y').parent('div').parent('.formControls').append('<spans style="color: red">暂无文章，无法跳转</span>');
+        }
+    }).catch(error => {
+        console.log(error);
+        layer.msg(error.toString(), { icon: 2, time: 1300 });
+    })
+
+    $('input[type=radio][name=jump]').change(function () {
+        if (this.id == "j-y") {
+            $('#news-cont').show();
+        } else {
+            $('#news-cont').hide();
+        }
+    });
+
+    // 初始化不显示的div
+    $('#banner-img-pre').hide();
+    $('#news-cont').hide();
+
+    var file = "";
+    // 保存当前轮播图相关信息
+    function saveBanner() {
+        var status = $('input[type=radio][name=status]:checked').next().text() == "展示" ? 1 : 0;
+        var navType = $('input[type=radio][name=jump]:checked').next().text() == "是" ? 1 : 0;
+        var navId = navType == 1 ? $('#news-list').val() : 0;
+        if (!file) {
+            layer.msg('请先选择图片', { icon: 2, time: 1300 });
+        } else {
+            layer.confirm('确定要保存并提交吗？', { title: '系统提示' }, function () {
+                // 1 先上传图片
+                var formData = new FormData();
+                formData.append('file', file);
+                upload(formData).then(res => {
+                    return request('/api/admin/slide/add', { img: res.data.img_src, navType: navType, navId: navId, status: status })
+                }).catch(error => {
+                    console.log(error);
+                    layer.msg(error.toString(), { icon: 2, time: 1300 });
+                }).then(res => {
+                    layer.msg('添加成功', { icon: 1, time: 1300 });
+                    index = parent.layer.getFrameIndex(window.name);
+                    setTimeout('parent.layer.close(index);', 1300);
+                }).catch(error => {
+                    console.log(error);
+                    layer.msg(error.toString(), { icon: 2, time: 1300 });
+                })
+            });
+        }
+    }
+
+    // 新闻公告图片预览
+    $("#banner-img").change(function () {
+        file = $(this)[0].files[0];
+        // 文件大小限制
+        if (file.size > 1024 * 1024 * 2) {
+            layer.msg('文件大小不能超过4MB', { icon: 2, time: 1300 });
+        } else {
+            $("#banner-img-pre").attr("src", URL.createObjectURL(file));
+            $('#banner-img-pre').show();
+        }
+    });
+</script>
+
+</html>

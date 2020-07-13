@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.ETHSwapSMCDao">
+    <resultMap id="ethSwapSMCResultMap" type="ETHSwapSMCDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="ethPrice" column="eth_price"/>
+        <result property="smcPrice" column="smc_price"/>
+        <result property="ethQuantity" column="eth_quantity"/>
+        <result property="smcQuantity" column="smc_quantity"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        coes.eth_quantity,
+        coes.smc_quantity
+    </sql>
+
+    <select id="selectOne" resultMap="ethSwapSMCResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth_smc coes ON co.id = coes.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            co.order_sn = #{orderSN}
+    </select>
+
+    <select id="selectByIds" resultMap="ethSwapSMCResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            coes.eth_quantity,
+            coes.smc_quantity
+        FROM
+            c_order co
+            JOIN c_order_eth_smc coes ON co.id = coes.c_order_id
+        WHERE
+            coes.id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectAllWithCustomerByType" resultMap="ethSwapSMCResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            coes.eth_price,
+            coes.smc_price,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth_smc coes ON co.id = coes.c_order_id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL
+            AND cu.deleted_at IS NULL
+            AND type = #{type}
+    </select>
+</mapper>

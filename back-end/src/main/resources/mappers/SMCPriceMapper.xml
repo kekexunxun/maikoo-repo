@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.SMCPriceDao">
+    <resultMap id="smcPriceDOResultMap" type="SMCPriceDO">
+        <result property="id" column="id"/>
+        <result property="date" column="date"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+    <select id="selectOneByDate" resultMap="smcPriceDOResultMap">
+        SELECT
+          id,
+          price
+        FROM
+          comm_smc_price
+        WHERE
+          date = #{date}
+    </select>
+
+    <select id="selectByDate" resultMap="smcPriceDOResultMap">
+        SELECT
+          date,
+          price
+        FROM
+          comm_smc_price
+        WHERE
+          date BETWEEN #{beginTimeStamp} AND #{endTimeStamp}
+    </select>
+</mapper>

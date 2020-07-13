@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 绑定支付宝账号</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">绑定支付宝账号</span>
+            </div>
+        </header>
+        <!-- alipay-form -->
+        <div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">支付宝账号</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="alipayAccount" type="text" class="cell-input" maxlength="20" placeholder="请输入支付宝账号" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">验证码</div>
+                <div class="cjkg-form-cell-right verifycode-right">
+                    <input id="verifycode" type="text" class="cell-input" maxlength="4" placeholder="请输入验证码" autocomplete="off" />
+                </div>
+                <div class="verify-canvas">
+                    <canvas id="verify-canvas" width="100" height="43"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- alipay-form END -->
+        <!-- alipay-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="alipayBtn" type="button" class="btn-block btn-primary">确定修改</button>
+        </div>
+        <!-- alipay-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<!-- 引入VerifyJS -->
+<script src="../../js/verifycode.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        var alipay = "";
+
+        // 获取用户支付宝账号
+        request('/api/customer/ali/information', {}, 300).then(res => {
+            alipay = res.data.alipay || "";
+            $('#alipayAccount').val(alipay);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+
+        // 图形验证码相关
+        var vCode = [];
+        drawVerifyCode(vCode);
+        // 验证码点击事件
+        $("#verify-canvas").on('click', function () {
+            drawVerifyCode(vCode);
+        })
+
+        // 确认修改按钮点击事件
+        $('#alipayBtn').click(function () {
+            // 表单校验
+            let alipayAccount = $.trim($('#alipayAccount').val());
+            let verify_vCode = $.trim($('#verifycode').val());
+            if (alipayAccount == "") {
+                YDUI.dialog.toast('支付宝账号不能为空', 'error', 1300);
+            } else if (alipay && alipay == alipayAccount) {
+                YDUI.dialog.toast('支付宝账号未做修改', 'error', 1300);
+            } else {
+                // 验证码验证
+                verify_vCode = verify_vCode.toLowerCase();
+                vCode_conv = vCode.join("");
+                if (verify_vCode != vCode_conv) {
+                    YDUI.dialog.toast('验证码错误', 'error', 1300);
+                    drawVerifyCode(vCode);
+                    return false;
+                }
+                // 支付宝账号绑定请求
+                request('/api/customer/ali', { alipayAccount: alipayAccount }, 300).then(res => {
+                    YDUI.dialog.toast('支付宝绑定成功', 'success', 1300);
+                    pageBack();
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                    drawVerifyCode(vCode);
+                })
+            }
+        })
+    })
+</script>
+
+</html>

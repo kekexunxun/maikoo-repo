@@ -1,0 +1,875 @@
+/* All */
+
+* {
+    /* font-family: Arial, "Microsoft YaHei", "黑体", "宋体", sans-serif; */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* 重写选中的tab的底部颜色 */
+
+.tab-nav-item.tab-active:before {
+    background: #ecd58d;
+}
+
+.scroll-after::after {
+    height: 0;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/* 通用form */
+
+.cjkg-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.cjkg-form-cell {
+    height: 1.2rem;
+    line-height: 1.2rem;
+    font-size: 0.28rem;
+    color: #25241e;
+    display: flex;
+    flex-direction: row;
+    margin: 0 0.3rem;
+    border-bottom: 1px solid #d4d4d4;
+    position: relative;
+}
+
+.cjkg-form-cell-left {
+    width: 30%;
+    text-align: left;
+    font-weight: 500;
+}
+
+.cjkg-form-cell-right {
+    width: 70%;
+}
+
+.cjkg-form-cell-right input {
+    width: 100%;
+    height: 1.2rem;
+    font-size: 0.28rem;
+}
+
+.cjkg-form-cell-right button {
+    width: 1.4rem;
+    height: 1.4rem;
+    background: url('../img/my/icon_addpic.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border: none;
+}
+
+.cjkg-form-verify {
+    position: absolute;
+    right: 0.3rem;
+}
+
+/* 通用table */
+
+/* .cjkg-table{
+    display: flex;
+} */
+
+.tab-panel .tab-panel-item {
+    padding: 0.02rem 0;
+}
+
+.cjkg-table-line,
+.cjkg-table-title {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.28rem;
+    text-align: center;
+}
+
+.cjkg-table-title {
+    color: #25241e;
+    background: #f9f9f9;
+    height: 0.8rem;
+    line-height: 0.8rem;
+}
+
+.cjkg-table-line {
+    color: #4a4a4a;
+    height: 1.2rem;
+    line-height: 1.2rem;
+}
+
+.cjkg-table-quarter-item {
+    width: 25%;
+}
+
+.cjkg-table-third-item {
+    width: 33.3%;
+}
+
+.btn-margin-top {
+    margin-top: 1rem;
+}
+
+.verifycode-right {
+    width: 40%;
+}
+
+.no-border-cell::after,
+.no-border-cell .cell-item::after {
+    border-bottom: none;
+}
+
+.text-cell {
+    margin: 1rem 0.3rem 0 0.3rem;
+}
+
+.text-cell .cell-item {
+    padding-right: 0.24rem;
+}
+
+.verify-canvas {
+    display: flex;
+    align-items: center;
+}
+
+.white-bg {
+    background: #fff;
+}
+
+.icon-history {
+    width: 0.44rem;
+}
+
+.base-color {
+    color: #ecd58d;
+}
+
+.price-color {
+    color: #de4f4f;
+}
+
+.grey-color {
+    color: #9b9b9b;
+}
+
+.row-spare-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.item-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.bigger-icon {
+    width: 0.48rem;
+    height: 0.48rem;
+}
+
+.right-gap1 {
+    margin-right: 0.15rem;
+}
+
+.download-a {
+    margin-top: 5rem;
+}
+
+/* All END */
+
+/* Index */
+
+.m-slider img {
+    height: 3.3rem;
+}
+
+.cjkg-notice {
+    width: 100%;
+    height: 0.6rem;
+    background: #f1f1f1;
+}
+
+.cjkg-notice a {
+    display: flex;
+    height: 0.6rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.cjkg-notice img {
+    height: 0.44rem;
+    width: 0.44rem;
+    margin-left: 0.3rem;
+}
+
+.cjkg-notice span {
+    margin-left: 0.2rem;
+    font-size: 0.24rem;
+}
+
+.chart-style {
+    margin: 0 auto;
+}
+
+.chart-style canvas {
+    border-radius: 0.08rem;
+}
+
+.coin-price {
+    height: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-left: 0.3rem;
+    justify-content: space-between;
+}
+
+.coin-price-text {
+    color: #25241e;
+    font-size: 0.28rem;
+}
+
+.coin-price-num {
+    color: #de4f4f;
+    font-size: 0.68rem;
+    margin-right: 0.6rem;
+}
+
+.coin-price-num label {
+    color: #9b9b9b;
+    font-size: 0.28rem;
+}
+
+.index-cell {
+    margin-bottom: 0;
+}
+
+.index-cell::after {
+    border-bottom: none;
+}
+
+.index-cell .cell-right {
+    color: #b6b6bb;
+}
+
+/* Index END */
+
+/* Login */
+
+.login-bg {
+    background: url('../img/login/bg_login.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.logo {
+    height: 100%;
+    margin: 1rem 0;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.login-cell {
+    background: rgba(1, 1, 1, 0);
+    padding: 0;
+    margin: 0 0.3rem;
+}
+
+.login-cell .cell-left span {
+    margin-left: 0.2rem;
+    color: #ecdc8d;
+    font-size: 0.28rem;
+}
+
+.login-cell .cell-right {
+    padding: 0;
+    margin-left: 0.3rem;
+}
+
+.login-cell .cell-right input {
+    color: #ecdc8d;
+    font-size: 0.28rem;
+}
+
+.login-cell-right input {
+    width: 1rem;
+}
+
+.pass-forget {
+    width: 100%;
+    text-align: center;
+    height: 0.6rem;
+    margin: 0.3rem 0;
+    line-height: 0.6rem;
+}
+
+.pass-forget span {
+    color: #ecdc8d;
+    font-size: 0.32rem;
+}
+
+/* Login END */
+
+/* find-pwd */
+
+.find-pwd-bg {
+    background: #fff;
+}
+
+.find-pwd-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0.3rem;
+}
+
+.find-pwd-text .text1 {
+    font-size: 0.68rem;
+    color: #000;
+    height: 0.8rem;
+    margin: 0.4rem 0;
+}
+
+.find-pwd-text .text2 {
+    color: #9b9b9b;
+    font-size: 0.26rem;
+    line-height: 0.36rem;
+}
+
+.verify-btn {
+    background: rgba(1, 1, 1, 0);
+    color: #ecdc8d;
+    font-size: 0.28rem;
+    border: none;
+}
+
+/* find-pwd END */
+
+/* pool */
+
+.list-line {
+    display: flex;
+    flex-direction: row;
+    height: 33%;
+    font-size: 0.28rem;
+    align-items: center;
+}
+
+.list-line .line-title {
+    width: 20%;
+}
+
+.list-line .line-content {
+    width: 70%;
+}
+
+.list-line .line-right {
+    width: 10%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.list-line .line-right img {
+    width: 0.24rem;
+    height: 0.24rem;
+}
+
+.pool-list .list-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.1rem;
+}
+
+.pool-list .list-img img {
+    margin-top: 0;
+}
+
+/* pool END */
+
+/* miner-detail */
+
+.miner-gif,
+.miner-gif img {
+    width: 100%;
+    height: 5.6rem;
+}
+
+.miner-desc {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 0.2rem;
+}
+
+.miner-img {
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.miner-img img {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.miner-item {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    line-height: 0.6rem;
+    font-size: 0.28rem;
+    color: #25241e;
+}
+
+/* miner-detail END */
+
+/* my */
+
+.my-bg {
+    color: #f9f9f9;
+}
+
+.user-info {
+    height: 2.4rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background: url('../img/my/bg_mine.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.user-img {
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.user-img img {
+    height: 1.2rem;
+    width: 1.2rem;
+    border-radius: 50%;
+}
+
+.user-desc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 0.6rem;
+    font-size: 0.3rem;
+    color: #fff;
+}
+
+.user-desc-trade {
+    font-size: 0.26rem;
+    color: #ecd58d;
+}
+
+.my-fun-cell {
+    margin-bottom: 0;
+    margin-top: 0.2rem;
+}
+
+/* my ENd */
+
+/* auth */
+
+.auth-form-cell-hight img {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.auth-form-cell-hight,
+.auth-form-cell-left-hight,
+.auth-form-cell-right-hight {
+    height: 1.8rem;
+    line-height: 1.8rem;
+}
+
+.auth-form-cell-right-hight {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.auth-form-cell-right-hight input {
+    opacity: 0;
+    position: absolute;
+    height: 1.4rem;
+    width: 1.4rem;
+}
+
+/* auth END */
+
+/* change-pwd */
+
+/* change-pwd END */
+
+/* wallet */
+
+.wallet-banner {
+    position: relative;
+}
+
+.wallet-banner,
+.wallet-banner-bg {
+    width: 100%;
+    height: 4.2rem;
+}
+
+.wallet-banner-logo {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.75rem;
+    width: 4rem;
+    height: 2rem;
+}
+
+.wallet-banner-icon {
+    position: absolute;
+    bottom: 0.44rem;
+    left: 0.3rem;
+    width: 0.44rem;
+    height: 0.44rem;
+}
+
+.wallet-banner-span {
+    position: absolute;
+    left: 1.04rem;
+    bottom: 0.48rem;
+    color: #fff;
+    font-size: 0.28rem;
+}
+
+.wallet-banner-btn {
+    position: absolute;
+    bottom: 0.4rem;
+    right: 0.3rem;
+    width: 1.44rem;
+    color: #25241e;
+}
+
+.wallet-cell {
+    margin-top: 0.2rem;
+}
+
+.w-address-btn {
+    margin-top: 0.6rem;
+}
+
+.wallet-cell-address {
+    color: #cbcbcb;
+    font-size: 0.24rem;
+    margin-left: 0.4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.wallet-cell-address img {
+    width: 0.24rem;
+    height: 0.24rem;
+}
+
+.wallet-address {
+    line-height: 0.6rem;
+    text-align: center;
+}
+
+/* wallet END */
+
+/* news */
+
+.news-list-banner img {
+    width: 100%;
+    height: 3.3rem;
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.news-list-item {
+    display: flex;
+    flex-direction: column;
+    height: 2.6rem;
+    font-size: 0.24rem;
+    padding: 0 0.3rem;
+    background: #fff;
+    margin-bottom: 0.15rem;
+}
+
+.news-item-title {
+    display: flex;
+    align-items: center;
+    height: 0.8rem;
+    position: relative;
+}
+
+.news-title {
+    font-size: 0.3rem;
+    color: #323232;
+    font-weight: bold;
+}
+
+.news-title-flag {
+    background: #ecd58d;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.22rem;
+    margin-left: 0.2rem;
+    padding: 0.08rem;
+}
+
+.news-title-icon {
+    position: absolute;
+    right: 0;
+}
+
+.news-title-icon img {
+    width: 0.22rem;
+}
+
+.news-item-time {
+    color: #cbcbcb;
+    font-size: 0.24rem;
+}
+
+.news-detail-content,
+.news-item-content {
+    color: #7f7f7f;
+    font-size: 0.24rem;
+    margin-top: 0.2rem;
+    line-height: 0.38rem;
+}
+
+.news-detail-content {
+    text-indent: 2em;
+}
+
+.news-item-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.detail-content {
+    margin: 0 0.24rem;
+}
+
+.news-detail-author {
+    font-size: 0.24rem;
+    color: #25241e;
+    text-align: right;
+    width: 100%;
+    margin-top: 0.3rem;
+}
+
+.news-img,
+.news-img img {
+    width: 100%;
+}
+
+.news-img {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0.1rem 0;
+}
+
+/* news END */
+
+/* machine-list */
+
+.machine-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.machine-item {
+    display: flex;
+    flex-direction: row;
+    height: 2.4rem;
+    width: 100%;
+    font-size: 0.28rem;
+    margin-bottom: 0.15rem;
+}
+
+.machine-item-left {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.machine-item-left img {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.machine-item-middle,
+.machine-item-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+}
+
+.machine-item-middle {
+    width: 40%;
+}
+
+.machine-item-right {
+    width: 30%;
+    text-align: center;
+}
+
+.machine-item-right a {
+    margin: 0 15%;
+    color: #25241e;
+}
+
+/* machine-list END */
+
+/* lp */
+
+.btn-radio {
+    border: 0.02rem solid #ecd58d;
+    border-radius: 28px;
+    background-color: #fff;
+    color: #25241e;
+    box-sizing: content-box;
+}
+
+.btn-active {
+    background-color: #ecd58d;
+}
+
+.lp-award {
+    margin-right: 0.3rem;
+    text-align: right;
+    line-height: 0.6rem;
+    font-size: 0.28rem;
+    color: #de4f4f;
+}
+
+/* lp END */
+
+/* eth */
+
+.eth-banner {
+    position: relative;
+}
+
+.eth-banner,
+.eth-banner-bg {
+    width: 100%;
+    height: 4.2rem;
+}
+
+.eth-banner .eth-title {
+    position: absolute;
+    top: 1.42rem;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 0.34rem;
+}
+
+.eth-banner .eth-num {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 2.1rem;
+    font-size: 0.64rem;
+}
+
+.eth-price {
+    display: flex;
+    flex-direction: row;
+    height: 1.44rem;
+}
+
+.eth-price-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+}
+
+.eth-price-left img {
+    width: 0.6rem;
+    height: 0.6rem;
+}
+
+.eth-price-right {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 0.3rem;
+}
+
+.eth-price-line {
+    height: 0.72rem;
+    line-height: 0.72rem;
+    font-size: 0.28rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: #25241e;
+}
+
+.eth-action {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0.3rem;
+    height: 1.4rem;
+}
+
+.eth-action a {
+    color: #25241e;
+}
+
+/* eth END */
+
+/* smc */
+
+.explain-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: #de4f4f;
+    font-size: 0.26rem;
+    line-height: 0.36rem;
+    height: 0.72rem;
+    margin-top: 0.15rem;
+}
+
+/* smc END */

@@ -1,0 +1,9 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.CustomerProductApplyDao">
+    <resultMap id="customerProductApplyResultMap" type="CustomerProductApplyDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <association property="productDO" resultMap="com.maikoo.superminercions.dao.ProductDao.productDOResultMap" columnPrefix="comm_product_" />
+    </resultMap>
+</mapper>

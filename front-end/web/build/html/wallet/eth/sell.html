@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - ETH卖出</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">卖出ETH</span>
+            </div>
+            <a id="navToETHRecord" href="#" class="navbar-item" data-type="SELL">
+                <img class="icon-history" src="../../../img/wallet/icon_history.png" alt="交易记录">
+            </a>
+        </header>
+
+        <!-- sell-form -->
+        <div class="sell-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">价格</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="eth-cur-price" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">卖出数量</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="eth-sell-num" type="number" pattern="[0-9]*" class="cell-input" placeholder="请输入需要卖出的ETH数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">ETH资产</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="eth-available" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">卖出价格</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="eth-sell-price" type="number" pattern="[0-9]*" class="cell-input" placeholder="请输入卖出的价格" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">交易密码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="trans-pass" type="password" class="cell-input" maxlength="12" placeholder="请输入交易密码" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <!-- sell-form END -->
+
+        <!-- sell-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="sellBtn" type="button" class="btn-block btn-primary">申请卖出</button>
+        </div>
+        <!-- sell-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入md5JS -->
+<script src="../../../js/md5.min.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 获取当前的ETH价格
+        YDUI.dialog.loading.open('Loading');
+        request('/api/exchange/rate', {}, 400, false).then(res => {
+            $('#eth-cur-price').text(res.data.eth2rmb);
+            return request('/api/customer/balance', { assetType: "ETH", assetStatus: "AVAILABLE" }, 100, false);
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        }).then(res => {
+            YDUI.dialog.loading.close();
+            $('#eth-available').text(res.data.eth.available);
+        }).catch(error => {
+            YDUI.dialog.loading.close();
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+
+        // 申请卖出按钮点击
+        $('#sellBtn').click(function () {
+            var ethSellNum = parseFloat($.trim($('#eth-sell-num').val()));
+            var ethSellPrice = parseFloat($.trim($('#eth-sell-price').val()));
+            var userETHNum = $('#eth-available').val();
+            var transPass = $.trim($('#trans-pass').val());
+            if (isNaN(ethSellNum) || ethSellNum < 0.3) {
+                YDUI.dialog.toast('ETH起卖数量为0.3', 'error', 1300);
+            } else if (isNaN(ethSellPrice)) {
+                YDUI.dialog.toast('卖出价格不能为空', 'error', 1300);
+            } else if (parseFloat(ethSellNum) > parseFloat(userETHNum)) {
+                YDUI.dialog.toast('余额不足，您的ETH余额为' + userETHNum, 'error', 1300);
+            } else if (transPass == "" || transPass.length < 6) {
+                YDUI.dialog.toast('交易密码格式错误', 'error', 1300);
+            } else {
+                YDUI.dialog.confirm('系统提示', '是否申请卖出？', function () {
+                    request('/api/eth/sell/apply', { ethNum: ethSellNum, ethPrice: ethSellPrice, transPass: md5(transPass) }, 400).then(res => {
+                        YDUI.dialog.toast('申请成功', 'success', 1300);
+                        pageBack();
+                    }).catch(error => {
+                        console.log(error);
+                        YDUI.dialog.toast(error.toString(), 'error', 1300);
+                    })
+                });
+            }
+        })
+    })
+</script>
+
+</html>

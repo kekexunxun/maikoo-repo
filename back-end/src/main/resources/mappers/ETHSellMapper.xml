@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.ETHSellDao">
+    <resultMap id="ethSellResultMap" type="ETHSellDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="currentPrice" column="current_price"/>
+        <result property="price" column="price"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        coe.quantity,
+        coe.price
+    </sql>
+
+    <select id="selectOne" resultMap="ethSellResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth coe ON co.id = coe.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            co.order_sn = #{orderSN}
+    </select>
+
+    <select id="selectByIds" resultMap="ethSellResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            coe.quantity
+        FROM
+            c_order co
+            JOIN c_order_eth coe ON co.id = coe.c_order_id
+        WHERE
+            coe.id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectAllWithCustomer" resultMap="ethSellResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            coe.current_price,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_eth coe ON co.id = coe.c_order_id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL AND cu.deleted_at IS NULL
+    </select>
+</mapper>

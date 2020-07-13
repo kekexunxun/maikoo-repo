@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 我的矿池 - 矿池详情</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview index-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a id="nav-back" href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">我的矿池</span>
+            </div>
+        </header>
+        <!-- Gif -->
+        <div class="miner-gif">
+            <img src="../../img/miner/progress.gif" alt="矿机运行中">
+        </div>
+        <!-- Miner-desc -->
+        <div class="miner-desc">
+            <div class="miner-img">
+                <img id="my-pool-detail-img" src="../../img/miner/miner.png" alt="矿机">
+            </div>
+            <div class="miner-item">
+                <span id="my-pool-detail-name" class="font-bold">名称：</span>
+                <span id="my-pool-detail-sn">编号：</span>
+                <span id="my-pool-detail-date">日期：</span>
+                <span id="my-pool-detail-cul-p">累计产量：</span>
+                <span id="my-pool-detail-cur-cf">当前算力： 0.000000 SMC/天</span>
+            </div>
+        </div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/nav.js"></script>
+<script>
+    $(function () {
+        // 获取请求携带的minersn
+        var url = location.search; //获取url中"?"符后的字串
+        param = url.split('=')[1];
+        // 发起请求
+        request('/api/customer/product/information', { minerSn: param }, 400).then(res => {
+            // 界面数据更新
+            $('#my-pool-detail-name').text("名称：" + res.data.miner_name);
+            $('#my-pool-detail-sn').text("编号：" + res.data.miner_sn);
+            $('#my-pool-detail-date').text("日期：" + res.data.miner_date);
+            $('#my-pool-detail-cul-p').text("累计产量：" + res.data.miner_cumulative_production + ' SMC');
+            $('#my-pool-detail-cur-cf').text("当前算力：" + res.data.miner_current_counting_force + ' SMC/天');
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+</script>
+
+</html>

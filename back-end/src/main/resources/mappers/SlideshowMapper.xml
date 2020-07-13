@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.SlideshowDao">
+    <resultMap id="slideshowDOResultMap" type="SlideshowDO">
+        <result property="id" column="id"/>
+        <result property="imageUri" column="image_uri"/>
+        <result property="pageType" column="page_type"/>
+        <result property="rank" column="rank"/>
+        <result property="isEnabled" column="is_enabled"/>
+        <association property="newsDO" resultMap="com.maikoo.superminercions.dao.NewsDao.newsDOResultMap" columnPrefix="comm_news_" />
+    </resultMap>
+
+</mapper>

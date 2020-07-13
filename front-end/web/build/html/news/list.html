@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 公告</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <section class="g-flexview">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">公告</span>
+            </div>
+        </header>
+        <!-- Content -->
+        <div id="news-list-view" class="g-scrollview scroll-after">
+            <!-- Banner -->
+            <div class="news-list-banner">
+                <img src="../../img/news/bg_notice.png" alt="新闻公告">
+            </div>
+            <!-- List -->
+            <article id="news-list" class="news-list">
+            </article>
+        </div>
+    </section>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<script>
+    $(function () {
+        var pageNum = 1;
+
+        $('#news-list-view').infiniteScroll({
+            pageSize: 10,
+            initLoad: true,
+            loadingHtml: '加载中...',
+            doneTxt: '没有更多啦',
+            loadListFn: function () {
+                var def = $.Deferred();
+
+                request('/api/news', { pageNum: pageNum }, 400).then(res => {
+                    if (res.data && res.data.length > 0) {
+                        let list = res.data;
+                        let listHtml = "";
+                        for (let i = 0; i < list.length; i++) {
+                            listHtml += '<a href="javascript:;" class="news-list-item" onclick="navToNewsDetail(this)" data-id="' + list[i].news_id + '">' +
+                                '<div class="news-item-title">' +
+                                '<span class="news-title">' + list[i].news_title + '</span>' +
+                                '<span class="news-title-flag">官方公告</span>' +
+                                '<span class="news-title-icon">' +
+                                '<img src="../../img/icon_arrowright.png" alt="查看详情">' +
+                                '</span>' +
+                                '</div>' +
+                                '<div class="news-item-time">' + list[i].news_date + '</div>' +
+                                '<div class="news-item-content">' + list[i].news_content.replace(/<[^>]+>/g, "") + '</div>' +
+                                '</a>';
+                        }
+                        $('#news-list').html(listHtml);
+                    } else {
+                        YDUI.dialog.toast('没有更多啦', 'error', 1300);
+                    }
+                    def.resolve(res.data);
+                    ++pageNum;
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+
+                return def.promise();
+            }
+        });
+    })
+</script>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 钱包地址</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">钱包地址</span>
+            </div>
+        </header>
+        <!-- wallet-address text -->
+        <div class="find-pwd-text">
+            <span class="text1">钱包地址</span>
+            <span class="text2">请确认输入的ETH钱包地址，系统将会按照你上传的地址操作，若地址错误，后果自负</span>
+        </div>
+        <!-- wallet-address text END -->
+        <!-- wallet-address-form -->
+        <div class="m-cell text-cell">
+            <div class="cell-item">
+                <input id="w-address" maxlength="42" type="text" class="cell-input" placeholder="请输入钱包地址" autocomplete="off"></input>
+            </div>
+        </div>
+        <!-- wallet-address END -->
+        <!-- wallet-address-btn -->
+        <div class="m-button w-address-btn">
+            <button id="upload-address" type="button" class="btn-block btn-primary">上传</button>
+        </div>
+        <!-- wallet-address-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<script>
+    $(function () {
+        // 判断是否已经上传了钱包地址
+        var oriWAddress = YDUI.util.sessionStorage.get('wAddress');
+        $('#w-address').val(oriWAddress);
+        let addressPattern = /[^A-Za-z0-9]/;
+        // 上传钱包地址
+        $('#upload-address').click(function () {
+            var wAddress = $.trim($('#w-address').val());
+            if (wAddress == oriWAddress) {
+                YDUI.dialog.toast('钱包地址未改动', 'error', 1300);
+            } else if (wAddress.length != 42) {
+                YDUI.dialog.toast('钱包地址应为42个字符长度', 'error', 1300);
+            } else if (addressPattern.test(wAddress)) {
+                YDUI.dialog.toast('钱包地址只能由英文和数字组成', 'error', 1300);
+            } else {
+                YDUI.dialog.confirm('是否更新钱包地址？', function () {
+                    request('/api/customer/wallet/update', { walletAddress: wAddress }, 400).then(res => {
+                        YDUI.dialog.toast('钱包地址更新成功', 'success', 1300);
+                        // 更新sessionStorage
+                        YDUI.util.sessionStorage.set('wAddress', wAddress);
+                        pageReload();
+                    }).catch(error => {
+                        console.log(error);
+                        YDUI.dialog.toast(error.toString(), 'error', 1300);
+                    })
+                });
+            }
+        })
+    })
+</script>
+
+</html>

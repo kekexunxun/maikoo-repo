@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.WithdrawalOrderDao">
+    <resultMap id="withdrawalOrderResultMap" type="WithdrawalOrderDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="smcBalance" column="smc_balance"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <result property="fee" column="fee"/>
+        <result property="method" column="method"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        cow.quantity,
+        cow.price,
+        cow.fee,
+        cow.method
+    </sql>
+
+    <select id="selectOne" resultMap="withdrawalOrderResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_withdrawal cow ON co.id = cow.c_order_id
+            AND co.deleted_at IS NULL
+        WHERE
+            co.order_sn = #{orderSN}
+    </select>
+
+    <select id="selectByIds" resultMap="withdrawalOrderResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            cow.quantity,
+            cow.price
+        FROM
+            c_order co
+            JOIN c_order_withdrawal cow ON co.id = cow.c_order_id
+        WHERE
+            cow.id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectAllWithCustomer" resultMap="withdrawalOrderResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            cow.smc_balance,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_withdrawal cow ON co.id = cow.c_order_id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL AND cu.deleted_at IS NULL
+    </select>
+</mapper>

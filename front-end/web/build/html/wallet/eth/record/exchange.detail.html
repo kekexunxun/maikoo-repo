@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - ETH兑换记录</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../../css/cjkg.css" />
+    <script src="../../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">兑换记录详情</span>
+            </div>
+        </header>
+
+        <!-- exchange-detail-form -->
+        <div class="exchange-detail-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">订单编号</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="list-sn" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">ETH兑换数额</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="eth-num" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">兑换SMC数量</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="smc-num" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">状态</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="status" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">申请时间</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="apply-at" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left" id="status-text">结束时间</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="finish-at" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell" id="remark">
+                <div class="cjkg-form-cell-left">交易备注</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="remark-text" class="cell-input"></span>
+                </div>
+            </div>
+        </div>
+        <!-- exchange-detail-form END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../../js/request.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        $('#remark').hide();
+
+        // 获取订单编号ListSN
+        var url = location.search; //获取url中"?"符后的字串
+        param = url.split('=')[1];
+
+        request('/api/eth/smc/information', { listSn: param }, 300).then(res => {
+            $('#list-sn').text(res.data.list_sn);
+            $('#smc-num').text(res.data.smc_num);
+            $('#eth-num').text(res.data.eth_num);
+            $('#status').text(res.data.status);
+            $('#apply-at').text(res.data.apply_at);
+            if (res.data.status == "被驳回") {
+                $('#remark').show();
+                $('#status-text').text('驳回时间');
+                $('#remark').children('.cjkg-form-cell-left').text('驳回原因');
+                $('#remark-text').text(res.data.remark);
+            } else if (res.data.remark) {
+                $('#remark').show();
+                $('#remark-text').text(res.data.remark);
+            }
+            $('#finish-at').text(res.data.finish_at);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+    })
+</script>
+
+</html>

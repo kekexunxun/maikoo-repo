@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 矿机详情</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">购买矿机</span>
+            </div>
+        </header>
+
+        <!-- auth-form -->
+        <div class="auth-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">矿机名称</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="miner-name" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">型号</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="miner-model" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">算力</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="miner-c-f" class="cell-input"></span>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">价格</div>
+                <div class="cjkg-form-cell-right">
+                    <span id="miner-price" class="cell-input"></span>
+                </div>
+            </div>
+        </div>
+        <!-- auth-form END -->
+
+        <!-- auth-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="machine-apply" type="button" class="btn-block btn-primary">申请购买</button>
+        </div>
+        <!-- auth-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 获取请求携带的minersn
+        var url = location.search; //获取url中"?"符后的字串
+        param = url.split('=')[1];
+
+        request('/api/product/information', { minerSn: param }, 400).then(res => {
+            $('#miner-name').text(res.data.miner_name);
+            $('#miner-model').text(res.data.miner_model);
+            $('#miner-c-f').text(res.data.miner_counting_force + ' SMC/天');
+            $('#miner-price').text(res.data.miner_price);
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+        $('#machine-apply').click(function () {
+            YDUI.dialog.confirm('系统提示', '是否申请购买？', function () {
+                request('/api/product/buy', { minerSn: param }, 400).then(res => {
+                    YDUI.dialog.toast('申请成功', 'success', 1300);
+                    pageBack();
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            });
+        })
+    })
+</script>
+
+</html>

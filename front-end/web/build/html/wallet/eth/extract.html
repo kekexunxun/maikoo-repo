@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - ETH提取</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../../favicon.ico" />
+    <link rel="stylesheet" href="../../../css/ydui.css" />
+    <link rel="stylesheet" href="../../../css/cjkg.css" />
+    <script src="../../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">提币ETH</span>
+            </div>
+            <a id="navToETHRecord" href="#" class="navbar-item" data-type="EXTRACT">
+                <img class="icon-history" src="../../../img/wallet/icon_history.png" alt="交易记录">
+            </a>
+        </header>
+
+        <!-- extract-form -->
+        <div class="extract-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">接收地址</div>
+                <div class="cjkg-form-cell-right">
+                    <div id="wallet-address" class="wallet-address"></div>
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">提币数量</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="eth-extract-num" type="number" pattern="[0-9]*" class="cell-input" placeholder="请输入数量" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">手机号码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="user-mobile" type="tel" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 11) value = value.slice(0, 11)" placeholder="请输入手机号码" autocomplete="off" />
+                </div>
+                <div class="cjkg-form-verify">
+                    <button type="button" class="verify-btn" id="J_GetCode">获取验证码</button>
+                    <input type="hidden" id="isSendCode" value="0">
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">短信验证码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="verify-code" type="number" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 4) value = value.slice(0, 4)" placeholder="请输入短信验证码" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">交易密码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="trans-pass" type="password" class="cell-input" maxlength="12" placeholder="请输入交易密码" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+        <!-- extract-form END -->
+
+        <!-- extract-btn -->
+        <div class="m-button btn-margin-top">
+            <button id="extractBtn" type="button" class="btn-block btn-primary">申请提币</button>
+        </div>
+        <!-- extract-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../../js/request.js"></script>
+<!-- 引入md5JS -->
+<script src="../../../js/md5.min.js"></script>
+<!-- 引入verifyCodeJS -->
+<script src="../../../js/verifycode.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+
+        // 填充用户walletAddress
+        var walletAddress = YDUI.util.sessionStorage.get('wAddress');
+        if (!walletAddress) {
+            YDUI.dialog.confirm('系统提示', '您需要绑定钱包地址才能进行后续操作！', [
+                {
+                    txt: '绑定钱包地址',
+                    color: true,
+                    callback: function () {
+                        navToBindWAdress();
+                    }
+                },
+                {
+                    txt: '返回',
+                    color: false,
+                    callback: function () {
+                        pageBack(0);
+                    }
+                }
+            ]);
+        }
+        walletAddress = walletAddress.slice(0, 30) + '</br>' + walletAddress.slice(30);
+        $('#wallet-address').html(walletAddress);
+
+        // 申请买入按钮点击
+        $('#extractBtn').click(function () {
+            var isSendCode = $('#isSendCode').val();
+            var userMobile = $.trim($('#user-mobile').val());
+            let mobileReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            var mobileVerifyCode = $.trim($('#verify-code').val());
+            var ethExtractNum = parseFloat($.trim($('#eth-extract-num').val()));
+            var transPass = $.trim($('#trans-pass').val());
+            if (isNaN(ethExtractNum) || ethExtractNum < 0.1) {
+                YDUI.dialog.toast('ETH提取数量0.1个起', 'error', 1300);
+            } else if (transPass == "" || transPass.length < 6) {
+                YDUI.dialog.toast('交易密码格式错误', 'error', 1300);
+            } else if (isSendCode == 0) {
+                YDUI.dialog.toast('请先验证手机号', 'error', 1300);
+            } else if (!mobileReg.test(userMobile)) {
+                YDUI.dialog.toast('手机号码格式错误', 'error', 1300);
+            } else {
+                request('/api/captcha/check', { mobile: userMobile, verifyCode: mobileVerifyCode }, 400).then(res => {
+                    YDUI.dialog.confirm('系统提示', '是否申请提币？', function () {
+                        request('/api/eth/withdrawal/apply', { ethNum: ethExtractNum, walletAddress: walletAddress, transPass: md5(transPass) }, 400).then(res => {
+                            YDUI.dialog.toast('申请成功', 'success', 1300);
+                            pageBack();
+                        }).catch(error => {
+                            console.log(error);
+                            YDUI.dialog.toast(error.toString(), 'error', 1300);
+                        })
+                    });
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            }
+        })
+    })
+</script>
+
+</html>

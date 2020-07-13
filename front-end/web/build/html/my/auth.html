@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>超级矿工 - 实名认证</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link rel="Bookmark" href="../../favicon.ico">
+    <link rel="Shortcut Icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../css/ydui.css" />
+    <link rel="stylesheet" href="../../css/cjkg.css" />
+    <script src="../../js/ydui.flexible.js"></script>
+</head>
+
+<body>
+    <div class="g-flexview find-pwd-bg">
+        <!-- NavBar -->
+        <header class="m-navbar">
+            <a href="#" class="navbar-item">
+                <i class="back-ico"></i>
+            </a>
+            <div class="navbar-center">
+                <span class="navbar-title">实名认证</span>
+            </div>
+        </header>
+
+        <!-- auth-form -->
+        <div class="cjkg-form">
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">会员账号</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="mem-account" type="text" class="cell-input" maxlength="20" placeholder="请输入会员账号" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">会员姓名</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="mem-name" type="text" class="cell-input" placeholder="请输入会员姓名" maxlength="12" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">手机号码</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="mem-mobile" type="number" pattern="[0-9]*" class="cell-input" oninput="if (value.length > 11) value = value.slice(0, 11)" placeholder="请输入手机号码" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell">
+                <div class="cjkg-form-cell-left">身份证号</div>
+                <div class="cjkg-form-cell-right">
+                    <input id="mem-idcard" type="text" class="cell-input" maxlength="18" placeholder="请输入身份证号" autocomplete="off" />
+                </div>
+            </div>
+            <div class="cjkg-form-cell auth-form-cell-hight">
+                <div class="cjkg-form-cell-left auth-form-cell-left-hight">身份证正面</div>
+                <div class="cjkg-form-cell-right auth-form-cell-right-hight">
+                    <input type="file" id="file-first" accept="image/jpeg, image/x-png" />
+                    <img id="img-first" src="../../img/my/icon_addpic.png" alt="上传身份证正面照片">
+                </div>
+                <input type="hidden" id="ident-positive">
+            </div>
+            <div class="cjkg-form-cell auth-form-cell-hight">
+                <div class="cjkg-form-cell-left auth-form-cell-left-hight">身份证反面</div>
+                <div class="cjkg-form-cell-right auth-form-cell-right-hight">
+                    <input type="file" id="file-second" accept="image/jpeg, image/x-png" />
+                    <img id="img-second" src="../../img/my/icon_addpic.png" alt="上传身份证反面照片">
+                </div>
+                <input type="hidden" id="ident-negative">
+            </div>
+        </div>
+        <!-- auth-form END -->
+
+        <!-- auth-btn -->
+        <div class="m-button btn-margin-top" id="authBtn">
+            <button type="button" class="btn-block btn-primary">上传审核</button>
+        </div>
+        <!-- auth-btn END -->
+    </div>
+</body>
+<!-- 引入jQuery 2.0+ -->
+<script src="../../js/jquery.min.js"></script>
+<!-- 引入YDUI脚本 -->
+<script src="../../js/ydui.js"></script>
+<!-- 引入NavJS -->
+<script src="../../js/nav.js"></script>
+<!-- 引入RequestJS -->
+<script src="../../js/request.js"></script>
+<!-- 引入script -->
+<script>
+    $(function () {
+        // 判断是否为初次认证
+        var url = location.search;
+        var isFirstload = url.split('=')[0] == "firstload";
+
+        var isAuth = false;
+
+        // 获取用户认证信息
+        request('/api/customer/authentication/information', {}, 400).then(res => {
+            if (res.data) {
+                $('#mem-account').val(res.data.user_account);
+                $('#mem-name').val(res.data.user_name);
+                $('#mem-mobile').val(res.data.user_mobile);
+                if (res.data.user_ident_id) {
+                    $('#authBtn').hide();
+                    $('#mem-idcard').val(res.data.user_ident_id);
+                    $('#img-first').attr('src', 'http://cjkg.up.maikoo.cn' + res.data.ident_above_url);
+                    $('#img-second').attr('src', 'http://cjkg.up.maikoo.cn' + res.data.ident_below_url);
+                    isAuth = true;
+                }
+            }
+        }).catch(error => {
+            console.log(error);
+            YDUI.dialog.toast(error.toString(), 'error', 1300);
+        })
+        // 上传按钮点击
+        $('#authBtn').click(function () {
+            // 简单校验
+            let memAccount = $.trim($('#mem-account').val());
+            let memName = $.trim($('#mem-name').val());
+            let mobile = $.trim($('#mem-mobile').val());
+            let identID = $.trim($('#mem-idcard').val());
+            let mobileReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+            let imgAbove = $('#ident-positive').val();
+            let imgBelow = $('#ident-negative').val();
+            let identImg = imgAbove + ':' + imgBelow;
+            if (memAccount == "") {
+                YDUI.dialog.toast('会员账号不能为空', 'error', 1300);
+            } else if (memName == "") {
+                YDUI.dialog.toast('会员姓名不能为空', 'error', 1300);
+            } else if (mobile == "") {
+                YDUI.dialog.toast('手机号码不能为空', 'error', 1300);
+            } else if (mobile.length != 11 || !mobileReg.test(mobile)) {
+                YDUI.dialog.toast('手机号码格式错误', 'error', 1300);
+            } else if (identID == "" || (identID.length != 18)) {
+                YDUI.dialog.toast('身份证号码格式错误', 'error', 1300);
+            } else if (!imgAbove || !imgBelow) {
+                YDUI.dialog.toast('请先上传身份证照片', 'error', 1300);
+            } else {
+                let IDCheck = checkID(identID);
+                if (IDCheck.status != 1) {
+                    YDUI.dialog.toast(IDCheck.msg, 'error', 1300);
+                    return false;
+                }
+                // 认证请求
+                request('/api/customer/authentication', { memAccount: memAccount, memName: memName, mobile: mobile, identID: identID, identImg: identImg }, 400).then(res => {
+                    YDUI.dialog.toast('认证成功', 'success', 1300);
+                    if (isFirstload) {
+                        YDUI.dialog.confirm('系统提示', '您需要绑定一种交易方式！', [
+                            {
+                                txt: '绑定支付宝',
+                                color: true,
+                                callback: function () {
+                                    navToBindAlipay();
+                                }
+                            },
+                            {
+                                txt: '绑定银行卡',
+                                color: true,
+                                callback: function () {
+                                    navToBindBank();
+                                }
+                            }
+                        ]);
+                    } else {
+                        navToIndex();
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast(error.toString(), 'error', 1300);
+                })
+            }
+        })
+
+        // 身份证号码校验
+        function checkID(identID) {
+            // 1 "验证通过!", 0 //校验不通过 // id为身份证号码
+            var format = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
+            //号码规则校验
+            if (!format.test(identID)) {
+                return { 'status': 0, 'msg': '身份证号码不合规' };
+            }
+            //区位码校验
+            //出生年月日校验  前正则限制起始年份为1900;
+            var year = identID.substr(6, 4),//身份证年
+                month = identID.substr(10, 2),//身份证月
+                date = identID.substr(12, 2),//身份证日
+                time = Date.parse(month + '-' + date + '-' + year),//身份证日期时间戳date
+                now_time = Date.parse(new Date()),//当前时间戳
+                dates = (new Date(year, month, 0)).getDate();//身份证当月天数
+            if (time > now_time || date > dates) {
+                return { 'status': 0, 'msg': '出生日期不合规' }
+            }
+            //校验码判断
+            var c = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);  //系数
+            var b = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'); //校验码对照表
+            var id_array = identID.split("");
+            var sum = 0;
+            for (var k = 0; k < 17; k++) {
+                sum += parseInt(id_array[k]) * parseInt(c[k]);
+            }
+            if (id_array[17].toUpperCase() != b[sum % 11].toUpperCase()) {
+                return { 'status': 0, 'msg': '身份证校验不合规' }
+            }
+            return { 'status': 1, 'msg': '校验通过' }
+        }
+
+        // 身份证正面上传
+        $("#file-first").change(function () {
+
+            if (isAuth) { return; }
+
+            var file = $(this)[0].files[0];
+            if (!file) {
+                return;
+            }
+            // 文件大小限制
+            if (file.size > 1024 * 1024 * 4) {
+                dialog.toast('文件大小不能超过4MB', 'error', 1300);
+            } else {
+                $("#img-first").attr("src", URL.createObjectURL(file));
+                // 上传
+                var formData = new FormData();
+                formData.append('file', file);
+                upload(formData).then(res => {
+                    YDUI.dialog.toast('上传成功', 'success', 1000);
+                    $('#ident-positive').val(res.data.img_src);
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast('上传失败', 'error', 1300);
+                })
+            }
+        });
+        // 身份证背面上传
+        $("#file-second").change(function () {
+
+            if (isAuth) { return; }
+            
+            var file = $(this)[0].files[0];
+            if (!file) {
+                return;
+            }
+            // 文件大小限制
+            if (file.size > 1024 * 1024 * 4) {
+                dialog.toast('文件大小不能超过4MB', 'error', 1300);
+            } else {
+                $("#img-second").attr("src", URL.createObjectURL(file));
+                // 上传
+                var formData = new FormData();
+                formData.append('file', file);
+                upload(formData).then(res => {
+                    YDUI.dialog.toast('上传成功', 'success', 1000);
+                    $('#ident-negative').val(res.data.img_src);
+                }).catch(error => {
+                    console.log(error);
+                    YDUI.dialog.toast('上传失败', 'error', 1300);
+                })
+            }
+        });
+    })
+</script>
+
+</html>

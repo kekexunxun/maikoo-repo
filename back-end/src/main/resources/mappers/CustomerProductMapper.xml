@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.CustomerProductDao">
+    <resultMap id="customerProductResultMap" type="CustomerProductDO">
+        <result property="id" column="id"/>
+        <result property="userProductSN" column="user_product_sn"/>
+        <result property="imageUri" column="image_uri"/>
+        <result property="productNumber" column="product_number"/>
+        <result property="model" column="model"/>
+        <result property="name" column="name"/>
+        <result property="performance" column="performance"/>
+        <result property="output" column="output"/>
+        <result property="isDisable" column="is_disable"/>
+        <result property="createdAt" column="created_at"/>
+        <association property="customerDO" resultMap="com.maikoo.superminercions.dao.CustomerDao.customerResultMap" columnPrefix="c_user_" />
+    </resultMap>
+</mapper>

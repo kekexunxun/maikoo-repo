@@ -1,0 +1,91 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.maikoo.superminercions.dao.SMCLockDao">
+    <resultMap id="smcLockResultMap" type="SMCLockDO" extends="com.maikoo.superminercions.dao.OrderDao.orderResultMap">
+        <result property="quantity" column="quantity"/>
+        <association property="smcLockCycleDO" resultMap="lockCycleDOResultMap" columnPrefix="clc_" />
+    </resultMap>
+
+    <resultMap id="lockCycleDOResultMap" type="SMCLockCycleDO">
+        <result property="id" column="id"/>
+        <result property="cycle" column="cycle"/>
+        <result property="reward" column="reward"/>
+    </resultMap>
+
+    <sql id="information">
+        co.c_user_id,
+        co.order_sn,
+        co.STATUS,
+        co.note,
+        co.created_at,
+        co.updated_at,
+        col.quantity,
+        clc.reward AS clc_reward
+    </sql>
+
+    <select id="selectOne" resultMap="smcLockResultMap">
+        SELECT
+        <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_lock col ON co.id = col.c_order_id
+            JOIN comm_lock_cycle clc ON col.comm_lock_cycle_id = clc.id
+        WHERE
+            co.order_sn = #{orderSN} AND co.deleted_at IS NULL
+    </select>
+
+    <select id="selectByIds" resultMap="smcLockResultMap">
+        SELECT
+            co.order_sn,
+            co.STATUS,
+            col.quantity,
+            clc.cycle AS clc_cycle
+        FROM
+            c_order co
+            JOIN c_order_lock col ON co.id = col.c_order_id
+            JOIN comm_lock_cycle clc ON col.comm_lock_cycle_id = clc.id
+        WHERE
+            col.id IN
+            <foreach item="id" index="index" collection="ids"
+                     open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+
+    <select id="selectAllWithCustomer" resultMap="smcLockResultMap">
+        SELECT
+            cu.name AS c_user_name,
+            cu.phone AS c_user_phone,
+            clc.cycle AS clc_cycle,
+            <include refid="information"/>
+        FROM
+            c_order co
+            JOIN c_order_lock col ON co.id = col.c_order_id
+            JOIN comm_lock_cycle clc ON col.comm_lock_cycle_id = clc.id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL AND cu.deleted_at IS NULL
+    </select>
+
+    <select id="selectExceedLockCycleByOrderStatus" resultMap="smcLockResultMap">
+        SELECT
+            cu.id AS c_user_id,
+            cu.smc_balance AS c_user_smc_balance,
+            cu.available_smc_balance AS c_user_available_smc_balance,
+            co.order_sn,
+            col.quantity,
+            clc.reward AS clc_reward
+        FROM
+            c_order co
+            JOIN c_order_lock col ON co.id = col.c_order_id
+            JOIN comm_lock_cycle clc ON col.comm_lock_cycle_id = clc.id
+            JOIN c_user cu ON co.c_user_id = cu.id
+        WHERE
+            co.deleted_at IS NULL
+            AND cu.deleted_at IS NULL
+            AND co.status = 0
+            AND (clc.cycle * 24 * 60 * 60 + co.created_at) &lt;= #{timestamp}
+    </select>
+</mapper>
